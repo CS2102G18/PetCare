@@ -84,6 +84,11 @@ $user_name = $row[1];
                 <div class="col-md-12">
                     <div class="container">
                         <h3>Your pets</h3>
+                        <div class="col-lg-6 col-md-6 col-xs-12">
+                            <button type="button" class="btn btn-large btn-primary"
+                                    onclick="window.location='addpet.php'">Add
+                            </button>
+                        </div>
                     </div>
                     <table>
                         <tr>
@@ -101,7 +106,6 @@ $user_name = $row[1];
                                 pet name
                             </th>
                         </tr>
-                        <
                     </table>
                 </div>
             </div>
