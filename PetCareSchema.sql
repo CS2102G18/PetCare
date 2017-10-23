@@ -18,9 +18,9 @@ CREATE SEQUENCE assn_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 
 CREATE TABLE petcategory(
     pcat_id INT PRIMARY KEY,
-    size VARCHAR(20) CONSTRAINT CHK_sz CHECK size in ('small', 'median', 'large', 'giant'),
-    age VARCHAR(10) CONSTRAINT CHK_ag CHECK age in ('puppy', 'adult'),
-    species VARCHAR(30) CONSTRAINT CHK_sp CHECK species in ('cat', 'dog', 'rabbit', 'lizard', 'others')
+    age VARCHAR(10) CONSTRAINT CHK_ag CHECK (age in ('puppy', 'adult')),
+    size VARCHAR(20) CONSTRAINT CHK_sz CHECK (size in ('small', 'medium', 'large', 'giant')),
+    species VARCHAR(30) CONSTRAINT CHK_sp CHECK (species in ('cat', 'dog', 'rabbit', 'lizard', 'others'))
 );
 
 CREATE TABLE pet_user(
@@ -68,14 +68,14 @@ CREATE TABLE assignment(
     is_paid BOOLEAN DEFAULT FALSE
 );
 
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (1,'puppy','small','lizard');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (2,'puppy','medium','rabbit');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (3,'puppy','large','cat');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (4,'puppy','giant','dog');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (5,'adult','small','lizard');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (6,'adult','medium','rabbit');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (7,'adult','large','cat');
-INSERT INTO petcategory(pcat_id, size, age, species) VALUES (8,'adult','giant','dog');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (1,'puppy','small','lizard');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (2,'puppy','medium','rabbit');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (3,'puppy','large','cat');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (4,'puppy','giant','dog');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (5,'adult','small','lizard');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (6,'adult','medium','rabbit');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (7,'adult','large','cat');
+INSERT INTO petcategory(pcat_id, age, size, species) VALUES (8,'adult','giant','dog');
 
 INSERT INTO pet_user(name, password, email, address) VALUES ('Patti Dennis',12345,'empathy@msn.com','157 Foxrun Street Newnan, GA 30263');
 INSERT INTO pet_user(name, password, email, address) VALUES ('Carmen Grant',23456,'presoff@hotmail.com','9 South Surrey Street Rockford, MI 49341');
