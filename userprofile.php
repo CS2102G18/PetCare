@@ -237,7 +237,4 @@ $user_address = $row[2];
         </div>                                                                                                                                                       
     </div>                                                                                                                                                           
 </body>                                                                                                                                                              
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                                                     
+

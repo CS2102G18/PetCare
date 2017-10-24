@@ -71,39 +71,8 @@
 
 
 
-
+<?php include "config/db-connection.php"; ?>
 <?php
-// Connect to the database. Please change the password in the following line accordingly
-$db = pg_connect("host=localhost port=5432 dbname=PetCare user=postgres password=admin");
-
-
-
-if (isset($_POST['create'])) {    // Submit the delete pet SQL command
-    echo "<ul><form name='signup' action='pet.php' method='POST'>  
-        <li>Owner ID:</li>  
-        <li><input type='text' name='new_ownerid' /></li>   
-        <li>Pet Category ID</li>  
-        <li><input type='text' name='new_pcatid' /></li> 
-        <li><input type='submit' name='createpet' value='Create Pet'/></li>  
-
-        </form>  
-        </ul>";
-
-}
-
-
-if (isset($_POST['createpet'])) {
-    $result = pg_query($db, "INSERT INTO pet(owner_id, pcat_id) VALUES ('$_POST[new_ownerid]','$_POST[new_pcatid]');");
-    if (!$result) {
-        die('Query failed: ' . pg_last_error());
-        echo "Creation failed!!";
-    } else {
-        echo "Creation successful!";
-    }
-
-}
-
-
 
 if (isset($_POST['submit'])) {
     $result = pg_query($db, "SELECT * FROM pet WHERE pets_id = '$_POST[petid]'");   // Query template
