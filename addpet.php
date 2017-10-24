@@ -51,12 +51,18 @@ if (isset($_SESSION["user_id"])) {
 </nav>
 <div class="content-container container">
     <div class="container">
-        <h2>Add your availability slot</h2>
+        <h2>Add your pet</h2>
         <form action="addpet.php">
             <div class="form-group">
                 <div class="row">
-                    <h3>Choose the </h3>
+                    <div class="col-sm-2">
+                        <h5>New Pet's Name</h5>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="pet_name" type="text" class="form-control" placeholder="Pet Name" required="true">
+                    </div>
                 </div>
+                <br>
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Species</h5>
