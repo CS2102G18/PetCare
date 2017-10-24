@@ -87,7 +87,6 @@ $user_address = $row[2];
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="container">
@@ -127,8 +126,6 @@ $user_address = $row[2];
                             echo "</tr>";
                         }
                         ?>
-
-
                     </table>
                     <div class="container">
                         <a class="btn btn-info" role="button" href="addpet.php">Add New Pet +</a>
@@ -233,6 +230,51 @@ $user_address = $row[2];
                         ?>
 
                     </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="container">
+                        <h3>Your Availabile Slots</h3>
+                    </div>
+                    <table class="table table-striped">
+
+                        <tr>
+                            <th>Availability ID</th>
+                            <th>Duration From</th>
+                            <th>Duration To</th>
+                            <th>Available Categories</th>
+                            <th>Actions</th>
+                        </tr>
+
+                        <?php
+                        $query = "SELECT * FROM availability a WHERE a.taker_id =$user_id AND a.is_deleted=FALSE;";
+                        $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+
+
+                        while ($row = pg_fetch_row($result)) {
+
+                            $av_id = $row[0];
+                            $av_start = $row[1];
+                            $av_end = $row[2];
+                            $av_cate = $row[3];
+
+                            echo "<tr>";
+                            echo "<td >$av_id</td >";
+                            echo "<td >$av_start</td >";
+                            echo "<td >$av_end</td >";
+                            echo "<td >$av_cate</td>";
+                            echo "<td ></td >";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </table>
+                    <div class="container">
+                        <a class="btn btn-info" role="button" href="addavail.php">Add New Slots +</a>
+                    </div>
+                    <br>
+                    <br>
                 </div>
             </div>
         </div>
