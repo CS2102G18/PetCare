@@ -70,24 +70,22 @@ $user_address = $row[2];
                     <div class="container">
 
                         <div>
-                            <h2>Hello, <?php echo $user_name;?> </h2>
+                            <h2>Hello, <?php echo $user_name; ?> </h2>
                         </div>
                         <table>
 
                             <tr>
                                 <th>Email:</th>
-                                <td><?php echo $user_email;?></td>
+                                <td><?php echo $user_email; ?></td>
                             </tr>
                             <tr>
                                 <th>Address:</th>
-                                <td><?php echo $user_address;?></td>
+                                <td><?php echo $user_address; ?></td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
-
-
 
 
             <div class="row">
@@ -132,6 +130,9 @@ $user_address = $row[2];
 
 
                     </table>
+                    <div class="container">
+                        <a class="btn btn-info" role="button" href="addpet.php">Add New Pet +</a>
+                    </div>
                     <br/>
                     <br/>
                     <div class="container">
@@ -141,7 +142,6 @@ $user_address = $row[2];
                     <div class="container">
                         <h4>Ongoing Requests</h4>
                     </div>
-
 
 
                     <table class="table table-striped">

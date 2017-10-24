@@ -1,27 +1,62 @@
-DROP TABLE request;
+﻿/*DROP TABLE request;
 DROP TABLE availability;
 DROP TABLE pet;
 DROP TABLE petcategory;
 DROP TABLE pet_user;
+DROP TABLE util_age;
+DROP TABLE util_size;
+DROP TABLE util_species;
 
 DROP SEQUENCE user_id_seq;
 DROP SEQUENCE pets_id_seq;
 DROP SEQUENCE request_id_seq;
 DROP SEQUENCE avail_id_seq;
 DROP SEQUENCE assn_id_seq;
+DROP SEQUENCE pcat_seq;*/
 
 CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pets_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE request_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE avail_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE assn_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
+CREATE SEQUENCE pcat_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
+
+CREATE TABLE util_age(
+    age VARCHAR(10) PRIMARY KEY CONSTRAINT CHK_ag CHECK (age in ('puppy', 'adult'))
+);
+
+CREATE TABLE util_size(
+    size VARCHAR(20) PRIMARY KEY CONSTRAINT CHK_sz CHECK (size in ('small', 'medium', 'large', 'giant'))
+);
+
+CREATE TABLE util_species(
+    species VARCHAR(30) PRIMARY KEY CONSTRAINT CHK_sp CHECK (species in ('cat', 'dog', 'rabbit', 'lizard', 'others'))
+);
 
 CREATE TABLE petcategory(
-    pcat_id INT PRIMARY KEY,
-    age VARCHAR(10) CONSTRAINT CHK_ag CHECK (age in ('puppy', 'adult')),
-    size VARCHAR(20) CONSTRAINT CHK_sz CHECK (size in ('small', 'medium', 'large', 'giant')),
-    species VARCHAR(30) CONSTRAINT CHK_sp CHECK (species in ('cat', 'dog', 'rabbit', 'lizard', 'others'))
+    pcat_id INT PRIMARY KEY DEFAULT nextval('pcat_seq'),
+    age VARCHAR(10) REFERENCES util_age(age),
+    size VARCHAR(20) REFERENCES util_size(size),
+    species VARCHAR(30) REFERENCES util_species(species)
 );
+
+INSERT INTO util_age(age) VALUES('puppy');
+INSERT INTO util_age(age) VALUES('adult');
+
+INSERT INTO util_size(size) VALUES('small');
+INSERT INTO util_size(size) VALUES('medium');
+INSERT INTO util_size(size) VALUES('large');
+INSERT INTO util_size(size) VALUES('giant');
+
+INSERT INTO util_species(species) VALUES('dog');
+INSERT INTO util_species(species) VALUES('rabbit');
+INSERT INTO util_species(species) VALUES('cat');
+INSERT INTO util_species(species) VALUES('lizard');
+INSERT INTO util_species(species) VALUES('others');
+
+INSERT INTO petcategory(age, size, species)
+    SELECT *
+    FROM util_age, util_size, util_species;
 
 CREATE TABLE pet_user(
     user_id INT PRIMARY KEY DEFAULT nextval('user_id_seq'),
@@ -67,15 +102,6 @@ CREATE TABLE assignment(
     is_done BOOLEAN DEFAULT FALSE,
     is_paid BOOLEAN DEFAULT FALSE
 );
-
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (1,'puppy','small','lizard');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (2,'puppy','medium','rabbit');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (3,'puppy','large','cat');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (4,'puppy','giant','dog');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (5,'adult','small','lizard');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (6,'adult','medium','rabbit');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (7,'adult','large','cat');
-INSERT INTO petcategory(pcat_id, age, size, species) VALUES (8,'adult','giant','dog');
 
 INSERT INTO pet_user(name, password, email, address) VALUES ('Patti Dennis',12345,'empathy@msn.com','157 Foxrun Street Newnan, GA 30263');
 INSERT INTO pet_user(name, password, email, address) VALUES ('Carmen Grant',23456,'presoff@hotmail.com','9 South Surrey Street Rockford, MI 49341');
