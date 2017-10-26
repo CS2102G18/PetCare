@@ -101,7 +101,7 @@ session_start();
                             $_SESSION["user_id"] = $row[0];
                             echo "Sign up successfully!";
                             sleep(1);
-                            echo "<script>window.location = 'userprofile.php';</script>";
+                            echo "<script>window.location = 'owner.php';</script>";
                             exit;
                         } else {
                             echo "Incorrect information";

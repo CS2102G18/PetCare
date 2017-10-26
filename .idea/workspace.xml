@@ -1,24 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="750f08ef-6e68-431d-bd22-16b3d6129752" name="Default" comment="" />
+    <list default="true" id="750f08ef-6e68-431d-bd22-16b3d6129752" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/bootstrap/Icon&#13;" afterPath="$PROJECT_DIR$/Vendor/bootstrap/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/bootstrap/css/Icon&#13;" afterPath="$PROJECT_DIR$/Vendor/bootstrap/css/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/bootstrap/fonts/Icon&#13;" afterPath="$PROJECT_DIR$/Vendor/bootstrap/fonts/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/bootstrap/js/Icon&#13;" afterPath="$PROJECT_DIR$/Vendor/bootstrap/js/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/css/Icon&#13;" afterPath="$PROJECT_DIR$/Vendor/css/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/js/Icon&#13;" afterPath="$PROJECT_DIR$/Vendor/js/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Bold.woff" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Bold.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Bold.woff2" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Bold.woff2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Light.woff" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Light.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Light.woff2" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Light.woff2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Medium.woff" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Medium.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Medium.woff2" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Medium.woff2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Regular.woff" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Regular.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Regular.woff2" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Regular.woff2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Thin.woff" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Thin.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Thin.woff2" afterPath="$PROJECT_DIR$/Vendor/materialize/fonts/roboto/Roboto-Thin.woff2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/Icon&#13;" afterPath="$PROJECT_DIR$/config/Icon&#13;" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PetCareRequest.sql" afterPath="$PROJECT_DIR$/PetCareRequest.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PetCareSchema.sql" afterPath="$PROJECT_DIR$/PetCareSchema.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/d3/API.md" afterPath="$PROJECT_DIR$/Vendor/d3/API.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/d3/CHANGES.md" afterPath="$PROJECT_DIR$/Vendor/d3/CHANGES.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/d3/LICENSE" afterPath="$PROJECT_DIR$/Vendor/d3/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/d3/README.md" afterPath="$PROJECT_DIR$/Vendor/d3/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/d3/d3.js" afterPath="$PROJECT_DIR$/Vendor/d3/d3.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/d3/d3.min.js" afterPath="$PROJECT_DIR$/Vendor/d3/d3.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/jquery-3.2.1.min.js" afterPath="$PROJECT_DIR$/Vendor/jquery-3.2.1.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/js/find-task.js" afterPath="$PROJECT_DIR$/Vendor/js/find-task.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/LICENSE" afterPath="$PROJECT_DIR$/Vendor/materialize/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/README.md" afterPath="$PROJECT_DIR$/Vendor/materialize/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/css/materialize.css" afterPath="$PROJECT_DIR$/Vendor/materialize/css/materialize.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/css/materialize.min.css" afterPath="$PROJECT_DIR$/Vendor/materialize/css/materialize.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/js/materialize.js" afterPath="$PROJECT_DIR$/Vendor/materialize/js/materialize.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/materialize/js/materialize.min.js" afterPath="$PROJECT_DIR$/Vendor/materialize/js/materialize.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addpet.php" afterPath="$PROJECT_DIR$/addpet.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/care_taker.php" afterPath="$PROJECT_DIR$/care_taker.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/db-connection.php" afterPath="$PROJECT_DIR$/config/db-connection.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/login.php" afterPath="$PROJECT_DIR$/login.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pet.php" afterPath="$PROJECT_DIR$/pet.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pet_owner.php" afterPath="$PROJECT_DIR$/pet_owner.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/phpinfo.php" afterPath="$PROJECT_DIR$/phpinfo.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/request.php" afterPath="$PROJECT_DIR$/request.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/signup.php" afterPath="$PROJECT_DIR$/signup.php" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="login.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/login.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <marker date="1508835509000" expanded="true" signature="3073:3299" ph="SELECT u.use... pet_user" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PetCareRequest.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PetCareRequest.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PetCareSchema.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PetCareSchema.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="17" />
+    <option name="y" value="41" />
+    <option name="width" value="1423" />
+    <option name="height" value="772" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+      <changelist id="750f08ef-6e68-431d-bd22-16b3d6129752" name="Default" comment="" />
       <created>1508776549328</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1508776549328</updated>
+      <workItem from="1508916904085" duration="28000" />
+      <workItem from="1508916936040" duration="28000" />
+      <workItem from="1508916986962" duration="1000" />
+      <workItem from="1508917002284" duration="1000" />
     </task>
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="58000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="17" y="41" width="1423" height="772" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -26,5 +174,108 @@
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1508835509000" expanded="true" signature="3073:3299" ph="SELECT u.use... pet_user" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PetCareRequest.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PetCareSchema.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1508835509000" expanded="true" signature="3073:3299" ph="SELECT u.use... pet_user" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PetCareRequest.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PetCareSchema.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/owner.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="5" lean-forward="true" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+          <folding>
+            <marker date="1508862854000" expanded="true" signature="1077:1135" ph="SELECT name,... pet_user" />
+            <marker date="1508862854000" expanded="true" signature="4206:4299" ph="SELECT * FRO... request" />
+            <marker date="1508862854000" expanded="true" signature="4632:4674" ph="SELECT name pet_user" />
+            <marker date="1508862854000" expanded="true" signature="4908:4945" ph="SELECT name pet" />
+            <marker date="1508862854000" expanded="true" signature="6205:6294" ph="SELECT * FRO... request" />
+            <marker date="1508862854000" expanded="true" signature="6578:6620" ph="SELECT name pet_user" />
+            <marker date="1508862854000" expanded="true" signature="6860:6901" ph="SELECT pet_n... pet" />
+            <marker date="1508862854000" expanded="true" signature="7298:8100" ph="..." />
+            <marker date="1508862854000" expanded="false" signature="7431:7444" ph="..." />
+            <marker date="1508862854000" expanded="false" signature="7717:7730" ph="..." />
+            <marker date="1508862854000" expanded="true" signature="8910:8948" ph="SELECT * FRO... pet" />
+            <marker date="1508862854000" expanded="true" signature="9286:9334" ph="SELECT speci... petcategory" />
+            <marker date="1508862854000" expanded="true" signature="9421:9466" ph="SELECT size " />
+            <marker date="1508862854000" expanded="true" signature="9552:9596" ph="SELECT age F... petcategory" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PetCareRequest.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PetCareSchema.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1508835509000" expanded="true" signature="3073:3299" ph="SELECT u.use... pet_user" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>

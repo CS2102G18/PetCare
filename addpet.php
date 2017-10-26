@@ -73,7 +73,6 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             $query = "SELECT * FROM util_species";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                             }
@@ -93,7 +92,6 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             $query = "SELECT * FROM util_age";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                             }
@@ -103,6 +101,7 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                 </div>
                 <br>
+
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Size</h5>
@@ -113,7 +112,6 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             $query = "SELECT * FROM util_size";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                             }
@@ -122,13 +120,25 @@ if (isset($_SESSION["user_id"])) {
                         </select>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <h5>New Pet's Name</h5>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="pet_name" class="form-control" required="true">
+                        <option value="">Input Name</option>
+
+                        </input>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" name="create" class="btn btn-default">Submit</button>
         </form>
     </div>
 </div>
 <?php
-if ((isset($_GET['create']))) {
+if (isset($_GET['create'])) {
     $pet_age = $_GET["pet_age"];
     $pet_size = $_GET["pet_size"];
     $pet_species = $_GET["pet_species"];
@@ -142,39 +152,39 @@ if ((isset($_GET['create']))) {
     $result = pg_query($insert_query);
     if (!$result) {
         echo "
-    <div id='successmodal' class='modal fade'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                  <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                  <h4 class='modal-title'>Create Pet</h4>
+            <div id='successmodal' class='modal fade'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                          <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                          <h4 class='modal-title'>Create Pet</h4>
+                        </div>
+                        <div class='modal-body'>
+                          <h4>Creation failed!</h4>
+                        </div>
+                        <div class='modal-footer'>
+                          <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                        </div>
+                    </div>
                 </div>
-                <div class='modal-body'>
-                  <h4>Creation failed!</h4>
-                </div>
-                <div class='modal-footer'>
-                  <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-                </div>
-            </div>
-        </div>
-    </div>";
+            </div>";
         die('Query failed: ' . pg_last_error());
     } else {
         echo " 
-    <div id='successmodal' class='modal fade'>
-        <div class='modal-dialog'><div class='modal-content'>
-            <div class='modal-header'>
-              <button type='button' class='close' data-dismiss='modal'>&times;</button>
-              <h4 class='modal-title'>Create Pet</h4>
-            </div>
-            <div class='modal-body'>
-              <p>Creation successful!</p>
-            </div>
-            <div class='modal-footer'>
-              <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-            </div>
-        </div>
-    </div>";
+            <div id='successmodal' class='modal fade'>
+                <div class='modal-dialog'><div class='modal-content'>
+                    <div class='modal-header'>
+                      <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                      <h4 class='modal-title'>Create Pet</h4>
+                    </div>
+                    <div class='modal-body'>
+                      <p>Creation successful!</p>
+                    </div>
+                    <div class='modal-footer'>
+                      <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                    </div>
+                </div>
+            </div>";
         pg_free_result($result);
         header("Location: userprofile.php");
     }
