@@ -67,10 +67,10 @@ session_start();
 
                         <!-- address -->
                         <div class="row address-input-row">
-                            <div class="col-lg-5 col-sm-5 address-label">
-                                <h5>address</h5>
+                            <div class="col-lg-5 col-sm-5 name-label">
+                                <h5>Address</h5>
                             </div>
-                            <div class="col-lg-7 col-sm-7 address-input">
+                            <div class="col-lg-7 col-sm-7 name-input">
                                 <input class="form-control" name="address" type="address" required></input>
                             </div>
                         </div>

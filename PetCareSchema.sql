@@ -76,23 +76,30 @@ CREATE TABLE pet(
 
 CREATE TABLE availability(
     avail_id INT PRIMARY KEY DEFAULT nextval('avail_id_seq'),
+    post_time timestamp NOT NULL DEFAULT current_timestamp,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     pcat_id INT REFERENCES petcategory(pcat_id) ON DELETE CASCADE ON UPDATE CASCADE,
     taker_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
-    is_deleted BOOLEAN DEFAULT FALSE
+    is_deleted BOOLEAN DEFAULT FALSE,
+    UNIQUE (start_time, end_time, pcat_id, taker_id),
+    CONSTRAINT CHK_start_end CHECK (end_time > start_time),
+    CONSTRAINT CHK_post CHECK (start_time > post_time)
 );
 
 CREATE TABLE request(
     request_id INT PRIMARY KEY DEFAULT nextval('request_id_seq'),
     owner_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
     taker_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
+    post_time timestamp NOT NULL DEFAULT current_timestamp,
     care_begin TIMESTAMP NOT NULL,
     care_end TIMESTAMP NOT NULL,
     remarks VARCHAR(64),
     bids NUMERIC NOT NULL,
     pets_id INT REFERENCES pet(pets_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    status VARCHAR(20) CHECK (status IN ('pending', 'failed', 'successful', 'cancelled')) DEFAULT 'pending'
+    status VARCHAR(20) CHECK (status IN ('pending', 'failed', 'successful', 'cancelled')) DEFAULT 'pending',
+    CONSTRAINT CHK_start_end CHECK (care_end > care_begin),
+    CONSTRAINT CHK_post CHECK (care_begin > post_time)
 );
 
 CREATE TABLE assignment(
