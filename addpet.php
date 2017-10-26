@@ -103,6 +103,7 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                 </div>
                 <br>
+                
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Size</h5>
@@ -122,7 +123,19 @@ if (isset($_SESSION["user_id"])) {
                         </select>
                     </div>
                 </div>
-            </div>
+
+            <div class="row">
+                    <div class="col-sm-2">
+                        <h5>New Pet's Name</h5>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="pet_name" class="form-control" required="true">
+                            <option value="">Input Name</option>
+                            
+                        </input>
+                    </div>
+                </div>
+             </div>
             <button type="submit" name="create" class="btn btn-default">Submit</button>
         </form>
     </div>
