@@ -53,7 +53,7 @@ $user_address = $row[2];
         </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="request.php"> Send Request </a></li>
+                <li><a href="Alpha/request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -190,7 +190,7 @@ $user_address = $row[2];
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
                             echo "<td>
-                                        <form class='form-inline' action='request.php' method='get'><div class='form-group' style='float: right;'><input type='submit' class='form-control' value='Request Another Taker'></div><input type='hidden' name='request_id' value=$request_id></form>
+                                        <form class='form-inline' action='Alpha/request.php' method='get'><div class='form-group' style='float: right;'><input type='submit' class='form-control' value='Request Another Taker'></div><input type='hidden' name='request_id' value=$request_id></form>
                                         <form class='form-inline' action='read.php' method='get'><div class='form-group' style='float: right;'><input type='submit' class='form-control' value='Read'></div><input type='hidden' name='request_id' value=$request_id></form>                                                                                                                                                                                                            
                                   </td>";
                             echo "</tr>";
