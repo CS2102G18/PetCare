@@ -55,8 +55,8 @@ INSERT INTO util_species(species) VALUES('lizard');
 INSERT INTO util_species(species) VALUES('others');
 
 INSERT INTO petcategory(age, size, species)
-    SELECT *
-    FROM util_age, util_size, util_species;
+    
+SELECT * FROM util_age, util_size, util_species;//??????有什么用
 
 CREATE TABLE pet_user(
     user_id INT PRIMARY KEY DEFAULT nextval('user_id_seq'),
