@@ -82,7 +82,7 @@ CREATE TABLE availability(
     pcat_id INT REFERENCES petcategory(pcat_id) ON DELETE CASCADE ON UPDATE CASCADE,
     taker_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
     is_deleted BOOLEAN DEFAULT FALSE,
-    UNIQUE (pcat_id, taker_id),
+    UNIQUE (start_time, end_time, pcat_id, taker_id),
     CONSTRAINT CHK_start_end CHECK (end_time > start_time),
     CONSTRAINT CHK_post CHECK (start_time > post_time)
 );

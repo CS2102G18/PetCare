@@ -52,7 +52,7 @@ if (isset($_SESSION["user_id"])) {
 <div class="content-container container">
     <div class="container">
         <h2>Add your available slot</h2>
-        <form action="userprofile.php">
+        <form>
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-12">
@@ -158,13 +158,13 @@ if (isset($_SESSION["user_id"])) {
             </div>
             <br>
             <div class="container">
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" name="create" class="btn btn-default">Submit</button>
             </div>
         </form>
     </div>
 </div>
 <?php
-if ((isset($_GET['create']))) {
+if (isset($_GET['create'])) {
     $start_time = $_GET['start_time'];
     $end_time = $_GET['end_time'];
     $pet_age = $_GET['pet_age'];
@@ -184,39 +184,39 @@ if ((isset($_GET['create']))) {
     print $insert_query;
     if (!$result) {
         echo "
-    <div id='successmodal' class='modal fade'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                  <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                  <h4 class='modal-title'>Create Availability</h4>
+            <div id='successmodal' class='modal fade'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                          <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                          <h4 class='modal-title'>Create Availability</h4>
+                        </div>
+                        <div class='modal-body'>
+                          <h4>Creation failed!</h4>
+                        </div>
+                        <div class='modal-footer'>
+                          <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                        </div>
+                    </div>
                 </div>
-                <div class='modal-body'>
-                  <h4>Creation failed!</h4>
-                </div>
-                <div class='modal-footer'>
-                  <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-                </div>
-            </div>
-        </div>
-    </div>";
+            </div>";
         die('Query failed: ' . pg_last_error());
     } else {
         echo " 
-    <div id='successmodal' class='modal fade'>
-        <div class='modal-dialog'><div class='modal-content'>
-            <div class='modal-header'>
-              <button type='button' class='close' data-dismiss='modal'>&times;</button>
-              <h4 class='modal-title'>Create Availability</h4>
-            </div>
-            <div class='modal-body'>
-              <p>Creation successful!</p>
-            </div>
-            <div class='modal-footer'>
-              <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-            </div>
-        </div>
-    </div>";
+            <div id='successmodal' class='modal fade'>
+                <div class='modal-dialog'><div class='modal-content'>
+                    <div class='modal-header'>
+                      <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                      <h4 class='modal-title'>Create Availability</h4>
+                    </div>
+                    <div class='modal-body'>
+                      <p>Creation successful!</p>
+                    </div>
+                    <div class='modal-footer'>
+                      <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                    </div>
+                </div>
+            </div>";
         pg_free_result($result);
         //header("Location: userprofile.php");
     }

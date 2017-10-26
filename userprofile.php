@@ -244,7 +244,7 @@ $user_address = $row[2];
                             <th>Availability ID</th>
                             <th>Duration From</th>
                             <th>Duration To</th>
-                            <th>Available Categories</th>
+                            <th>Available Pet Category</th>
                             <th>Actions</th>
                         </tr>
 
@@ -254,17 +254,19 @@ $user_address = $row[2];
 
 
                         while ($row = pg_fetch_row($result)) {
-
                             $av_id = $row[0];
-                            $av_start = $row[1];
-                            $av_end = $row[2];
-                            $av_cate = $row[3];
+                            $av_start = $row[2];
+                            $av_end = $row[3];
+                            $av_cate = $row[4];
+                            $av_cate_query = "SELECT * FROM petcategory pc WHERE pc.pcat_id =$av_cate;";
+                            $av_cate_result = pg_query($av_cate_query) or die('Query failed: ' . pg_last_error());
+                            $av_cat_row = pg_fetch_row($av_cate_result);
 
                             echo "<tr>";
                             echo "<td >$av_id</td >";
                             echo "<td >$av_start</td >";
                             echo "<td >$av_end</td >";
-                            echo "<td >$av_cate</td>";
+                            echo "<td >$av_cat_row[1] $av_cat_row[2] $av_cat_row[3]</td>";
                             echo "<td ></td >";
                             echo "</tr>";
                         }
