@@ -33,7 +33,7 @@ if (isset($_SESSION["user_id"])) {
 <?php include "config/db-connection.php"; ?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="userprofile.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="nav navbar-nav navbar-form">
             <div class="input-icon">
                 <i class="glyphicon glyphicon-search search"></i>
@@ -123,7 +123,7 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default" name="create">Submit</button>
         </form>
     </div>
 </div>
@@ -171,12 +171,12 @@ if ((isset($_GET['create']))) {
               <p>Creation successful!</p>
             </div>
             <div class='modal-footer'>
-              <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+              <button type='button'><a href='owner.php'>Close</a></button>
             </div>
         </div>
     </div>";
+    
         pg_free_result($result);
-        header("Location: userprofile.php");
     }
     exit();
 }

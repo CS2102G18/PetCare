@@ -1,5 +1,12 @@
 alter session set nls_date_format = 'DD-MM-YYYY HH24:MI:SS'
 
+
+
+INSERT INTO request (owner_id, taker_id,care_begin, care_end, bids, pets_id, status) VALUES (21, 2, '2004-10-19 10:23:54', '2004-10-19 13:23:54', 9, 11, 'failed');
+INSERT INTO request (owner_id, taker_id,care_begin, care_end, bids, pets_id, status) VALUES (2, 21, '2018-10-19 10:23:54', '2018-10-19 13:23:54', 9, 11, 'pending');
+INSERT INTO request (owner_id, taker_id,care_begin, care_end, bids, pets_id, status) VALUES (2, 21, '2018-10-19 10:23:54', '2018-10-19 13:23:54', 10, 11, 'pending');
+INSERT INTO request (owner_id, taker_id,care_begin, care_end, bids, pets_id, status) VALUES (2, 21, '2018-10-19 10:23:54', '2018-10-19 13:23:54', 15, 11, 'pending');
+
 INSERT INTO request (request_id, owner_id, care_begin, care_end, kind_of_work, bids, pets_id, status) VALUES (1, 1, '21-09-2017 09:00:00', '22-09-2017 18:00:00', 'drop-in visits', 9, 1, 'pending');
 INSERT INTO request (request_id, owner_id, care_begin, care_end, kind_of_work, bids, pets_id, status) VALUES (2, 1, '18-09-2017 08:00:00', '21-09-2017 12:00:00', 'drop-in visits', 10, 3, 'successful');
 INSERT INTO request (request_id, owner_id, care_begin, care_end, kind_of_work, bids, pets_id, status) VALUES (3, 1, '03-08-2017 15:00:00', '04-08-2017 09:00:00', 'day care', 10, 2, 'failed');

@@ -83,7 +83,7 @@ session_start();
                             $user_id = $row[0];
                             $_SESSION["user_email"] = $email;
                             $_SESSION["user_id"] = $user_id;
-                            header("Location: userprofile.php");
+                            header("Location: owner.php");
                             exit;
                         } else {
                             echo "Incorrect email or password";
