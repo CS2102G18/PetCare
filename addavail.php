@@ -51,15 +51,48 @@ if (isset($_SESSION["user_id"])) {
 </nav>
 <div class="content-container container">
     <div class="container">
-        <h2>Add your pet</h2>
-        <form action="addpet.php">
+        <h2>Add your available slot</h2>
+        <form>
             <div class="form-group">
                 <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Name</h5>
+                    <div class="col-sm-12">
+                        <h4>Declare your available time</h4>
                     </div>
-                    <div class="col-sm-8">
-                        <input name="pet_name" type="text" class="form-control" placeholder="Pet Name" required="true">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label">
+                                <h5>Start</h5>
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="input-group date" id="start-datetimepicker">
+                                    <input type="text" class="form-control" name="start_time" required="true">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label">
+                                <h5>End</h5>
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="input-group date" id="end-datetimepicker">
+                                    <input type="text" class="form-control" name="end_time" required="true">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>Declare the available pet categories</h4>
                     </div>
                 </div>
                 <br>
@@ -103,7 +136,6 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                 </div>
                 <br>
-                
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Size</h5>
@@ -123,36 +155,33 @@ if (isset($_SESSION["user_id"])) {
                         </select>
                     </div>
                 </div>
-
-            <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Name</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <input name="pet_name" class="form-control" required="true">
-                            <option value="">Input Name</option>
-                            
-                        </input>
-                    </div>
-                </div>
-             </div>
-            <button type="submit" name="create" class="btn btn-default">Submit</button>
+            </div>
+            <br>
+            <div class="container">
+                <button type="submit" name="create" class="btn btn-default">Submit</button>
+            </div>
         </form>
     </div>
 </div>
 <?php
 if (isset($_GET['create'])) {
-    $pet_age = $_GET["pet_age"];
-    $pet_size = $_GET["pet_size"];
-    $pet_species = $_GET["pet_species"];
-    $pcat_query = "SELECT pcat_id FROM petcategory WHERE age = '$pet_age'
-                      AND size = '$pet_size'
-                      AND species = '$pet_species';";
+    $start_time = $_GET['start_time'];
+    $end_time = $_GET['end_time'];
+    $pet_age = $_GET['pet_age'];
+    $pet_species = $_GET['pet_species'];
+    $pet_size = $_GET['pet_size'];
+    $pcat_query = "SELECT pcat_id FROM petcategory
+                   WHERE age = '$pet_age'
+                   AND size = '$pet_size'
+                   AND species = '$pet_species';";
     $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
     $pcat_id = pg_fetch_row($pcat_result)[0];
+
     $pet_name = $_GET["pet_name"];
-    $insert_query = "INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES ($pcat_id,$user_id,'$pet_name');";
+    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id) 
+                     VALUES ('$start_time', '$end_time', $pcat_id, $user_id);";
     $result = pg_query($insert_query);
+    print $insert_query;
     if (!$result) {
         echo "
             <div id='successmodal' class='modal fade'>
@@ -160,7 +189,7 @@ if (isset($_GET['create'])) {
                     <div class='modal-content'>
                         <div class='modal-header'>
                           <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                          <h4 class='modal-title'>Create Pet</h4>
+                          <h4 class='modal-title'>Create Availability</h4>
                         </div>
                         <div class='modal-body'>
                           <h4>Creation failed!</h4>
@@ -178,7 +207,7 @@ if (isset($_GET['create'])) {
                 <div class='modal-dialog'><div class='modal-content'>
                     <div class='modal-header'>
                       <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                      <h4 class='modal-title'>Create Pet</h4>
+                      <h4 class='modal-title'>Create Availability</h4>
                     </div>
                     <div class='modal-body'>
                       <p>Creation successful!</p>
@@ -189,9 +218,10 @@ if (isset($_GET['create'])) {
                 </div>
             </div>";
         pg_free_result($result);
-        header("Location: userprofile.php");
+        //header("Location: userprofile.php");
     }
     exit();
 }
 ?>
 </body>
+</html>
