@@ -153,20 +153,22 @@ $user_address = $row[2];
                         </tr>
 
                         <?php
-                        $query = "SELECT * FROM request WHERE owner_id = $user_id AND status = 'successful';";
+                        $query = "SELECT * FROM request WHERE owner_id = $user_id AND status = 'pending' OR status = 'successful';";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
 
                         while ($row = pg_fetch_row($result)) {
 
                             $request_id = $row[0];
+                            $owner_id = $row[1];
                             $taker_id = $row[2];
                             $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
-                            $care_begin = $row[3];
-                            $care_end = $row[4];
-                            $bids = $row[6];
-                            $request_pet_name = pg_fetch_row(pg_query("SELECT name FROM pet WHERE pets_id = " . $row[7] . ";"))[0];
-                            $status = $row[8];
+                            $care_begin = $row[4];
+                            $care_end = $row[5];
+                            $bids = $row[7];
+                            $remarks = $row[8];
+                            $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
+                            $status = $row[9];
 
                             echo "<tr>";
                             echo "<td >$taker_name</td >";
@@ -174,7 +176,7 @@ $user_address = $row[2];
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
-                            echo "<td><a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Successful</a></td>";
+                            echo "<td><a class='waves-effect waves-light btn' style='background-color: #c7cdcc'> $status </a></td>";
                             echo "</tr>";
                         }
                         ?>
@@ -206,13 +208,15 @@ $user_address = $row[2];
                         while ($row = pg_fetch_row($result)) {
 
                             $request_id = $row[0];
+                            $owner_id = $row[1];
                             $taker_id = $row[2];
                             $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
-                            $care_begin = $row[3];
-                            $care_end = $row[4];
-                            $bids = $row[6];
-                            $request_pet_name = pg_fetch_row(pg_query("SELECT name FROM petcategory WHERE pcat_id = " . $row[7] . ";"))[0];
-                            $status = $row[8];
+                            $care_begin = $row[4];
+                            $care_end = $row[5];
+                            $bids = $row[7];
+                            $remarks = $row[8];
+                            $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
+                            $status = $row[9];
 
                             echo "<tr>";
                             echo "<td >$taker_name</td >";
@@ -220,12 +224,12 @@ $user_address = $row[2];
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
-                            echo "<td>                                                                                                                               
+                            echo "<td>
                                         <a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Read</a>                                           
                                         <br>                                                                                                                         
-                                        <a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Find Another Taker</a>                             
-                                  </td>";
+                                        <a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Find Another Taker</a>                                </td>";
                             echo "</tr>";
+
                         }
                         ?>
 
