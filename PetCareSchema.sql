@@ -99,6 +99,7 @@ CREATE TABLE request(
     remarks VARCHAR(64),
     bids NUMERIC NOT NULL,
     pets_id INT REFERENCES pet(pets_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    slot VARCHAR(64),
     status VARCHAR(20) CHECK (status IN ('pending', 'failed', 'successful', 'cancelled')) DEFAULT 'pending',
     CONSTRAINT CHK_start_end CHECK (care_end > care_begin),
     CONSTRAINT CHK_post CHECK (care_begin > post_time)
@@ -111,6 +112,39 @@ CREATE TABLE assignment(
     is_done BOOLEAN DEFAULT FALSE,
     is_paid BOOLEAN DEFAULT FALSE
 );
+
+CREATE OR REPLACE FUNCTION timeslot(requestNum INTEGER)
+RETURNS VARCHAR(64) AS $$
+DECLARE slot VARCHAR(64); hours DOUBLE PRECISION; beginTime timestamp;
+BEGIN
+SELECT care_begin INTO beginTime FROM request WHERE request_id = requestNum;
+hours = extract(HOUR FROM (beginTime));
+IF hours BETWEEN 6 AND 11 THEN slot = 'Morning';
+ELSE IF hours BETWEEN 12 AND 17 THEN slot = 'Afternoon';
+ELSE IF hours BETWEEN 18 AND 23 THEN slot = 'Evening';
+ELSE slot = 'Before Dawn';
+END IF;
+END IF;
+END IF;
+RETURN slot;
+END; $$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION addRequestSlot()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE request
+    SET slot = timeslot(new.request_id)
+    WHERE request_id = new.request_id;
+    RETURN NULL;
+END; $$
+LANGUAGE PLPGSQL;
+
+CREATE TRIGGER addSlot
+AFTER INSERT
+ON request
+FOR EACH ROW
+EXECUTE PROCEDURE addRequestSlot();
 
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xia Rui',12345,'e0012672@u.nus.edu','30 Ang Mo Kio Ave 8', 'admin');
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Chen Penghao',12345,'e0004801@u.nus.edu','33 Lorong 2 Toa Payoh', 'admin');
