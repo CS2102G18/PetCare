@@ -142,30 +142,17 @@ if (isset($_SESSION["user_id"])) {
             </div>
             <br>
             <div class="container">
-                <button type="submit" name="find" class="btn btn-default">Find available caretakers</button>
+                <button type="submit" name="find" class="btn btn-default">Send Request</button>
             </div>
         </form>
     </div>
 </div>
 
-</table>
 
-
-<div class="container">
-    <h4>Available care takers</h4>
-</div>
-
-<table class="table table-striped">
-
-    <tr>
-        <th>Taker Name</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Send Request</th>
-    </tr>
 
 <?php
-if (isset($_GET['find'])) { // TODO: Update creation of request to all users who are available?;
+
+if (isset($_GET['find'])) { // send requests to all care takers who are available
     $start_time = $_GET['start_time'];
     $end_time = $_GET['end_time'];
     $pet_name = $_GET['pet_name'];
@@ -181,34 +168,57 @@ if (isset($_GET['find'])) { // TODO: Update creation of request to all users who
     $pcat_id = pg_fetch_row($pcat_result)[0];
 
 
-    $avail_query = "SELECT * FROM availability 
-                    WHERE pcat_id = $pcat_id 
+    $avail_query = "SELECT * FROM availability
+                    WHERE pcat_id = $pcat_id
                     AND start_time <= '$start_time'
                     AND end_time >= '$end_time'
-                    AND is_deleted = false";
+                    AND is_deleted = false
+                    AND taker_id <> '$user_id'";
     $avail_result = pg_query($avail_query) or die('Query failed: ' . pg_last_error());
 
 
     while ($row = pg_fetch_row($avail_result)) {
 
         $avail_id = $row[0];
-        $start_time = $row[2];
-        $end_time = $row[3];
+        $start_avail_time = $row[2];
+        $end_avail_time = $row[3];
         $taker_id = $row[5];
         $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
         $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
         $status = $row[9];
 
+        $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
+                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
+        $result = pg_query($insert_query);
+        print $insert_query;
+
+
+        echo "<div class=\"container\">
+                <h4>Available care takers</h4>
+                </div>
+                
+                <table class=\"table table-striped\">
+
+                <tr>
+                <th>Taker Name</th>
+                <th>Availability Start Time</th>
+                <th>Availability End Time</th>
+                <th>Request Status</th>
+                </tr>";
+
         echo "<tr>";
         echo "<td >$taker_name</td >";
-        echo "<td >$start_time</td >";
-        echo "<td >$end_time</td >";
-        echo "<td >placeholder</td >"; // TODO make link to send to individual care taker
+        echo "<td >$start_avail_time</td >";
+        echo "<td >$end_avail_time</td >";
+        echo "<td >
+                Sent, Pending
+              </td >";
 
         echo "</tr>";
 
-    }
+        echo "</table>";
 
+    }
 
 //    $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
 //                     VALUES ($user_id, null, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
@@ -236,9 +246,9 @@ if (isset($_GET['find'])) { // TODO: Update creation of request to all users who
 //    }
     exit();
 }
+
 ?>
 
-</table>
 
 </body>
 </html>

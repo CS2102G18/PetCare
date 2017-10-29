@@ -24,6 +24,7 @@ if (isset($_SESSION["user_id"])) {
     <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
     <script src="./vendor/js/find-task.js"></script>
 </head>
+
 <body>
 <!-- include php -->
 <?php include "config/db-connection.php"; ?>
@@ -188,7 +189,7 @@ $user_address = $row[2];
                         <h4>Unsuccessful Requests</h4>
                     </div>
 
-                    <table class="table table-striped">
+                    <table class="table table-striped" >
 
                         <tr>
                             <th>Taker Name</th>
