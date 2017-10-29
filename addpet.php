@@ -33,7 +33,7 @@ if (isset($_SESSION["user_id"])) {
 <?php include "config/db-connection.php"; ?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="userprofile.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="nav navbar-nav navbar-form">
             <div class="input-icon">
                 <i class="glyphicon glyphicon-search search"></i>
@@ -42,7 +42,7 @@ if (isset($_SESSION["user_id"])) {
         </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="Alpha/request.php"> Send Request </a></li>
+                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -71,7 +71,7 @@ if (isset($_SESSION["user_id"])) {
                         <select name="pet_species" class="form-control" required="true">
                             <option value="">Select Category</option>
                             <?php
-                            $query = "SELECT * FROM util_species";
+                            $query = "SELECT DISTINCT species FROM petcategory";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -90,7 +90,7 @@ if (isset($_SESSION["user_id"])) {
                         <select name="pet_age" class="form-control" required="true">
                             <option value="">Select Age</option>
                             <?php
-                            $query = "SELECT * FROM util_age";
+                            $query = "SELECT DISTINCT age FROM petcategory";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -110,7 +110,7 @@ if (isset($_SESSION["user_id"])) {
                         <select name="pet_size" class="form-control" required="true">
                             <option value="">Select Size</option>
                             <?php
-                            $query = "SELECT * FROM util_size";
+                            $query = "SELECT DISTINCT size FROM petcategory";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -120,6 +120,7 @@ if (isset($_SESSION["user_id"])) {
                         </select>
                     </div>
                 </div>
+
             <button type="submit" name="create" class="btn btn-default">Submit</button>
         </form>
     </div>
@@ -173,7 +174,7 @@ if (isset($_GET['create'])) {
                 </div>
             </div>";
         pg_free_result($result);
-        header("Location: userprofile.php");
+        header("Location: owner.php");
     }
     exit();
 }
