@@ -51,9 +51,10 @@ $user_address = $row[2];
         </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="Alpha/request.php"> Send Request </a></li>
+                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
+                <li><a href="admin.php"> Admin </a></li>
             </ul>
         </div>
     </div>
@@ -111,38 +112,45 @@ $user_address = $row[2];
                     <table class="table table-striped">
 
                         <tr>
-                            <th>Pet Owner</th>
-                            <th>Pet Name</th>
-                            <th>Pet Species</th>
-                            <th>Pet Age</th>
-                            <th>Pet Size</th>
+                            <th>Pet Owner Info</th>
+                            <th>Pet Info</th>
                             <th>Begin</th>
                             <th>End</th>
+                            <th>Remarks</th>
                             <th>Bid Offered</th>
                             <th>Action</th>
                         </tr>
 
                         <?php
-                        $query = "SELECT r.request_id, r.owner_id, r.care_begin, r.care_end, r.remarks, r.bids, p.pet_name, c.age, c.size, c.species FROM request r, pet p, petcategory c WHERE r.taker_id = $user_id AND r.status = 'pending' AND r.care_begin > CURRENT_TIMESTAMP AND p.pets_id = r.pets_id AND p.pcat_id = c.pcat_id ORDER BY r.bids DESC;";
+                        $query = "SELECT r.request_id, u.name, u.email, r.care_begin, r.care_end, r.remarks, r.bids, p.pet_name, c.age, c.size, c.species 
+                                  FROM request r, pet p, petcategory c, pet_user u
+                                  WHERE r.taker_id = $user_id
+                                        AND r.status = 'pending' 
+                                        AND r.care_begin > CURRENT_TIMESTAMP 
+                                        AND p.pets_id = r.pets_id 
+                                        AND p.pcat_id = c.pcat_id
+                                        AND u.user_id = r.owner_id
+                                  ORDER BY r.bids DESC;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
 
                         while ($row = pg_fetch_row($result)) {
 
                             $request_id = $row[0];
-                            $owner_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = " . $row[1] . ";"))[0];
-                            $care_begin = $row[2];
-                            $care_end = $row[3];
-                            $remarks = $row[4];
-                            $bids = $row[5];
-                            $request_pet_name = $row[6];
-                            $request_pet_age = $row[7];
-                            $request_pet_size = $row[8];
-                            $request_pet_species = $row[9];
+                            $owner_name = $row[1];
+                            $owner_email = $row[2];
+                            $care_begin = $row[3];
+                            $care_end = $row[4];
+                            $remarks = $row[5];
+                            $bids = $row[6];
+                            $request_pet_name = $row[7];
+                            $request_pet_age = $row[8];
+                            $request_pet_size = $row[9];
+                            $request_pet_species = $row[10];
 
 
                             echo "<tr>";
-                            echo "<td >$owner_name</td >";
+                            echo "<td >$owner_name<br>$owner_email</td >";
                             echo "<td >$request_pet_name</td >";
                             echo "<td >$request_pet_species</td >";
                             echo "<td >$request_pet_age</td >";
@@ -169,43 +177,48 @@ $user_address = $row[2];
                     <table class="table table-striped">
 
                         <tr>
-                            <th>Pet Owner</th>
-                            <th>Pet Name</th>
-                            <th>Pet Species</th>
-                            <th>Pet Age</th>
-                            <th>Pet Size</th>
+                            <th>Pet Owner Info</th>
+                            <th>Pet Info</th>
                             <th>Begin</th>
                             <th>End</th>
+                            <th>Remarks</th>
                             <th>Bid Offered</th>
                         </tr>
 
                         <?php
-                        $query = "SELECT r.request_id, r.owner_id, r.care_begin, r.care_end, r.remarks, r.bids, p.pet_name, c.age, c.size, c.species FROM request r, pet p, petcategory c WHERE r.taker_id = $user_id AND r.status = 'successful' AND r.care_begin > CURRENT_TIMESTAMP AND p.pets_id = r.pets_id AND p.pcat_id = c.pcat_id ORDER BY r.bids DESC;";
+                        $query = "SELECT r.request_id, u.name, u.email, r.care_begin, r.care_end, r.remarks, r.bids, p.pet_name, c.age, c.size, c.species 
+                                  FROM request r, pet p, petcategory c, pet_user u
+                                  WHERE r.taker_id = $user_id
+                                        AND r.status = 'successful' 
+                                        AND r.care_begin > CURRENT_TIMESTAMP 
+                                        AND p.pets_id = r.pets_id 
+                                        AND p.pcat_id = c.pcat_id
+                                        AND u.user_id = r.owner_id
+                                  ORDER BY r.bids DESC;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
 
                         while ($row = pg_fetch_row($result)) {
 
                             $request_id = $row[0];
-                            $owner_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = " . $row[1] . ";"))[0];
-                            $care_begin = $row[2];
-                            $care_end = $row[3];
-                            $remarks = $row[4];
-                            $bids = $row[5];
-                            $request_pet_name = $row[6];
-                            $request_pet_age = $row[7];
-                            $request_pet_size = $row[8];
-                            $request_pet_species = $row[9];
+                            $owner_name = $row[1];
+                            $owner_email = $row[2];
+                            $care_begin = $row[3];
+                            $care_end = $row[4];
+                            $remarks = $row[5];
+                            $bids = $row[6];
+                            $request_pet_name = $row[7];
+                            $request_pet_age = $row[8];
+                            $request_pet_size = $row[9];
+                            $request_pet_species = $row[10];
 
 
                             echo "<tr>";
-                            echo "<td >$owner_name</td >";
-                            echo "<td >$request_pet_name</td >";
-                            echo "<td >$request_pet_species</td >";
-                            echo "<td >$request_pet_age</td >";
-                            echo "<td >$request_pet_size</td >";
+                            echo "<td >$owner_name<br>$owner_email</td >";
+                            echo "<td >$request_pet_name<br>$request_pet_species<br>$request_pet_age<br>$request_pet_size</td >";
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
+                            echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "</tr>";
                         }
@@ -234,7 +247,13 @@ $user_address = $row[2];
                         </tr>
 
                         <?php
-                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age FROM availability a, petcategory p WHERE a.pcat_id = p.pcat_id AND a.taker_id =$user_id AND a.is_deleted = FALSE AND a.start_time > CURRENT_TIMESTAMP ORDER BY a.start_time;";
+                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age 
+                                  FROM availability a, petcategory p 
+                                  WHERE a.pcat_id = p.pcat_id 
+                                        AND a.taker_id =$user_id 
+                                        AND a.is_deleted = FALSE 
+                                        AND a.start_time > CURRENT_TIMESTAMP 
+                                  ORDER BY a.start_time;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
 
@@ -279,7 +298,13 @@ $user_address = $row[2];
                         </tr>
 
                         <?php
-                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age FROM availability a, petcategory p WHERE a.pcat_id = p.pcat_id AND a.taker_id =$user_id AND a.is_deleted = TRUE AND a.start_time > CURRENT_TIMESTAMP ORDER BY a.start_time;";
+                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age 
+                                  FROM availability a, petcategory p 
+                                  WHERE a.pcat_id = p.pcat_id 
+                                        AND a.taker_id =$user_id 
+                                        AND a.is_deleted = TRUE 
+                                        AND a.start_time > CURRENT_TIMESTAMP 
+                                  ORDER BY a.start_time;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
 
@@ -319,5 +344,4 @@ $user_address = $row[2];
             </div>
         </div>
     </div>
-</body>                                                                                                                                                              
-
+</body>               
