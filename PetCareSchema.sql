@@ -1,4 +1,5 @@
-﻿/*DROP TABLE request;
+﻿DROP TABLE assignment;
+DROP TABLE request
 DROP TABLE availability;
 DROP TABLE pet;
 DROP TABLE petcategory;
@@ -12,9 +13,9 @@ DROP SEQUENCE pets_id_seq;
 DROP SEQUENCE request_id_seq;
 DROP SEQUENCE avail_id_seq;
 DROP SEQUENCE assn_id_seq;
-DROP SEQUENCE pcat_seq;*/
+DROP SEQUENCE pcat_seq;
 
-CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
+﻿CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pets_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE request_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE avail_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
@@ -63,7 +64,8 @@ CREATE TABLE pet_user(
     name VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
     email VARCHAR(64) UNIQUE,
-    address VARCHAR(64)
+    address VARCHAR(64),
+    role VARCHAR(10) DEFAULT 'normal' CONSTRAINT CHK_role CHECK (role in ('admin', 'normal'))
 );
 
 CREATE TABLE pet(
@@ -91,12 +93,13 @@ CREATE TABLE request(
     request_id INT PRIMARY KEY DEFAULT nextval('request_id_seq'),
     owner_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
     taker_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
-    post_time timestamp NOT NULL DEFAULT current_timestamp,
+    post_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
     care_begin TIMESTAMP NOT NULL,
     care_end TIMESTAMP NOT NULL,
     remarks VARCHAR(64),
     bids NUMERIC NOT NULL,
     pets_id INT REFERENCES pet(pets_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    slot VARCHAR(64),
     status VARCHAR(20) CHECK (status IN ('pending', 'failed', 'successful', 'cancelled')) DEFAULT 'pending',
     CONSTRAINT CHK_start_end CHECK (care_end > care_begin),
     CONSTRAINT CHK_post CHECK (care_begin > post_time)
@@ -109,6 +112,44 @@ CREATE TABLE assignment(
     is_done BOOLEAN DEFAULT FALSE,
     is_paid BOOLEAN DEFAULT FALSE
 );
+
+CREATE OR REPLACE FUNCTION timeslot(requestNum INTEGER)
+RETURNS VARCHAR(64) AS $$
+DECLARE slot VARCHAR(64); hours DOUBLE PRECISION; beginTime timestamp;
+BEGIN
+SELECT care_begin INTO beginTime FROM request WHERE request_id = requestNum;
+hours = extract(HOUR FROM (beginTime));
+IF hours BETWEEN 6 AND 11 THEN slot = 'Morning';
+ELSE IF hours BETWEEN 12 AND 17 THEN slot = 'Afternoon';
+ELSE IF hours BETWEEN 18 AND 23 THEN slot = 'Evening';
+ELSE slot = 'Before Dawn';
+END IF;
+END IF;
+END IF;
+RETURN slot;
+END; $$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION addRequestSlot()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE request
+    SET slot = timeslot(new.request_id)
+    WHERE request_id = new.request_id;
+    RETURN NULL;
+END; $$
+LANGUAGE PLPGSQL;
+
+CREATE TRIGGER addSlot
+AFTER INSERT
+ON request
+FOR EACH ROW
+EXECUTE PROCEDURE addRequestSlot();
+
+INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xia Rui',12345,'e0012672@u.nus.edu','30 Ang Mo Kio Ave 8', 'admin');
+INSERT INTO pet_user(name, password, email, address, role) VALUES ('Chen Penghao',12345,'e0004801@u.nus.edu','33 Lorong 2 Toa Payoh', 'admin');
+INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xie Peiyi',12345,'peiyi@u.nus.edu','55 Hougang Ave 10', 'admin');
+INSERT INTO pet_user(name, password, email, address, role) VALUES ('Kuang Ming',12345,'km@msn.com','', 'admin');
 
 INSERT INTO pet_user(name, password, email, address) VALUES ('Patti Dennis',12345,'empathy@msn.com','157 Foxrun Street Newnan, GA 30263');
 INSERT INTO pet_user(name, password, email, address) VALUES ('Carmen Grant',23456,'presoff@hotmail.com','9 South Surrey Street Rockford, MI 49341');

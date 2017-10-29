@@ -42,7 +42,7 @@ if (isset($_SESSION["user_id"])) {
         </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="request.php"> Send Request </a></li>
+                <li><a href="Alpha/request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -73,7 +73,6 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             $query = "SELECT * FROM util_species";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                             }
@@ -93,7 +92,6 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             $query = "SELECT * FROM util_age";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                             }
@@ -103,7 +101,7 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                 </div>
                 <br>
-                
+
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Size</h5>
@@ -114,7 +112,6 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             $query = "SELECT * FROM util_size";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                             }
@@ -123,19 +120,6 @@ if (isset($_SESSION["user_id"])) {
                         </select>
                     </div>
                 </div>
-
-            <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Name</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <input name="pet_name" class="form-control" required="true">
-                            <option value="">Input Name</option>
-                            
-                        </input>
-                    </div>
-                </div>
-             </div>
             <button type="submit" name="create" class="btn btn-default">Submit</button>
         </form>
     </div>
@@ -166,7 +150,7 @@ if (isset($_GET['create'])) {
                           <h4>Creation failed!</h4>
                         </div>
                         <div class='modal-footer'>
-                          <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                          <button type='button' class='btn btn-default'><a href='owner.php'>Close</a></button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +168,7 @@ if (isset($_GET['create'])) {
                       <p>Creation successful!</p>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                      <button type='button' class='btn btn-default'><a href='owner.php'>Close</a></button>
                     </div>
                 </div>
             </div>";

@@ -4,7 +4,7 @@ $dbconn = pg_connect("
     port=5432
     dbname=PetCare
     user=postgres
-    password=admin
+    password=12345
     ")
     or die('Could not connect: ' . pg_last_error());
 ?>

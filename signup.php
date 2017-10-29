@@ -5,7 +5,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tasource - Making task sourcing simple</title>
+    <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/login-styling.css">
@@ -101,7 +101,7 @@ session_start();
                             $_SESSION["user_id"] = $row[0];
                             echo "Sign up successfully!";
                             sleep(1);
-                            echo "<script>window.location = 'userprofile.php';</script>";
+                            echo "<script>window.location = 'owner.php';</script>";
                             exit;
                         } else {
                             echo "Incorrect information";
