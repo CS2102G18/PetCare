@@ -33,7 +33,7 @@ if (isset($_SESSION["user_id"])) {
 <?php include "config/db-connection.php"; ?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="userprofile.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="taker.php"> PetCare</a></div>
         <div class="nav navbar-nav navbar-form">
             <div class="input-icon">
                 <i class="glyphicon glyphicon-search search"></i>
@@ -195,7 +195,7 @@ if (isset($_GET['create'])) {
                           <h4>Creation failed!</h4>
                         </div>
                         <div class='modal-footer'>
-                          <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                          <button type='button' class='btn btn-default'><a href='taker.php'>Close</a></button>
                         </div>
                     </div>
                 </div>
@@ -213,7 +213,7 @@ if (isset($_GET['create'])) {
                       <p>Creation successful!</p>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                      <button type='button' class='btn btn-default'><a href='taker.php'>Close</a></button>
                     </div>
                 </div>
             </div>";
