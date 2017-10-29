@@ -223,7 +223,7 @@ if (isset($_SESSION["user_id"])) {
             $flag = 0;
 
 
-                while ($row3 = pg_fetch_row($result2)) {
+                while ($row3 = pg_fetch_row($result3)) {
                     $flag = 1;
                     $average = $row3[1] < 0 ? '' : round(floatval($row3[1]), 2);
                     echo "
@@ -244,4 +244,3 @@ if (isset($_SESSION["user_id"])) {
     </div>
 
 </body>                                                                                                                                                              
-
