@@ -24,6 +24,7 @@ if (isset($_SESSION["user_id"])) {
     <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
     <script src="./vendor/js/find-task.js"></script>
 </head>
+
 <body>
 <!-- include php -->
 <?php include "config/db-connection.php"; ?>
@@ -153,20 +154,22 @@ $user_address = $row[2];
                         </tr>
 
                         <?php
-                        $query = "SELECT * FROM request WHERE owner_id = $user_id AND status = 'successful';";
+                        $query = "SELECT * FROM request WHERE owner_id = $user_id AND status = 'pending' OR status = 'successful';";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
 
                         while ($row = pg_fetch_row($result)) {
 
                             $request_id = $row[0];
+                            $owner_id = $row[1];
                             $taker_id = $row[2];
                             $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
-                            $care_begin = $row[3];
-                            $care_end = $row[4];
-                            $bids = $row[6];
-                            $request_pet_name = pg_fetch_row(pg_query("SELECT name FROM pet WHERE pets_id = " . $row[7] . ";"))[0];
-                            $status = $row[8];
+                            $care_begin = $row[4];
+                            $care_end = $row[5];
+                            $bids = $row[7];
+                            $remarks = $row[8];
+                            $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
+                            $status = $row[9];
 
                             echo "<tr>";
                             echo "<td >$taker_name</td >";
@@ -174,7 +177,7 @@ $user_address = $row[2];
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
-                            echo "<td><a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Successful</a></td>";
+                            echo "<td><a class='waves-effect waves-light btn' style='background-color: #c7cdcc'> $status </a></td>";
                             echo "</tr>";
                         }
                         ?>
@@ -186,7 +189,7 @@ $user_address = $row[2];
                         <h4>Unsuccessful Requests</h4>
                     </div>
 
-                    <table class="table table-striped">
+                    <table class="table table-striped" >
 
                         <tr>
                             <th>Taker Name</th>
@@ -206,13 +209,15 @@ $user_address = $row[2];
                         while ($row = pg_fetch_row($result)) {
 
                             $request_id = $row[0];
+                            $owner_id = $row[1];
                             $taker_id = $row[2];
                             $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
-                            $care_begin = $row[3];
-                            $care_end = $row[4];
-                            $bids = $row[6];
-                            $request_pet_name = pg_fetch_row(pg_query("SELECT name FROM petcategory WHERE pcat_id = " . $row[7] . ";"))[0];
-                            $status = $row[8];
+                            $care_begin = $row[4];
+                            $care_end = $row[5];
+                            $bids = $row[7];
+                            $remarks = $row[8];
+                            $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
+                            $status = $row[9];
 
                             echo "<tr>";
                             echo "<td >$taker_name</td >";
@@ -220,12 +225,12 @@ $user_address = $row[2];
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
-                            echo "<td>                                                                                                                               
+                            echo "<td>
                                         <a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Read</a>                                           
                                         <br>                                                                                                                         
-                                        <a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Find Another Taker</a>                             
-                                  </td>";
+                                        <a class='waves-effect waves-light btn' style='background-color: #c7cdcc'>Find Another Taker</a>                                </td>";
                             echo "</tr>";
+
                         }
                         ?>
 
@@ -244,7 +249,7 @@ $user_address = $row[2];
                             <th>Availability ID</th>
                             <th>Duration From</th>
                             <th>Duration To</th>
-                            <th>Available Categories</th>
+                            <th>Available Pet Category</th>
                             <th>Actions</th>
                         </tr>
 
@@ -254,17 +259,19 @@ $user_address = $row[2];
 
 
                         while ($row = pg_fetch_row($result)) {
-
                             $av_id = $row[0];
-                            $av_start = $row[1];
-                            $av_end = $row[2];
-                            $av_cate = $row[3];
+                            $av_start = $row[2];
+                            $av_end = $row[3];
+                            $av_cate = $row[4];
+                            $av_cate_query = "SELECT * FROM petcategory pc WHERE pc.pcat_id =$av_cate;";
+                            $av_cate_result = pg_query($av_cate_query) or die('Query failed: ' . pg_last_error());
+                            $av_cat_row = pg_fetch_row($av_cate_result);
 
                             echo "<tr>";
                             echo "<td >$av_id</td >";
                             echo "<td >$av_start</td >";
                             echo "<td >$av_end</td >";
-                            echo "<td >$av_cate</td>";
+                            echo "<td >$av_cat_row[1] $av_cat_row[2] $av_cat_row[3]</td>";
                             echo "<td ></td >";
                             echo "</tr>";
                         }
