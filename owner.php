@@ -53,7 +53,7 @@ $user_address = $row[2];
         </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="Alpha/request.php"> Send Request </a></li>
+                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -112,37 +112,41 @@ $user_address = $row[2];
 
                         <tr>
                             <th>Taker Name</th>
+                            <th>Taker's Email</th>
                             <th>Pet Name</th>
                             <th>Begin</th>
                             <th>End</th>
                             <th>Your bid</th>
-                            <th>Status</th>
                         </tr>
 
                         <?php
                         pg_free_result($result1);
-                        $query3 = "SELECT * FROM request WHERE owner_id = $user_id AND status = 'successful' AND care_end > current_timestamp ORDER BY care_begin;";
+                        $query3 = "SELECT u.name, u.email, r.care_begin, r.care_end, r.bids, p.pet_name FROM request r, pet_user u, pet p 
+                                   WHERE r.owner_id = $user_id 
+                                         AND r.status = 'successful' 
+                                         AND r.care_end > current_timestamp 
+                                         AND r.taker_id = u.user_id
+                                         AND r.pets_id = p.pets_id
+                                   ORDER BY care_begin;";
                         $result3 = pg_query($query3) or die('Query failed: ' . pg_last_error());
 
 
                         while ($row = pg_fetch_row($result3)) {
 
-                            $request_id = $row[0];
-                            $taker_id = $row[2];
-                            $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
-                            $care_begin = $row[3];
-                            $care_end = $row[4];
-                            $bids = $row[6];
-                            $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[7] . ";"))[0];
-                            $status = $row[8];
+                            $taker_name = $row[0];
+                            $taker_email = $row[1];
+                            $care_begin = $row[2];
+                            $care_end = $row[3];
+                            $bids = $row[4];
+                            $request_pet_name = $row[5];
 
                             echo "<tr>";
                             echo "<td >$taker_name</td >";
+                            echo "<td >$taker_email</td >";
                             echo "<td >$request_pet_name</td >";
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
-                            echo "<td><a class='btn btn-info' role='button'>Successful</a></td>";
                             echo "</tr>";
                         }
                         pg_free_result($result3);
@@ -169,18 +173,22 @@ $user_address = $row[2];
 
 
                         <?php
-                        $query4 = "SELECT * FROM request WHERE owner_id = $user_id AND status = 'failed' ORDER BY care_begin;";
+                        $query4 = "SELECT u.name, r.care_begin, r.care_end, r.bids, p.pet_name FROM request r, pet_user u, pet p 
+                                   WHERE r.owner_id = $user_id 
+                                         AND r.status = 'failed' 
+                                         AND r.taker_id = u.user_id
+                                         AND r.pets_id = p.pets_id
+                                   ORDER BY care_begin;;";
                         $result4 = pg_query($query4) or die('Query failed: ' . pg_last_error());
 
 
                         while ($row = pg_fetch_row($result4)) {
 
-                            $request_id = $row[0];
-                            $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = " . $row[2] . ";"))[0];
-                            $care_begin = $row[3];
-                            $care_end = $row[4];
-                            $bids = $row[6];
-                            $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[7] . ";"))[0];
+                            $taker_name = $row[0];
+                            $care_begin = $row[1];
+                            $care_end = $row[2];
+                            $bids = $row[3];
+                            $request_pet_name = $row[4];
 
 
                             echo "<tr>";
@@ -190,7 +198,7 @@ $user_address = $row[2];
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
                             echo "<td>
-                                        <form class='form-inline' action='Alpha/request.php' method='get'><div class='form-group' style='float: right;'><input type='submit' class='form-control' value='Request Another Taker'></div><input type='hidden' name='request_id' value=$request_id></form>
+                                        <form class='form-inline' action='request.php' method='get'><div class='form-group' style='float: right;'><input type='submit' class='form-control' value='Request Another Taker'></div><input type='hidden' name='request_id' value=$request_id></form>
                                         <form class='form-inline' action='read.php' method='get'><div class='form-group' style='float: right;'><input type='submit' class='form-control' value='Read'></div><input type='hidden' name='request_id' value=$request_id></form>                                                                                                                                                                                                            
                                   </td>";
                             echo "</tr>";
@@ -249,5 +257,4 @@ $user_address = $row[2];
             </div>
         </div>
     </div>
-</body>                                                                                                                                                              
-
+</body> 
