@@ -4,10 +4,12 @@
 session_start();
 if (isset($_SESSION["user_id"])) {
     $user_id = $_SESSION["user_id"];
+    $role = $_SESSION["role"];
 } else {
     header("Location: login.php");
     exit;
 }
+
 if (isset($_GET["p_id"])) {
     $pet_id = (int)$_GET["p_id"];
     $query = "SELECT * FROM pet p WHERE p.pets_id = $pet_id;";
@@ -53,6 +55,11 @@ if (isset($_GET["p_id"])) {
             <ul class="nav navbar-nav">
                 <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
+                <?php
+                if ($role == 'admin') {
+                    echo "<li><a href=\"admin.php\"> Admin </a></li>";
+                }
+                ?>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
         </div>
