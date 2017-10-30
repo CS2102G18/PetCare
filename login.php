@@ -77,7 +77,7 @@ session_start();
 
                     <?php if (isset($_GET['login'])) {
                         $email = $_GET['email'];
-                        $query = "SELECT u.user_id
+                        $query = "SELECT u.user_id, u.role
                                       FROM pet_user u
                                       WHERE u.email = '" . $email . "'
                                         AND u.password = '" . $_GET['password'] . "';";
@@ -86,8 +86,10 @@ session_start();
                         $row = pg_fetch_row($result);
                         if ($row) {
                             $user_id = $row[0];
+                            $role = $row[1];
                             $_SESSION["user_email"] = $email;
                             $_SESSION["user_id"] = $user_id;
+                            $_SESSION["role"] = $role;
                             header("Location: owner.php");
                             exit;
                         } else {
