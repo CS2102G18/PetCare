@@ -33,6 +33,7 @@ if (isset($_SESSION["user_id"])) {
             color: #FFFFFF;
             background-color: #035f72;
         }
+
         body {
             background: url('./media/background.png');
         }
@@ -53,117 +54,119 @@ if (isset($_SESSION["user_id"])) {
     </div>
 </nav>
 <div class="content-container container">
-    <div class="container">
-        <h2>Add your available slot</h2>
-        <form>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Declare your available time</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-3 control-label">
-                                <h5>Start</h5>
-                            </label>
-                            <div class="col-sm-6">
-                                <div class="input-group date" id="start-datetimepicker">
-                                    <input type="text" class="form-control" name="start_time" required="true">
-                                    <div class="input-group-addon">
-                                        <i class="glyphicon glyphicon-calendar"></i>
+    <div class="panel new-task-panel">
+        <div class="container">
+            <h2>Add your available slot</h2>
+            <form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Declare your available time</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 control-label">
+                                    <h5>Start</h5>
+                                </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="start-datetimepicker">
+                                        <input type="text" class="form-control" name="start_time" required="true">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 control-label">
+                                    <h5>End</h5>
+                                </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="end-datetimepicker">
+                                        <input type="text" class="form-control" name="end_time" required="true">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Declare the available pet categories</h4>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Species</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_species" class="form-control" required="true">
+                                <option value="">Select Category</option>
+                                <?php
+                                $query = "SELECT * FROM util_species";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-3 control-label">
-                                <h5>End</h5>
-                            </label>
-                            <div class="col-sm-6">
-                                <div class="input-group date" id="end-datetimepicker">
-                                    <input type="text" class="form-control" name="end_time" required="true">
-                                    <div class="input-group-addon">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Age</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_age" class="form-control" required="true">
+                                <option value="">Select Age</option>
+                                <?php
+                                $query = "SELECT * FROM util_age";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Size</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_size" class="form-control" required="true">
+                                <option value="">Select Size</option>
+                                <?php
+                                $query = "SELECT * FROM util_size";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Declare the available pet categories</h4>
-                    </div>
-                </div>
                 <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Species</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_species" class="form-control" required="true">
-                            <option value="">Select Category</option>
-                            <?php
-                            $query = "SELECT * FROM util_species";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
+                <div class="container">
+                    <button type="submit" name="create" class="btn btn-default">Submit</button>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Age</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_age" class="form-control" required="true">
-                            <option value="">Select Age</option>
-                            <?php
-                            $query = "SELECT * FROM util_age";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Size</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_size" class="form-control" required="true">
-                            <option value="">Select Size</option>
-                            <?php
-                            $query = "SELECT * FROM util_size";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="container">
-                <button type="submit" name="create" class="btn btn-default">Submit</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 <?php
@@ -221,7 +224,7 @@ if (isset($_GET['create'])) {
                 </div>
             </div>";
         pg_free_result($result);
-        //header("Location: userprofile.php");
+        header("Location: userprofile.php");
     }
     exit();
 }

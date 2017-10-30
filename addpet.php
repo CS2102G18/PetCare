@@ -27,6 +27,7 @@ if (isset($_SESSION["user_id"])) {
             color: #FFFFFF;
             background-color: #8a3541;
         }
+
         body {
             background: url('./media/background.png');
         }
@@ -47,79 +48,82 @@ if (isset($_SESSION["user_id"])) {
     </div>
 </nav>
 <div class="content-container container">
-    <div class="container">
-        <h2>Add your pet</h2>
-        <form action="addpet.php">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Name</h5>
+    <div class="panel new-task-panel">
+        <div class="container">
+            <h2>Add your pet</h2>
+            <form action="addpet.php">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Name</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <input name="pet_name" type="text" class="form-control" placeholder="Pet Name"
+                                   required="true">
+                        </div>
                     </div>
-                    <div class="col-sm-8">
-                        <input name="pet_name" type="text" class="form-control" placeholder="Pet Name" required="true">
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Species</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_species" class="form-control" required="true">
+                                <option value="">Select Category</option>
+                                <?php
+                                $query = "SELECT DISTINCT species FROM petcategory";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Species</h5>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Age</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_age" class="form-control" required="true">
+                                <option value="">Select Age</option>
+                                <?php
+                                $query = "SELECT DISTINCT age FROM petcategory";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-8">
-                        <select name="pet_species" class="form-control" required="true">
-                            <option value="">Select Category</option>
-                            <?php
-                            $query = "SELECT DISTINCT species FROM petcategory";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Age</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_age" class="form-control" required="true">
-                            <option value="">Select Age</option>
-                            <?php
-                            $query = "SELECT DISTINCT age FROM petcategory";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <br>
+                    <br>
 
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Size</h5>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Size</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_size" class="form-control" required="true">
+                                <option value="">Select Size</option>
+                                <?php
+                                $query = "SELECT DISTINCT size FROM petcategory";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-8">
-                        <select name="pet_size" class="form-control" required="true">
-                            <option value="">Select Size</option>
-                            <?php
-                            $query = "SELECT DISTINCT size FROM petcategory";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
 
-            <button type="submit" name="create" class="btn btn-default">Submit</button>
-        </form>
+                    <button type="submit" name="create" class="btn btn-default">Submit</button>
+            </form>
+        </div>
     </div>
 </div>
 <?php
@@ -137,18 +141,18 @@ if (isset($_GET['create'])) {
     $result = pg_query($insert_query);
     if (!$result) {
         echo "
-            <div id='successmodal' class='modal fade'>
+            <div id='failmodal' class='modal fade'>
                 <div class='modal-dialog'>
                     <div class='modal-content'>
                         <div class='modal-header'>
-                          <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                          <h4 class='modal-title'>Create Pet</h4>
+                            <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                            <h4 class='modal-title'>Create Pet</h4>
                         </div>
                         <div class='modal-body'>
-                          <h4>Creation failed!</h4>
+                            <h4>Creation failed!</h4>
                         </div>
                         <div class='modal-footer'>
-                          <button type='button' class='btn btn-default'><a href='owner.php'>Close</a></button>
+                            <button type='button' class='btn btn-default'>Close</button>
                         </div>
                     </div>
                 </div>
@@ -159,14 +163,14 @@ if (isset($_GET['create'])) {
             <div id='successmodal' class='modal fade'>
                 <div class='modal-dialog'><div class='modal-content'>
                     <div class='modal-header'>
-                      <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                      <h4 class='modal-title'>Create Pet</h4>
+                        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                        <h4 class='modal-title'>Create Pet</h4>
                     </div>
                     <div class='modal-body'>
-                      <p>Creation successful!</p>
+                        <p>Creation successful!</p>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default'><a href='owner.php'>Close</a></button>
+                        <button type='button' class='btn btn-default'><a href='owner.php'>Close</a></button>
                     </div>
                 </div>
             </div>";
