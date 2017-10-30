@@ -28,18 +28,21 @@ if (isset($_SESSION["user_id"])) {
             $("#successmodal").modal('show');
         });
     </script>
+    <style>
+        .navbar-taker {
+            color: #FFFFFF;
+            background-color: #035f72;
+        }
+        body {
+            background: url('./media/background.png');
+        }
+    </style>
 </head>
 <body>
 <?php include "config/db-connection.php"; ?>
-<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
+<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-taker">
     <div class="container navbar-container">
         <div class="navbar-header pull-left"><a class="navbar-brand" href="taker.php"> PetCare</a></div>
-        <div class="nav navbar-nav navbar-form">
-            <div class="input-icon">
-                <i class="glyphicon glyphicon-search search"></i>
-                <input type="text" placeholder="Type to search..." class="form-control search-form" tabindex="1">
-            </div>
-        </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="Alpha/request.php"> Send Request </a></li>

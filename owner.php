@@ -9,8 +9,6 @@ if (isset($_SESSION["user_id"])) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +22,15 @@ if (isset($_SESSION["user_id"])) {
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="./vendor/js/jquery.ns-autogrow.min.js"></script>
     <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
+    <style>
+        .navbar-owner {
+            color: #FFFFFF;
+            background-color: #8a3541;
+        }
+        body {
+            background: url('./media/background.png');
+        }
+    </style>
 </head>
 <body>
 <!-- include php -->
@@ -42,15 +49,9 @@ $user_address = $row[2];
 
 
 <!--navigation bar-->
-<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
+<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-owner">
     <div class="container navbar-container">
         <div class="navbar-header pull-left"><a class="navbar-brand" href=""> PetCare</a></div>
-        <div class="nav navbar-nav navbar-form">
-            <div class="input-icon">
-                <i class="glyphicon glyphicon-search search"></i>
-                <input type="text" placeholder="Type to search..." class="form-control search-form" tabindex="1">
-            </div>
-        </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="request.php"> Send Request </a></li>
