@@ -55,6 +55,7 @@ if (isset($_SESSION["user_id"])) {
 
 
 <div class="content-container container">
+    <div class="panel new-task-panel">
     <div class="container">
         <h2>Choose time slots for your requests</h2>
         <form>
@@ -148,7 +149,7 @@ if (isset($_SESSION["user_id"])) {
             </div>
         </form>
     </div>
-</div>
+
 
 
 
@@ -210,7 +211,8 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
 }
 ?>
 
-
+    </div>
+</div>
 </body>
 </html>
 
