@@ -27,6 +27,7 @@ CREATE TABLE petcategory(
     size VARCHAR(20),
     species VARCHAR(30)
 );
+
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','cat');
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','dog');
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','rabbit');
@@ -66,6 +67,7 @@ CREATE TABLE pet(
     owner_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
     pcat_id INT REFERENCES petcategory(pcat_id) ON DELETE CASCADE ON UPDATE CASCADE,
     pet_name VARCHAR(64),
+    is_deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (owner_id, pet_name)
 );
 

@@ -120,8 +120,13 @@ if (isset($_SESSION["user_id"])) {
                             </select>
                         </div>
                     </div>
-
-                    <button type="submit" name="create" class="btn btn-default">Submit</button>
+                    <br>
+                    
+                    <div class="container">
+                        <button type="submit" name="create" class="btn btn-default">Submit</button>
+                        <a class="btn btn-danger" role="button" href="owner.php">Cancel</a>
+                    </div>
+                    
             </form>
         </div>
     </div>

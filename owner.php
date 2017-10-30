@@ -228,7 +228,7 @@ $user_address = $row[2];
 
                         <?php
 
-                        $query2 = "SELECT * FROM pet p WHERE p.owner_id =$user_id ORDER BY pets_id;";
+                        $query2 = "SELECT * FROM pet p WHERE p.owner_id =$user_id AND p.is_deleted=false ORDER BY pets_id;";
                         $result2 = pg_query($query2) or die('Query failed: ' . pg_last_error());
 
 
