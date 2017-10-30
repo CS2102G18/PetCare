@@ -139,43 +139,12 @@ if (isset($_GET['create'])) {
     $pet_name = $_GET["pet_name"];
     $insert_query = "INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES ($pcat_id,$user_id,'$pet_name');";
     $result = pg_query($insert_query);
-    if (!$result) {
-        echo "
-            <div id='failmodal' class='modal fade'>
-                <div class='modal-dialog'>
-                    <div class='modal-content'>
-                        <div class='modal-header'>
-                            <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                            <h4 class='modal-title'>Create Pet</h4>
-                        </div>
-                        <div class='modal-body'>
-                            <h4>Creation failed!</h4>
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-default'>Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>";
+    if (!$result){
         die('Query failed: ' . pg_last_error());
     } else {
-        echo " 
-            <div id='successmodal' class='modal fade'>
-                <div class='modal-dialog'><div class='modal-content'>
-                    <div class='modal-header'>
-                        <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                        <h4 class='modal-title'>Create Pet</h4>
-                    </div>
-                    <div class='modal-body'>
-                        <p>Creation successful!</p>
-                    </div>
-                    <div class='modal-footer'>
-                        <button type='button' class='btn btn-default'><a href='owner.php'>Close</a></button>
-                    </div>
-                </div>
-            </div>";
         pg_free_result($result);
         header("Location: owner.php");
+        echo "<script>window.location = './owner.php';</script>";
     }
     exit();
 }

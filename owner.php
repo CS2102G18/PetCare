@@ -246,6 +246,10 @@ $user_address = $row[2];
                             echo "<td >$pet_species</td >";
                             echo "<td >$pet_size</td>";
                             echo "<td >$pet_age</td >";
+                            echo "<td >
+                                      <a class=\"btn btn-default\" role=\"button\" href=\"editPet.php\">Edit</a>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"deletePet.php?pet_id=$pet_id\">Delete</a>
+                                  </td>";
                             echo "</tr>";
                         }
                         pg_free_result($result2);
@@ -258,4 +262,8 @@ $user_address = $row[2];
             </div>
         </div>
     </div>
-</body> 
+</body>
+</html>
+<?php
+
+?>
