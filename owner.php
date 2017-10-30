@@ -228,7 +228,7 @@ $user_address = $row[2];
 
                         <?php
 
-                        $query2 = "SELECT * FROM pet p WHERE p.owner_id =$user_id;";
+                        $query2 = "SELECT * FROM pet p WHERE p.owner_id =$user_id ORDER BY pets_id;";
                         $result2 = pg_query($query2) or die('Query failed: ' . pg_last_error());
 
 
@@ -246,6 +246,10 @@ $user_address = $row[2];
                             echo "<td >$pet_species</td >";
                             echo "<td >$pet_size</td>";
                             echo "<td >$pet_age</td >";
+                            echo "<td >
+                                      <a class=\"btn btn-default\" role=\"button\" href=\"editpet.php?p_id=$pet_id\">Edit</a>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"deletepet.php?pet_id=$pet_id\">Delete</a>
+                                  </td>";
                             echo "</tr>";
                         }
                         pg_free_result($result2);
@@ -258,4 +262,8 @@ $user_address = $row[2];
             </div>
         </div>
     </div>
-</body> 
+</body>
+</html>
+<?php
+
+?>
