@@ -109,9 +109,8 @@ if (isset($_SESSION["user_id"])) {
                             <select name="pet_species" class="form-control" required="true">
                                 <option value="">Select Category</option>
                                 <?php
-                                $query = "SELECT * FROM util_species";
+                                $query = "SELECT DISTINCT species FROM petcategory";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                                 }
@@ -129,9 +128,8 @@ if (isset($_SESSION["user_id"])) {
                             <select name="pet_age" class="form-control" required="true">
                                 <option value="">Select Age</option>
                                 <?php
-                                $query = "SELECT * FROM util_age";
+                                $query = "SELECT DISTINCT age FROM petcategory";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                                 }
@@ -149,9 +147,8 @@ if (isset($_SESSION["user_id"])) {
                             <select name="pet_size" class="form-control" required="true">
                                 <option value="">Select Size</option>
                                 <?php
-                                $query = "SELECT * FROM util_size";
+                                $query = "SELECT DISTINCT size FROM petcategory";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
                                 }
@@ -161,11 +158,11 @@ if (isset($_SESSION["user_id"])) {
                         </div>
                     </div>
                 </div>
-                <br>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
                 </div>
             </form>
+            <br>
         </div>
     </div>
 </div>
