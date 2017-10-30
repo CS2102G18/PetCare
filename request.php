@@ -55,8 +55,10 @@ if (isset($_SESSION["user_id"])) {
 
 
 <div class="content-container container">
+
     <div class="panel new-task-panel">
-    <div class="container">
+
+        <div class="container">
         <h2>Choose time slots for your requests</h2>
         <form>
             <div class="form-group">
@@ -157,6 +159,9 @@ if (isset($_SESSION["user_id"])) {
 if (isset($_GET['find'])) { // send requests to all care takers who are available
     $start_time = $_GET['start_time'];
     $end_time = $_GET['end_time'];
+
+
+
     $pet_name = $_GET['pet_name'];
     $remarks = $_GET['remarks'];
     $bids = $_GET['bids'];
@@ -172,8 +177,16 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                     AND end_time >= '$end_time'
                     AND is_deleted = false
                     AND taker_id <> '$user_id'";
+
     $avail_result = pg_query($avail_query) or die('Query failed: ' . pg_last_error());
+
+    echo "<div class=\"container\">
+                <h4>Available care takers</h4>
+                </div>";
+
     while ($row = pg_fetch_row($avail_result)) {
+
+
         $avail_id = $row[0];
         $start_avail_time = $row[2];
         $end_avail_time = $row[3];
@@ -181,14 +194,9 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
         $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
         $status = $row[9];
-        $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
-                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
-        //$result = pg_query($insert_query);
-        print $insert_query;
-        echo "<div class=\"container\">
-                <h4>Available care takers</h4>
-                </div>
-                
+
+
+        echo "
                 <table class=\"table table-striped\">
                 <tr>
                 <th>Taker Name</th>
@@ -201,27 +209,71 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
         echo "<td >
-                <form method = post;> 
-                <class='form-inline' action='sendRequestAction.php'>
+                <form method = 'get' class='form-inline' >
                     <div class='form-group' style='float: left;'>
-                    <input type='submit' class='form-control' value='Send'>
-                    </div>
-                    <input type='hidden' name='send_req' value=$taker_id></form>
-                    <input type='hidden' name='send_req' value=$user_id></form>
-                    <input type='hidden' name='send_req' value=$start_time></form>
-                    <input type='hidden' name='send_req' value=$end_time></form>
-                    <input type='hidden' name='send_req' value=$pet_id></form>
-                    <input type='number' name='send_req' value=$bids></form>
-                    
-                
+                    <input type='submit' class='form-control' name = 'send_req' value='Send'>                    
+                    <input type='hidden' name='taker_id' value=$taker_id>
+                    <input type='hidden' name='user_id' value=$user_id>
+                    <input type='text' name='start_time' value='$start_time'>
+                    <input type='text' name='end_time' value='$end_time'>
+                    <input type='hidden' name='pet_id' value=$pet_id>
+                    <input type='number' name='bids' value=$bids>
+                    <input type='hidden' name='pet_id' value=$pet_id>
+                    <input type='hidden' name='remarks' value='$remarks'>
+                    <input type='hidden' name='pet_name' value='$pet_name'>
+                    <input type='hidden' name='pcat_id' value=$pcat_id>
+                </div>
+                </form>
               </td >";
         echo "</tr>";
         echo "</table>";
+
     }
 
     exit();
 }
 ?>
+        <?php
+
+        if (isset($_GET["send_req"])) {
+            $taker_id = $_GET["taker_id"];
+            $user_id = $_GET["user_id"];
+            $start_time = $_GET["start_time"];
+            $end_time = $_GET["end_time"];
+            $pet_id = $_GET["pet_id"];
+            $bids = $_GET["bids"];
+            $remarks = $_GET["remarks"];
+            $pet_name = $_GET["pet_name"];
+
+            $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
+                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
+            $result = pg_query($insert_query) or die('Query failed: ' . pg_last_error());
+            pg_free_result($result);
+
+            echo "
+            
+            <form method = 'get' class='form-inline' >
+                    <div class='form-group' style='float: left;'>
+                    <input type='submit' class='form-control' name = 'find' value='Send to another taker'>                    
+                    <input type='hidden' name='taker_id' value=$taker_id>
+                    <input type='hidden' name='user_id' value=$user_id>
+                    <input type='text' name='start_time' value='$start_time'>
+                    <input type='text' name='end_time' value='$end_time'>
+                    <input type='hidden' name='pet_id' value=$pet_id>
+                    <input type='number' name='bids' value=$bids>
+                    <input type='hidden' name='pet_id' value=$pet_id>
+                    <input type='hidden' name='remarks' value='$remarks'>
+                    <input type='hidden' name='pet_name' value='$pet_name'>
+                </div>
+                </form>
+            
+            ";
+
+
+        }
+
+        ?>
+
 
     </div>
 </div>
