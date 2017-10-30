@@ -46,7 +46,6 @@ if (isset($_SESSION["user_id"])) {
         <div class="navbar-header pull-left"><a class="navbar-brand" href="taker.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="Alpha/request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -160,6 +159,7 @@ if (isset($_SESSION["user_id"])) {
                 </div>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
+                    <a class="btn btn-danger" role="button" href="taker.php">Cancel</a>
                 </div>
             </form>
             <br>
@@ -184,7 +184,7 @@ if (isset($_GET['create'])) {
     $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id) 
                      VALUES ('$start_time', '$end_time', $pcat_id, $user_id);";
     $result = pg_query($insert_query);
-    print $insert_query;
+    //print $insert_query;
     if (!$result) {
         echo "
             <div id='successmodal' class='modal fade'>
@@ -198,7 +198,7 @@ if (isset($_GET['create'])) {
                           <h4>Creation failed!</h4>
                         </div>
                         <div class='modal-footer'>
-                          <button type='button' class='btn btn-default'><a href='taker.php'>Close</a></button>
+                          <a class='btn btn-default' role='button' href='addavail.php'>Close</a>
                         </div>
                     </div>
                 </div>
@@ -216,12 +216,11 @@ if (isset($_GET['create'])) {
                       <p>Creation successful!</p>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default'><a href='taker.php'>Close</a></button>
+                      <a class='btn btn-default' role='button' href='taker.php'>OK</a>
                     </div>
                 </div>
             </div>";
         pg_free_result($result);
-        header("Location: userprofile.php");
     }
     exit();
 }

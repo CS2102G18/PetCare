@@ -54,7 +54,6 @@ $user_address = $row[2];
         <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
                 <li><a href="admin.php"> Admin </a></li>
@@ -277,58 +276,7 @@ $user_address = $row[2];
                                   <td >$pet_size</td >
                                   <td >$pet_age</td >
                                   <td>
-                                    <form class='form-inline' action='availAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Delete Slot'></div><input type='hidden' name='delete_avail_id' value=$avail_id></form>
-                                  </td>
-                                  </tr>";
-
-                        }
-                        ?>
-                    </table>
-
-                    <table class="table table-striped">
-
-                        <div class="container">
-                            <h4>Deleted Slots</h4>
-                        </div>
-
-                        <tr>
-                            <th>Duration From</th>
-                            <th>Duration To</th>
-                            <th>Pet Species</th>
-                            <th>Pet Size</th>
-                            <th>Pet Age</th>
-                            <th>Action</th>
-                        </tr>
-
-                        <?php
-                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age 
-                                  FROM availability a, petcategory p 
-                                  WHERE a.pcat_id = p.pcat_id 
-                                        AND a.taker_id =$user_id 
-                                        AND a.is_deleted = TRUE 
-                                        AND a.start_time > CURRENT_TIMESTAMP 
-                                  ORDER BY a.start_time;";
-                        $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-
-                        while ($row = pg_fetch_row($result)) {
-
-                            $avail_id = $row[0];
-                            $start = $row[1];
-                            $end = $row[2];
-                            $pet_species = $row[3];
-                            $pet_size = $row[4];
-                            $pet_age = $row[5];
-
-
-                            echo "<tr>
-                                  <td >$start</td >
-                                  <td >$end</td >
-                                  <td >$pet_species</td >
-                                  <td >$pet_size</td >
-                                  <td >$pet_age</td >
-                                  <td>
-                                    <form class='form-inline' action='availAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Restore Slot'></div><input type='hidden' name='restore_avail_id' value=$avail_id></form>
+                                    <a class=\"btn btn-danger\" role=\"button\" href=\"deleteavail.php?avail_id=$avail_id\">Delete</a>
                                   </td>
                                   </tr>";
 
