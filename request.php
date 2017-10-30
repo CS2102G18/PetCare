@@ -183,7 +183,7 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         $status = $row[9];
         $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
                      VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
-        $result = pg_query($insert_query);
+        //$result = pg_query($insert_query);
         print $insert_query;
         echo "<div class=\"container\">
                 <h4>Available care takers</h4>
@@ -201,7 +201,19 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
         echo "<td >
-                Sent, Pending
+                <form method = post;> 
+                <class='form-inline' action='sendRequestAction.php'>
+                    <div class='form-group' style='float: left;'>
+                    <input type='submit' class='form-control' value='Send'>
+                    </div>
+                    <input type='hidden' name='send_req' value=$taker_id></form>
+                    <input type='hidden' name='send_req' value=$user_id></form>
+                    <input type='hidden' name='send_req' value=$start_time></form>
+                    <input type='hidden' name='send_req' value=$end_time></form>
+                    <input type='hidden' name='send_req' value=$pet_id></form>
+                    <input type='number' name='send_req' value=$bids></form>
+                    
+                
               </td >";
         echo "</tr>";
         echo "</table>";
