@@ -10,8 +10,6 @@ if (isset($_SESSION["user_id"])) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,12 +35,10 @@ if (isset($_SESSION["user_id"])) {
 <!-- include php -->
 <?php include "config/db-connection.php"; ?>
 
-
-
 <!--navigation bar-->
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="taker.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="request.php"> Send Request </a></li>
@@ -53,14 +49,6 @@ if (isset($_SESSION["user_id"])) {
     </div>
 </nav>
 <div class="content-container container">
-    <div class="page-heading">
-        <ol class="breadcrumb">
-            <li><a href="/">Home</a></li>
-            <li>Data summary</li>
-        </ol>
-        <h1>Data Summary</h1>
-    </div>
-
     <div>
         <h2>Summary on Requests</h2>
     </div>
