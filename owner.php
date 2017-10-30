@@ -28,7 +28,7 @@ if (isset($_SESSION["user_id"])) {
             background-color: #8a3541;
         }
         body {
-            background: url('./media/background.png');
+            background: url('./media/background_owner.png');
         }
     </style>
 </head>

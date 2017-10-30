@@ -41,7 +41,7 @@ if (isset($_GET["p_id"])) {
         }
 
         body {
-            background: url('./media/background.png');
+            background: url('./media/background_owner.png');
         }
     </style>
 </head>

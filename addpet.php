@@ -29,7 +29,7 @@ if (isset($_SESSION["user_id"])) {
         }
 
         body {
-            background: url('./media/background.png');
+            background: url('./media/background_owner.png');
         }
     </style>
 </head>

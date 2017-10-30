@@ -13,6 +13,11 @@ session_start();
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background: url('./media/background_login.png');
+        }
+    </style>
 </head>
 <body>
 <!-- include php -->
