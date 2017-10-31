@@ -50,6 +50,7 @@ $bids = 1;
 $start_time = $_GET['start_time'];
 $end_time = $_GET['end_time'];
 $pet_name = $_GET['pet_name'];
+$taker_name = $_GET['taker_name'];
 $remarks = $_GET['remarks'];
 $bids = $_GET['bids'];
 
@@ -73,7 +74,6 @@ $bids = $_GET['bids'];
     <div class="panel new-task-panel">
 
         <div class="container">
-        <h2>Choose time slots for your requests</h2>
         <form>
             <div class="form-group">
                 <div class="row">
@@ -87,7 +87,7 @@ $bids = $_GET['bids'];
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group date" id="start-datetimepicker">
-                                    <input type="text" class="form-control" name="start_time"  value = '<?php echo $start_time;?>' required="true">
+                                    <input type="text" class="form-control" name="start_time"  value = '<?php echo $start_time;?>' >
                                     <div class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </div>
@@ -103,7 +103,7 @@ $bids = $_GET['bids'];
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group date" id="end-datetimepicker">
-                                    <input type="text" class="form-control" name="end_time" value = '<?php echo $end_time;?>' required="true">
+                                    <input type="text" class="form-control" name="end_time" value = '<?php echo $end_time;?>' >
                                     <div class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </div>
@@ -112,18 +112,13 @@ $bids = $_GET['bids'];
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Choose your pet to be taken care of</h4>
-                    </div>
-                </div>
-                <br>
+
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>Pet to be taken care of</h5>
                     </div>
                     <div class="col-sm-8">
-                        <select name="pet_name" class="form-control" required="true">
+                        <select name="pet_name" class="form-control">
                             <option value="">Select Pet</option>
                             <?php
                             $query = "SELECT pet_name FROM pet WHERE owner_id = $user_id";
@@ -140,10 +135,21 @@ $bids = $_GET['bids'];
 
                 <div class="row">
                     <div class="col-sm-2">
+                        <h5>Preferred Taker Name</h5>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="taker_name" class="form-control" value = '<?php echo $taker_name;?>' >
+                        </input>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-sm-2">
                         <h5>Your remarks for the care taker</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input name="remarks" class="form-control" value = '<?php echo $remarks;?>' required="true">
+                        <input name="remarks" class="form-control" value = '<?php echo $remarks;?>' >
                         </input>
                     </div>
                 </div>
@@ -153,15 +159,15 @@ $bids = $_GET['bids'];
                         <h5>Your bids</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="number" name="bids" min = "1" class="form-control"  value = '<?php echo $bids;?>' required="true">
+                        <input type="number" name="bids" min = "1" class="form-control"  value = '<?php echo $bids;?>' >
                         </input>
                     </div>
                 </div>
                 <br>
-            </div>
-            <br>
-            <div class="container">
-                <button type="submit" name="find" class="btn btn-default">Find takers</button>
+
+                <div class="row"  style="display:block; text-align:center; padding-left: 0px " >
+                    <button type="submit" name="find" class="btn btn-default">Find takers</button>
+                </div>
             </div>
             <br>
         </form>
@@ -171,29 +177,59 @@ $bids = $_GET['bids'];
 
 
 <?php
-if (isset($_GET['find'])) { // send requests to all care takers who are available
+if (isset($_GET['find'])) {
     $start_time = $_GET['start_time'];
     $end_time = $_GET['end_time'];
-
-
-
+    $pet_id = $_GET['pet_id'];
     $pet_name = $_GET['pet_name'];
     $remarks = $_GET['remarks'];
     $bids = $_GET['bids'];
+    $pcat_id = $_GET['pcat_id'];
+    $taker_name = $_GET['taker_name'];
+
+    $complete = true;
+
     $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
     $pid_result = pg_query($pid_query) or die('Query failed: ' . pg_last_error());
     $pet_id = pg_fetch_row($pid_result)[0];
     $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
     $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
     $pcat_id = pg_fetch_row($pcat_result)[0];
-    $avail_query = "SELECT * FROM availability
-                    WHERE pcat_id = $pcat_id
-                    AND start_time <= '$start_time'
-                    AND end_time >= '$end_time'
-                    AND is_deleted = false
+    $avail_query = "SELECT *
+                    FROM availability a, pet_user p
+                    WHERE is_deleted = false
+                    AND p.user_id = a.taker_id
                     AND taker_id <> '$user_id'";
 
+
+    if(trim($pet_name)) {
+        $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
+        $pid_result = pg_query($pid_query) or die('Query failed: ' . pg_last_error());
+        $pet_id = pg_fetch_row($pid_result)[0];
+        $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
+        $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
+        $pcat_id = pg_fetch_row($pcat_result)[0];
+
+        $avail_query .= " AND pcat_id = $pcat_id ";
+    }else
+        $complete = false;
+
+    if(trim($start_time)) {
+        $avail_query .= " AND start_time <= '$start_time' ";
+    }else
+        $complete = false;
+
+    if(trim($end_time)) {
+        $avail_query .= " AND end_time >= '$end_time' ";
+    }else
+        $complete = false;
+
+    if(trim($taker_name)) {
+        $avail_query .= " AND UPPER(p.name) LIKE UPPER('%$taker_name%') ";
+    }
+
     $avail_result = pg_query($avail_query) or die('Query failed: ' . pg_last_error());
+    //print $avail_query;
 
     echo "<div class=\"container\">
                 <h4>Available care takers</h4>
@@ -207,8 +243,6 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         $end_avail_time = $row[3];
         $taker_id = $row[5];
         $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
-        $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
-        $status = $row[9];
 
         $bids_query = "SELECT AVG(bids) FROM request WHERE taker_id = '$taker_id'";
         $bids_result = pg_query($bids_query) or die('Query failed: ' . pg_last_error());
@@ -240,8 +274,11 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                                                   
               </div>                       
               <td >                
-                <div class='form-group' style='float: left;'>
-                <input type='submit' class='form-control' name = 'send_req' value='Send'>                    
+                <div class='form-group' style='float: left;'>";
+
+        if($complete) {
+            echo "  
+                <input type='submit' class='form-control' name = 'send_req' value='Send'>
                 <input type='hidden' name='taker_id' value=$taker_id>
                 <input type='hidden' name='user_id' value=$user_id>
                 <input type='hidden' name='start_time' value='$start_time'>
@@ -249,11 +286,15 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                 <input type='hidden' name='pet_id' value=$pet_id>
                 <input type='hidden' name='remarks' value='$remarks'>
                 <input type='hidden' name='pet_name' value='$pet_name'>
-                <input type='hidden' name='pcat_id' value=$pcat_id>                    
+                <input type='hidden' name='pcat_id' value=$pcat_id>    
+                ";
+        }else {
+            echo "
+                Incomplete Info, Unable to Send                                              
               </td >
               </form>
               ";
-
+        }
 
         echo "</tr>";
         echo "</table>";
@@ -275,6 +316,7 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
             $remarks = $_GET["remarks"];
             $pet_name = $_GET["pet_name"];
 
+
             $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
                      VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks', $bids, $pet_id);";
             //print $insert_query;
@@ -282,11 +324,11 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
             pg_free_result($result);
 
             echo "
-            <br>
-            <br>
-            <div class=\"container\">
+            
+            <div class=\"container\"  style=\"text-align:center\">
             <form method = 'get' class='form-inline' >
                     <div class='form-group' style='float: top;'>
+                    <p style=\"color:green;\" >Sent successfully!</p>
                     <input type='submit' class='form-control' name = 'find' value='Send to another taker'>                    
                     <input type='hidden' name='taker_id' value=$taker_id>
                     <input type='hidden' name='user_id' value=$user_id>
