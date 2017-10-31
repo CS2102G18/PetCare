@@ -9,7 +9,7 @@ if (isset($_SESSION["user_id"])) {
 }
 ?>
 
-<!DOCTYPE html>
+<!DOCTYPE html>2
 <html>
 <head>
     <title>PetCare</title>
@@ -232,17 +232,14 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
         echo "<td >$avg_bids</td >";
-        echo "<td>
+        echo "
+            <form method = 'get' class='form-inline' >
+              <td>
                 <input type='number' name='bids' min = '1' value=$bids>                                                            
-              </td>                                    
-              </div>
-              </form>
-              ";
-
-        echo "<form method = 'get' class='form-inline' >
-                    
-              <td >
-                
+              </td>
+                                                  
+              </div>                       
+              <td >                
                 <div class='form-group' style='float: left;'>
                 <input type='submit' class='form-control' name = 'send_req' value='Send'>                    
                 <input type='hidden' name='taker_id' value=$taker_id>
@@ -250,12 +247,12 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                 <input type='hidden' name='start_time' value='$start_time'>
                 <input type='hidden' name='end_time' value='$end_time'>
                 <input type='hidden' name='pet_id' value=$pet_id>
-                <input type='hidden' name='bids' value=$bids>
                 <input type='hidden' name='remarks' value='$remarks'>
                 <input type='hidden' name='pet_name' value='$pet_name'>
-                <input type='hidden' name='pcat_id' value=$pcat_id>
-                    
-              </td >";
+                <input type='hidden' name='pcat_id' value=$pcat_id>                    
+              </td >
+              </form>
+              ";
 
 
         echo "</tr>";
