@@ -180,8 +180,61 @@ if (isset($_GET['create'])) {
     $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
     $pcat_id = pg_fetch_row($pcat_result)[0];
 
-    $pet_name = $_GET["pet_name"];
-    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id) 
+    //check overlap
+    $check_query = "SELECT start_time, end_time FROM availability WHERE pcat_id=" . $pcat_id . " AND taker_id=" . $user_id . " AND is_deleted=false;";
+    $check_result = pg_query($check_query);
+    if (!$check_result) {
+        echo "
+            <div id='successmodal' class='modal fade'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                          <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                          <h4 class='modal-title'>Create Availability</h4>
+                        </div>
+                        <div class='modal-body'>
+                          <h4>Creation failed!</h4>
+                        </div>
+                        <div class='modal-footer'>
+                          <a class='btn btn-default' role='button' href='addavail.php'>Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+        die('Query failed: ' . pg_last_error());
+    }
+    $overlap_exist=false;
+    while ($check_row = pg_fetch_row($check_result)) {
+        if(!(($check_row[0]<$check_row[1] and $check_row[1]<$start_time and $start_time<$end_time) 
+         or ($start_time<$end_time and end_time<$check_row[0] and $check_row[0]<$check_row[1]))){
+            $overlap_exist=true;
+        }
+    }
+    if ($overlap_exist) {
+        echo "
+            <div id='successmodal' class='modal fade'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                          <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                          <h4 class='modal-title'>Create Availability</h4>
+                        </div>
+                        <div class='modal-body'>
+                          <h4>Time slot overlap. Creation failed!</h4>
+                          <h4>Two consecutive slots will still be considered as overlap</h4>
+                        </div>
+                        <div class='modal-footer'>
+                          <a class='btn btn-default' role='button' href='addavail.php'>Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+        die('Query failed: ' . pg_last_error());
+    }    
+    pg_free_result($check_result);
+    //complete check overlap
+ 
+    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id)
                      VALUES ('$start_time', '$end_time', $pcat_id, $user_id);";
     $result = pg_query($insert_query);
     //print $insert_query;
