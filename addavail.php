@@ -28,21 +28,24 @@ if (isset($_SESSION["user_id"])) {
             $("#successmodal").modal('show');
         });
     </script>
+    <style>
+        .navbar-taker {
+            color: #FFFFFF;
+            background-color: #035f72;
+        }
+
+        body {
+            background: url('./media/background_taker.png');
+        }
+    </style>
 </head>
 <body>
 <?php include "config/db-connection.php"; ?>
-<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
+<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-taker">
     <div class="container navbar-container">
         <div class="navbar-header pull-left"><a class="navbar-brand" href="taker.php"> PetCare</a></div>
-        <div class="nav navbar-nav navbar-form">
-            <div class="input-icon">
-                <i class="glyphicon glyphicon-search search"></i>
-                <input type="text" placeholder="Type to search..." class="form-control search-form" tabindex="1">
-            </div>
-        </div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="Alpha/request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -50,117 +53,117 @@ if (isset($_SESSION["user_id"])) {
     </div>
 </nav>
 <div class="content-container container">
-    <div class="container">
-        <h2>Add your available slot</h2>
-        <form>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Declare your available time</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-3 control-label">
-                                <h5>Start</h5>
-                            </label>
-                            <div class="col-sm-6">
-                                <div class="input-group date" id="start-datetimepicker">
-                                    <input type="text" class="form-control" name="start_time" required="true">
-                                    <div class="input-group-addon">
-                                        <i class="glyphicon glyphicon-calendar"></i>
+    <div class="panel new-task-panel">
+        <div class="container">
+            <h2>Add your available slot</h2>
+            <form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Declare your available time</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 control-label">
+                                    <h5>Start</h5>
+                                </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="start-datetimepicker">
+                                        <input type="text" class="form-control" name="start_time" required="true">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 control-label">
+                                    <h5>End</h5>
+                                </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="end-datetimepicker">
+                                        <input type="text" class="form-control" name="end_time" required="true">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-3 control-label">
-                                <h5>End</h5>
-                            </label>
-                            <div class="col-sm-6">
-                                <div class="input-group date" id="end-datetimepicker">
-                                    <input type="text" class="form-control" name="end_time" required="true">
-                                    <div class="input-group-addon">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Declare the available pet categories</h4>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Species</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_species" class="form-control" required="true">
+                                <option value="">Select Category</option>
+                                <?php
+                                $query = "SELECT DISTINCT species FROM petcategory";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Age</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_age" class="form-control" required="true">
+                                <option value="">Select Age</option>
+                                <?php
+                                $query = "SELECT DISTINCT age FROM petcategory";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>New Pet's Size</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="pet_size" class="form-control" required="true">
+                                <option value="">Select Size</option>
+                                <?php
+                                $query = "SELECT DISTINCT size FROM petcategory";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Declare the available pet categories</h4>
-                    </div>
+                <div class="container">
+                    <button type="submit" name="create" class="btn btn-default">Submit</button>
+                    <a class="btn btn-danger" role="button" href="taker.php">Cancel</a>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Species</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_species" class="form-control" required="true">
-                            <option value="">Select Category</option>
-                            <?php
-                            $query = "SELECT * FROM util_species";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Age</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_age" class="form-control" required="true">
-                            <option value="">Select Age</option>
-                            <?php
-                            $query = "SELECT * FROM util_age";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h5>New Pet's Size</h5>
-                    </div>
-                    <div class="col-sm-8">
-                        <select name="pet_size" class="form-control" required="true">
-                            <option value="">Select Size</option>
-                            <?php
-                            $query = "SELECT * FROM util_size";
-                            $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-                            while ($row = pg_fetch_row($result)) {
-                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                            }
-                            pg_free_result($result);
-                            ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            </form>
             <br>
-            <div class="container">
-                <button type="submit" name="create" class="btn btn-default">Submit</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 <?php
@@ -181,7 +184,7 @@ if (isset($_GET['create'])) {
     $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id) 
                      VALUES ('$start_time', '$end_time', $pcat_id, $user_id);";
     $result = pg_query($insert_query);
-    print $insert_query;
+    //print $insert_query;
     if (!$result) {
         echo "
             <div id='successmodal' class='modal fade'>
@@ -195,7 +198,7 @@ if (isset($_GET['create'])) {
                           <h4>Creation failed!</h4>
                         </div>
                         <div class='modal-footer'>
-                          <button type='button' class='btn btn-default'><a href='taker.php'>Close</a></button>
+                          <a class='btn btn-default' role='button' href='addavail.php'>Close</a>
                         </div>
                     </div>
                 </div>
@@ -213,12 +216,11 @@ if (isset($_GET['create'])) {
                       <p>Creation successful!</p>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default'><a href='taker.php'>Close</a></button>
+                      <a class='btn btn-default' role='button' href='taker.php'>OK</a>
                     </div>
                 </div>
             </div>";
         pg_free_result($result);
-        //header("Location: userprofile.php");
     }
     exit();
 }

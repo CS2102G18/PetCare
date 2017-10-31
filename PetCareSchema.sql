@@ -1,12 +1,9 @@
-﻿DROP TABLE assignment;
-DROP TABLE request
+DROP TABLE assignment;
+DROP TABLE request;
 DROP TABLE availability;
 DROP TABLE pet;
 DROP TABLE petcategory;
 DROP TABLE pet_user;
-DROP TABLE util_age;
-DROP TABLE util_size;
-DROP TABLE util_species;
 
 DROP SEQUENCE user_id_seq;
 DROP SEQUENCE pets_id_seq;
@@ -15,49 +12,46 @@ DROP SEQUENCE avail_id_seq;
 DROP SEQUENCE assn_id_seq;
 DROP SEQUENCE pcat_seq;
 
-﻿CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
+CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pets_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE request_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE avail_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE assn_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pcat_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 
-CREATE TABLE util_age(
-    age VARCHAR(10) PRIMARY KEY CONSTRAINT CHK_ag CHECK (age in ('puppy', 'adult'))
-);
 
-CREATE TABLE util_size(
-    size VARCHAR(20) PRIMARY KEY CONSTRAINT CHK_sz CHECK (size in ('small', 'medium', 'large', 'giant'))
-);
-
-CREATE TABLE util_species(
-    species VARCHAR(30) PRIMARY KEY CONSTRAINT CHK_sp CHECK (species in ('cat', 'dog', 'rabbit', 'lizard', 'others'))
-);
 
 CREATE TABLE petcategory(
     pcat_id INT PRIMARY KEY DEFAULT nextval('pcat_seq'),
-    age VARCHAR(10) REFERENCES util_age(age),
-    size VARCHAR(20) REFERENCES util_size(size),
-    species VARCHAR(30) REFERENCES util_species(species)
+    age VARCHAR(10),
+    size VARCHAR(20),
+    species VARCHAR(30)
 );
 
-INSERT INTO util_age(age) VALUES('puppy');
-INSERT INTO util_age(age) VALUES('adult');
-
-INSERT INTO util_size(size) VALUES('small');
-INSERT INTO util_size(size) VALUES('medium');
-INSERT INTO util_size(size) VALUES('large');
-INSERT INTO util_size(size) VALUES('giant');
-
-INSERT INTO util_species(species) VALUES('dog');
-INSERT INTO util_species(species) VALUES('rabbit');
-INSERT INTO util_species(species) VALUES('cat');
-INSERT INTO util_species(species) VALUES('lizard');
-INSERT INTO util_species(species) VALUES('others');
-
-INSERT INTO petcategory(age, size, species)
-    SELECT *
-    FROM util_age, util_size, util_species;
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','medium','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','medium','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','medium','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','large','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','large','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','large','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','giant','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','giant','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('puppy','giant','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','small','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','small','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','small','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','medium','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','medium','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','medium','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','large','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','large','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','large','rabbit');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','giant','cat');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','giant','dog');
+INSERT INTO petcategory (age, size, species) VALUES ('adult','giant','rabbit');
 
 CREATE TABLE pet_user(
     user_id INT PRIMARY KEY DEFAULT nextval('user_id_seq'),
@@ -73,6 +67,7 @@ CREATE TABLE pet(
     owner_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
     pcat_id INT REFERENCES petcategory(pcat_id) ON DELETE CASCADE ON UPDATE CASCADE,
     pet_name VARCHAR(64),
+    is_deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (owner_id, pet_name)
 );
 

@@ -4,7 +4,7 @@ session_start();
 if (isset($_SESSION["user_id"])) {
     $user_id = $_SESSION["user_id"];
 } else {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit;
 }
 ?>
@@ -13,38 +13,55 @@ if (isset($_SESSION["user_id"])) {
 <html>
 <head>
     <title>PetCare</title>
-    <link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="../vendor/css/new-task-styling.css">
-    <link rel="stylesheet" href="../vendor/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
+    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
+    <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
 
-    <script src="../vendor/js/jquery-3.2.0.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../vendor/js/jquery.ns-autogrow.min.js"></script>
-    <script src="../vendor/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="../vendor/js/find-task.js"></script>
+    <script src="./vendor/js/jquery-3.2.0.min.js"></script>
+    <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./vendor/js/jquery.ns-autogrow.min.js"></script>
+    <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="./vendor/js/find-task.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#successmodal").modal('show');
         });
     </script>
+    <style>
+        .navbar-owner {
+            color: #FFFFFF;
+            background-color: #8a3541;
+        }
+        body {
+            background: url('./media/background_owner.png');
+        }
+    </style>
 </head>
 <body>
-<?php include "../config/db-connection.php"; ?>
-<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top">
+<?php include "config/db-connection.php";
+
+$start_time = '';
+$end_time = '';
+$pet_name = '';
+$remarks = '';
+$bids = 1;
+
+$start_time = $_GET['start_time'];
+$end_time = $_GET['end_time'];
+$pet_name = $_GET['pet_name'];
+$remarks = $_GET['remarks'];
+$bids = $_GET['bids'];
+
+?>
+<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-owner">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="../userprofile.php"> PetCare</a></div>
-        <div class="nav navbar-nav navbar-form">
-            <div class="input-icon">
-                <i class="glyphicon glyphicon-search search"></i>
-                <input type="text" placeholder="Type to search..." class="form-control search-form" tabindex="1">
-            </div>
-        </div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="request.php"> Send Request </a></li>
-                <li><a href="../history.php"> View History </a></li>
-                <li><a href="../logout.php"> Log Out </a></li>
+                <li><a href="history.php"> View History </a></li>
+                <li><a href="logout.php"> Log Out </a></li>
             </ul>
         </div>
     </div>
@@ -52,7 +69,10 @@ if (isset($_SESSION["user_id"])) {
 
 
 <div class="content-container container">
-    <div class="container">
+
+    <div class="panel new-task-panel">
+
+        <div class="container">
         <h2>Choose time slots for your requests</h2>
         <form>
             <div class="form-group">
@@ -67,7 +87,7 @@ if (isset($_SESSION["user_id"])) {
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group date" id="start-datetimepicker">
-                                    <input type="text" class="form-control" name="start_time" required="true">
+                                    <input type="text" class="form-control" name="start_time"  value = '<?php echo $start_time;?>' required="true">
                                     <div class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </div>
@@ -83,7 +103,7 @@ if (isset($_SESSION["user_id"])) {
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group date" id="end-datetimepicker">
-                                    <input type="text" class="form-control" name="end_time" required="true">
+                                    <input type="text" class="form-control" name="end_time" value = '<?php echo $end_time;?>' required="true">
                                     <div class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </div>
@@ -120,20 +140,20 @@ if (isset($_SESSION["user_id"])) {
 
                 <div class="row">
                     <div class="col-sm-2">
-                        <h5>End your remarks for the care taker</h5>
+                        <h5>Your remarks for the care taker</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input name="remarks" class="form-control" required="true">
+                        <input name="remarks" class="form-control" value = '<?php echo $remarks;?>' required="true">
                         </input>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-sm-2">
-                        <h5>End your bids</h5>
+                        <h5>Your bids</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="number" name="bids" min = "1" class="form-control" required="true">
+                        <input type="number" name="bids" min = "1" class="form-control"  value = '<?php echo $bids;?>' required="true">
                         </input>
                     </div>
                 </div>
@@ -141,11 +161,12 @@ if (isset($_SESSION["user_id"])) {
             </div>
             <br>
             <div class="container">
-                <button type="submit" name="find" class="btn btn-default">Send Request</button>
+                <button type="submit" name="find" class="btn btn-default">Find takers</button>
             </div>
+            <br>
         </form>
     </div>
-</div>
+
 
 
 
@@ -153,6 +174,9 @@ if (isset($_SESSION["user_id"])) {
 if (isset($_GET['find'])) { // send requests to all care takers who are available
     $start_time = $_GET['start_time'];
     $end_time = $_GET['end_time'];
+
+
+
     $pet_name = $_GET['pet_name'];
     $remarks = $_GET['remarks'];
     $bids = $_GET['bids'];
@@ -168,8 +192,16 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                     AND end_time >= '$end_time'
                     AND is_deleted = false
                     AND taker_id <> '$user_id'";
+
     $avail_result = pg_query($avail_query) or die('Query failed: ' . pg_last_error());
+
+    echo "<div class=\"container\">
+                <h4>Available care takers</h4>
+                </div>";
+
     while ($row = pg_fetch_row($avail_result)) {
+
+
         $avail_id = $row[0];
         $start_avail_time = $row[2];
         $end_avail_time = $row[3];
@@ -177,60 +209,113 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
         $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
         $status = $row[9];
-        $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
-                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
-        $result = pg_query($insert_query);
-        print $insert_query;
-        echo "<div class=\"container\">
-                <h4>Available care takers</h4>
-                </div>
-                
+
+        $bids_query = "SELECT AVG(bids) FROM request WHERE taker_id = '$taker_id'";
+        $bids_result = pg_query($bids_query) or die('Query failed: ' . pg_last_error());
+        $avg_bids = pg_fetch_row($bids_result)[0];
+        $avg_bids = number_format((float)$avg_bids, 2, '.', '');
+
+        echo "
                 <table class=\"table table-striped\">
                 <tr>
                 <th>Taker Name</th>
                 <th>Availability Start Time</th>
                 <th>Availability End Time</th>
-                <th>Request Status</th>
+                <th>Average Bids</th>
+                <th>Your Bids</th>
+                <th>Send Request</th>
+               
+                
                 </tr>";
         echo "<tr>";
         echo "<td >$taker_name</td >";
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
-        echo "<td >
-                Sent, Pending
+        echo "<td >$avg_bids</td >";
+        echo "<td>
+                <input type='number' name='bids' min = '1' value=$bids>                                                            
+              </td>                                    
+              </div>
+              </form>
+              ";
+
+        echo "<form method = 'get' class='form-inline' >
+                    
+              <td >
+                
+                <div class='form-group' style='float: left;'>
+                <input type='submit' class='form-control' name = 'send_req' value='Send'>                    
+                <input type='hidden' name='taker_id' value=$taker_id>
+                <input type='hidden' name='user_id' value=$user_id>
+                <input type='hidden' name='start_time' value='$start_time'>
+                <input type='hidden' name='end_time' value='$end_time'>
+                <input type='hidden' name='pet_id' value=$pet_id>
+                <input type='hidden' name='bids' value=$bids>
+                <input type='hidden' name='remarks' value='$remarks'>
+                <input type='hidden' name='pet_name' value='$pet_name'>
+                <input type='hidden' name='pcat_id' value=$pcat_id>
+                    
               </td >";
+
+
         echo "</tr>";
         echo "</table>";
+
     }
-//    $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
-//                     VALUES ($user_id, null, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
-//    $result = pg_query($insert_query);
-//    print $insert_query;
-//    if (!$result) {
-//        echo "
-//            <div id='successmodal' class='modal fade'>
-//                <div class='modal-dialog'>
-//                    <div class='modal-content'>
-//                        <div class='modal-header'>
-//                          <button type='button' class='close' data-dismiss='modal'>&times;</button>
-//                          <h4 class='modal-title'>Sorry</h4>
-//                        </div>
-//                        <div class='modal-body'>
-//                          <h4>No available care takers. Please try again.</h4>
-//                        </div>
-//                        <div class='modal-footer'>
-//                          <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-//                        </div>
-//                    </div>
-//                </div>
-//            </div>";
-//        die('Query failed: ' . pg_last_error());
-//    }
+
     exit();
 }
 ?>
+        <?php
+
+        if (isset($_GET["send_req"])) {
+            $taker_id = $_GET["taker_id"];
+            $user_id = $_GET["user_id"];
+            $start_time = $_GET["start_time"];
+            $end_time = $_GET["end_time"];
+            $pet_id = $_GET["pet_id"];
+            $bids = $_GET["bids"];
+            $remarks = $_GET["remarks"];
+            $pet_name = $_GET["pet_name"];
+
+            $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
+                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks', $bids, $pet_id);";
+            //print $insert_query;
+            $result = pg_query($insert_query) or die('Query failed: ' . pg_last_error());
+            pg_free_result($result);
+
+            echo "
+            <br>
+            <br>
+            <div class=\"container\">
+            <form method = 'get' class='form-inline' >
+                    <div class='form-group' style='float: top;'>
+                    <input type='submit' class='form-control' name = 'find' value='Send to another taker'>                    
+                    <input type='hidden' name='taker_id' value=$taker_id>
+                    <input type='hidden' name='user_id' value=$user_id>
+                    <input type='hidden' name='start_time' value='$start_time'>
+                    <input type='hidden' name='end_time' value='$end_time'>
+                    <input type='hidden' name='pet_id' value=$pet_id>
+                    <input type='hidden' min = '1' name='bids' value=$bids>
+                    <input type='hidden' name='pet_id' value=$pet_id>
+                    <input type='hidden' name='remarks' value='$remarks'>
+                    <input type='hidden' name='pet_name' value='$pet_name'>
+                    </div>
+                    
+               
+                </form>
+            </div>
+            
+            ";
 
 
+        }
+
+        ?>
+
+
+    </div>
+</div>
 </body>
 </html>
 
