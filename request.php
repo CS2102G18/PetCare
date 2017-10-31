@@ -250,7 +250,7 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                 <input type='hidden' name='start_time' value='$start_time'>
                 <input type='hidden' name='end_time' value='$end_time'>
                 <input type='hidden' name='pet_id' value=$pet_id>
-                <input type='hidden' name='pet_id' value=$pet_id>
+                <input type='hidden' name='bids' value=$bids>
                 <input type='hidden' name='remarks' value='$remarks'>
                 <input type='hidden' name='pet_name' value='$pet_name'>
                 <input type='hidden' name='pcat_id' value=$pcat_id>
@@ -279,7 +279,8 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
             $pet_name = $_GET["pet_name"];
 
             $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
-                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks','$bids',$pet_id);";
+                     VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks', $bids, $pet_id);";
+            //print $insert_query;
             $result = pg_query($insert_query) or die('Query failed: ' . pg_last_error());
             pg_free_result($result);
 
