@@ -39,7 +39,21 @@ if (isset($_SESSION["user_id"])) {
     </style>
 </head>
 <body>
-<?php include "config/db-connection.php"; ?>
+<?php include "config/db-connection.php";
+
+$start_time = '';
+$end_time = '';
+$pet_name = '';
+$remarks = '';
+$bids = 1;
+
+$start_time = $_GET['start_time'];
+$end_time = $_GET['end_time'];
+$pet_name = $_GET['pet_name'];
+$remarks = $_GET['remarks'];
+$bids = $_GET['bids'];
+
+?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-owner">
     <div class="container navbar-container">
         <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
@@ -73,7 +87,7 @@ if (isset($_SESSION["user_id"])) {
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group date" id="start-datetimepicker">
-                                    <input type="text" class="form-control" name="start_time" required="true">
+                                    <input type="text" class="form-control" name="start_time"  value = '<?php echo $start_time;?>' required="true">
                                     <div class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </div>
@@ -89,7 +103,7 @@ if (isset($_SESSION["user_id"])) {
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group date" id="end-datetimepicker">
-                                    <input type="text" class="form-control" name="end_time" required="true">
+                                    <input type="text" class="form-control" name="end_time" value = '<?php echo $end_time;?>' required="true">
                                     <div class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </div>
@@ -129,7 +143,7 @@ if (isset($_SESSION["user_id"])) {
                         <h5>Your remarks for the care taker</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input name="remarks" class="form-control" required="true">
+                        <input name="remarks" class="form-control" value = '<?php echo $remarks;?>' required="true">
                         </input>
                     </div>
                 </div>
@@ -139,7 +153,7 @@ if (isset($_SESSION["user_id"])) {
                         <h5>Your bids</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="number" name="bids" min = "1" class="form-control" required="true">
+                        <input type="number" name="bids" min = "1" class="form-control"  value = '<?php echo $bids;?>' required="true">
                         </input>
                     </div>
                 </div>
@@ -147,8 +161,9 @@ if (isset($_SESSION["user_id"])) {
             </div>
             <br>
             <div class="container">
-                <button type="submit" name="find" class="btn btn-default">Send Request</button>
+                <button type="submit" name="find" class="btn btn-default">Find takers</button>
             </div>
+            <br>
         </form>
     </div>
 
@@ -195,6 +210,10 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
         $request_pet_name = pg_fetch_row(pg_query("SELECT pet_name FROM pet WHERE pets_id = " . $row[8] . ";"))[0];
         $status = $row[9];
 
+        $bids_query = "SELECT AVG(bids) FROM request WHERE taker_id = '$taker_id'";
+        $bids_result = pg_query($bids_query) or die('Query failed: ' . pg_last_error());
+        $avg_bids = pg_fetch_row($bids_result)[0];
+        $avg_bids = number_format((float)$avg_bids, 2, '.', '');
 
         echo "
                 <table class=\"table table-striped\">
@@ -202,29 +221,43 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
                 <th>Taker Name</th>
                 <th>Availability Start Time</th>
                 <th>Availability End Time</th>
-                <th>Request Status</th>
+                <th>Average Bids</th>
+                <th>Your Bids</th>
+                <th>Send Request</th>
+               
+                
                 </tr>";
         echo "<tr>";
         echo "<td >$taker_name</td >";
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
-        echo "<td >
-                <form method = 'get' class='form-inline' >
-                    <div class='form-group' style='float: left;'>
-                    <input type='submit' class='form-control' name = 'send_req' value='Send'>                    
-                    <input type='hidden' name='taker_id' value=$taker_id>
-                    <input type='hidden' name='user_id' value=$user_id>
-                    <input type='text' name='start_time' value='$start_time'>
-                    <input type='text' name='end_time' value='$end_time'>
-                    <input type='hidden' name='pet_id' value=$pet_id>
-                    <input type='number' name='bids' value=$bids>
-                    <input type='hidden' name='pet_id' value=$pet_id>
-                    <input type='hidden' name='remarks' value='$remarks'>
-                    <input type='hidden' name='pet_name' value='$pet_name'>
-                    <input type='hidden' name='pcat_id' value=$pcat_id>
-                </div>
-                </form>
+        echo "<td >$avg_bids</td >";
+        echo "<td>
+                <input type='number' name='bids' min = '1' value=$bids>                                                            
+              </td>                                    
+              </div>
+              </form>
+              ";
+
+        echo "<form method = 'get' class='form-inline' >
+                    
+              <td >
+                
+                <div class='form-group' style='float: left;'>
+                <input type='submit' class='form-control' name = 'send_req' value='Send'>                    
+                <input type='hidden' name='taker_id' value=$taker_id>
+                <input type='hidden' name='user_id' value=$user_id>
+                <input type='hidden' name='start_time' value='$start_time'>
+                <input type='hidden' name='end_time' value='$end_time'>
+                <input type='hidden' name='pet_id' value=$pet_id>
+                <input type='hidden' name='pet_id' value=$pet_id>
+                <input type='hidden' name='remarks' value='$remarks'>
+                <input type='hidden' name='pet_name' value='$pet_name'>
+                <input type='hidden' name='pcat_id' value=$pcat_id>
+                    
               </td >";
+
+
         echo "</tr>";
         echo "</table>";
 
@@ -251,21 +284,26 @@ if (isset($_GET['find'])) { // send requests to all care takers who are availabl
             pg_free_result($result);
 
             echo "
-            
+            <br>
+            <br>
+            <div class=\"container\">
             <form method = 'get' class='form-inline' >
-                    <div class='form-group' style='float: left;'>
+                    <div class='form-group' style='float: top;'>
                     <input type='submit' class='form-control' name = 'find' value='Send to another taker'>                    
                     <input type='hidden' name='taker_id' value=$taker_id>
                     <input type='hidden' name='user_id' value=$user_id>
-                    <input type='text' name='start_time' value='$start_time'>
-                    <input type='text' name='end_time' value='$end_time'>
+                    <input type='hidden' name='start_time' value='$start_time'>
+                    <input type='hidden' name='end_time' value='$end_time'>
                     <input type='hidden' name='pet_id' value=$pet_id>
-                    <input type='number' name='bids' value=$bids>
+                    <input type='hidden' min = '1' name='bids' value=$bids>
                     <input type='hidden' name='pet_id' value=$pet_id>
                     <input type='hidden' name='remarks' value='$remarks'>
                     <input type='hidden' name='pet_name' value='$pet_name'>
-                </div>
+                    </div>
+                    
+               
                 </form>
+            </div>
             
             ";
 
