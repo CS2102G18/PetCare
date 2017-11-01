@@ -171,7 +171,7 @@ $bids = $_GET['bids'];
 
                 <div class="row">
                     <div class="col-sm-2">
-                        <h5>Your remarks for the care taker</h5>
+                        <h5>Remarks </h5>
                     </div>
                     <div class="col-sm-8">
                         <input name="remarks" class="form-control" value = '<?php echo $remarks;?>' >
@@ -181,7 +181,7 @@ $bids = $_GET['bids'];
                 <br>
                 <div class="row">
                     <div class="col-sm-2">
-                        <h5>Your bids</h5>
+                        <h5>Bids</h5>
                     </div>
                     <div class="col-sm-8">
                         <input type="number" name="bids" min = "1" class="form-control"  value = '<?php echo $bids;?>' >
@@ -275,10 +275,18 @@ if (isset($_GET['find'])) {
         $taker_id = $row[5];
         $taker_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = $taker_id;"))[0];
 
-        $bids_query = "SELECT AVG(bids) FROM request WHERE taker_id = '$taker_id'";
+        $bids_query = "SELECT SUM(bids) FROM request WHERE taker_id = '$taker_id'";
         $bids_result = pg_query($bids_query) or die('Query failed: ' . pg_last_error());
         $avg_bids = pg_fetch_row($bids_result)[0];
-        $avg_bids = number_format((float)$avg_bids, 2, '.', '');
+
+
+        $hour_query = "SELECT SUM(mins)/60 AS totalhours FROM requesttime WHERE taker_id = '$taker_id' ";
+        $hour_result = pg_query($hour_query) or die('Query failed: ' . pg_last_error());
+        $hour = pg_fetch_row($hour_result)[0];
+
+        $avg_bids = number_format((float)$avg_bids / $hour, 2, '.', '');
+        if($avg_bids == 'nan')
+            $avg_bids = 'N/A, no request yet';
 
         echo "
                 <table class=\"table table-striped\">
@@ -286,10 +294,9 @@ if (isset($_GET['find'])) {
                 <th>Taker Name</th>
                 <th>Availability Start Time</th>
                 <th>Availability End Time</th>
-                <th>Average Bids</th>
+                <th>Average Bids/Hour</th>
                 <th>Your Bids</th>
                 <th>Send Request</th>
-               
                 
                 </tr>";
         echo "<tr>";
