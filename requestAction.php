@@ -16,14 +16,12 @@ if (isset($_SESSION["user_id"])) {
     <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
     <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="./vendor/js/jquery.ns-autogrow.min.js"></script>
     <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="./vendor/js/find-task.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#successmodal").modal('show');
@@ -85,4 +83,5 @@ if ((isset($_GET['accept']))) {
     echo "<script>window.location = 'taker.php';</script>";
 }
 ?>
-</body>>
+</body>
+</html>
