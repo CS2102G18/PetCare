@@ -140,9 +140,10 @@ if (isset($_SESSION["user_id"])) {
             $query2 = "SELECT u.name, u.email, k.average, k.num
                        FROM (SELECT r.taker_id AS id, AVG(r.bids) AS average, COUNT(r.request_id) AS num
                              FROM request r
+                             WHERE r.status = 'successful'
                              GROUP BY r.taker_id) AS k, pet_user u
                        WHERE u.user_id = k.id AND NOT EXISTS(SELECT *
-                                                             FROM (SELECT AVG(r1.bids) AS avg FROM request r1 GROUP BY r1.taker_id) AS k1 
+                                                             FROM (SELECT AVG(r1.bids) AS avg FROM request r1 WHERE r1.status='successful' GROUP BY r1.taker_id) AS k1 
                                                              WHERE k.average < k1.avg);";
 
             $result2 = pg_query($query2) or die('Query failed: ' . pg_last_error());
@@ -160,12 +161,12 @@ if (isset($_SESSION["user_id"])) {
             $query4 = "SELECT k.species, u.name, u.email, k.average, k.num
                        FROM (SELECT r.taker_id AS id, AVG(r.bids) AS average, COUNT(r.request_id) AS num, c.species AS species
                              FROM request r, pet p, petcategory c
-                             WHERE r.pets_id = p.pets_id AND p.pcat_id = c.pcat_id
+                             WHERE r.pets_id = p.pets_id AND p.pcat_id = c.pcat_id AND r.status = 'successful'
                              GROUP BY c.species, r.taker_id) AS k, pet_user u
                        WHERE u.user_id = k.id AND NOT EXISTS(SELECT *
                                                              FROM (SELECT AVG(r1.bids) AS avg 
                                                                    FROM request r1, pet p1, petcategory c1 
-                                                                   WHERE r1.pets_id = p1.pets_id AND p1.pcat_id = c1.pcat_id AND c1.species = k.species
+                                                                   WHERE r1.pets_id = p1.pets_id AND p1.pcat_id = c1.pcat_id AND c1.species = k.species AND r1.status='successful'
                                                                    GROUP BY r1.taker_id) AS k1 
                                                              WHERE k.average < k1.avg);";
 
@@ -209,14 +210,15 @@ if (isset($_SESSION["user_id"])) {
             <?php
             $query3 = "SELECT u.name, AVG(r1.bids) AS average, COUNT(r1.taker_id)
                        FROM request r1, pet_user u
-                       WHERE r1.taker_id = u.user_id AND NOT EXISTS (SELECT c1.species
-                                                                     FROM petcategory c1
-                                                                     WHERE NOT EXISTS (SELECT *
-                                                                                       FROM request r2, pet p, petcategory c2
-                                                                                       WHERE r2.taker_id = r1.taker_id
-                                                                                             AND r2.pets_id = p.pets_id
-                                                                                             AND p.pcat_id = c2.pcat_id
-                                                                                             AND c2.species = c1.species))
+                       WHERE r1.taker_id = u.user_id AND r1.status='successful' AND NOT EXISTS (SELECT c1.species
+                                                                                    FROM petcategory c1
+                                                                                    WHERE NOT EXISTS (SELECT *
+                                                                                                      FROM request r2, pet p, petcategory c2
+                                                                                                      WHERE r2.taker_id = r1.taker_id
+                                                                                                            AND r2.pets_id = p.pets_id
+                                                                                                            AND p.pcat_id = c2.pcat_id
+                                                                                                            AND c2.species = c1.species
+                                                                                                            AND r2.status = 'successful'))
                        GROUP BY r1.taker_id, u.name
                        ORDER BY average DESC";
 
