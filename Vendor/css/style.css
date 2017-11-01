@@ -2,80 +2,32 @@ html {
     height: 100%;
 }
 
-body {
-    font-size: 12px;
-    line-height: 1.5;
-    color: #707980;
-    height: 100%;
-    background: #fafafa;
-    padding: 0;
-    background-color: #ebeef1;
-}
-
-.navigation-bar {
-    background-color: #37444e;
-    border-radius: 0;
-    border: none;
-    box-shadow: 0 2px 1px 0 rgba(0,0,0,.1)!important;
-}
-
-.navbar-brand {
-    color: #fff !important;
-}
-
-.search-form {
-    background-color: #37444e;
-    color: #d5dce2;
-    border: 0;
-    height: 35px;
-    box-shadow: none;
-    font-weight: 300;
-    font-size: 12px;
-    padding-left: 25px;
-}
-
-.search-form:focus {
-    outline: none;
-    box-shadow: none;
-}
-
-.input-icon {
-    font-size: 12px;
-    line-height: 1.5;
-    color: #707980;
-    position: relative;
-}
-
-.input-icon i {
-    color: #92a4b2;
-    margin: 9px 10px 9px 0;
-    position: absolute;
-    display: block;
-    line-height: 14px;
-}
-
 .content-container {
     padding-top: 50px;
 }
 
-.breadcrumb {
-    background-color: #ebeef0;
-    font-weight: 300;
+.navbar-brand {
+    color: #fff !important;
+    font-family: Impact, Charcoal, sans-serif;
+}
+
+table td {
     font-size: 12px;
-    padding-left: 20px;
-    margin: 0px;
+    line-height: 1.0;
+    color: #737373;
+    height: 100%;
+}
+p{
+    position: relative;
+    font-family: Impact, Charcoal, sans-serif;
 }
 
-.page-heading h1 {
-    padding: 20px;
-    margin: 0px;
-    line-height: 34px;
-    font-weight: 300;
-    font-size: 20px;
-    color: #000;
+i{
+    position: relative;
 }
 
-.btn-primary {
-    background-color: #2685ee;
-    border-color: #1278e8;
+table th {
+    font-size: 14px;
+    font-family: American Typewriter, serif	;
+    line-height: 1.0;
 }
