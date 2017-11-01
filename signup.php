@@ -8,7 +8,6 @@ session_start();
     <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./vendor/css/login-styling.css">
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -22,24 +21,20 @@ session_start();
 <!-- include php -->
 <?php include "config/db-connection.php"; ?>
 
-<div class="main-container">
+<div class="container">
     <div class="container">
         <div class="wrapper">
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-8 panel panel-default ogin-panel">
 
-                <!-- heading -->
                 <div class="panel-title login-panelheading">
                     <h4>Welcome</h4>
                     <h5 class="login-panel-subtitle">Please sign up here.</h5>
                 </div>
 
-                <!-- body -->
                 <div class="panel-body">
 
-                    <!-- login form -->
                     <form class="login-form" action='signup.php' method='POST'>
 
-                        <!--  name -->
                         <div class="row name-input-row">
                             <div class="col-lg-5 col-sm-5 name-label">
                                 <h5>Name</h5>
@@ -49,8 +44,6 @@ session_start();
                             </div>
                         </div>
 
-
-                        <!-- email -->
                         <div class="row email-input-row">
                             <div class="col-lg-5 col-sm-5 email-label">
                                 <h5>Email</h5>
@@ -60,17 +53,15 @@ session_start();
                             </div>
                         </div>
 
-                        <!-- password -->
                         <div class="row password-input-row">
                             <div class="col-lg-5 col-sm-5 password-label">
                                 <h5>Password</h5>
                             </div>
                             <div class="col-lg-7 col-sm-7 password-input">
-                                <input class="form-control" name="password" type="password" pattern="\w{6,16}" title="Must use 6-16 characters" required></input>
+                                <input class="form-control" name="password" type="password" pattern="\w{6}" title="Must use 6 characters" required></input>
                             </div>
                         </div>
 
-                        <!-- address -->
                         <div class="row address-input-row">
                             <div class="col-lg-5 col-sm-5 name-label">
                                 <h5>Address</h5>
@@ -80,7 +71,6 @@ session_start();
                             </div>
                         </div>
 
-                        <!-- login button -->
                         <div class="row login-button-wrapper">
                             <div class="col-lg-6 col-md-6 col-xs-12">
                                 <button type="submit" name="signup" class="btn btn-large btn-success login-button">Sign up</button>
