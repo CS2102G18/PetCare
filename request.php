@@ -36,6 +36,13 @@ if (isset($_SESSION["user_id"])) {
         body {
             background: url('./media/background_owner.png');
         }
+
+        #avgbidselect {
+            all: inherit;
+            height: initial;
+        }
+
+
     </style>
 </head>
 <body>
@@ -98,6 +105,9 @@ $bids = $_GET['bids'];
 
 
             </script>
+
+
+
 
 
             <div class="form-group">
@@ -289,12 +299,40 @@ if (isset($_GET['find'])) {
             $avg_bids = 'N/A, no request yet';
 
         echo "
-                <table class=\"table table-striped\">
+                <table class=\"table table-striped\" >
                 <tr>
                 <th>Taker Name</th>
                 <th>Availability Start Time</th>
                 <th>Availability End Time</th>
-                <th>Average Bids/Hour</th>
+                <th>
+                
+                <script>
+                    function avgbidfn() {
+                        var select = document.getElementById(\"avgbidselect\");
+                        var result = '$avg_bids';
+                        if (result == 'N/A, no request yet')
+                            return;
+                        if(select.value == \"day\") {
+                            document.getElementById(\"avgbidresult\").innerHTML = (parseFloat(result) * 24).toString();
+                        }
+                        if(select.value == \"min\") {
+                            document.getElementById(\"avgbidresult\").innerHTML = (parseFloat(result) / 60).toFixed(2).toString();
+                        }
+                        if(select.value == \"hour\") {
+                            document.getElementById(\"avgbidresult\").innerHTML = '$avg_bids';
+                        }
+                    }
+                </script>
+                
+                
+                <select id = \"avgbidselect\" name=\"AvgBid\" onchange=\"avgbidfn()\" class=\"table table-striped\" style=''>
+                            <option value=\"hour\">Average Bids/Hour</option>
+                            <option value=\"day\">Average Bids/Day</option>
+                            <option value=\"min\">Average Bids/Min</option>
+                </select>
+                
+                                                              
+                </th>
                 <th>Your Bids</th>
                 <th>Send Request</th>
                 
@@ -303,7 +341,7 @@ if (isset($_GET['find'])) {
         echo "<td >$taker_name</td >";
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
-        echo "<td >$avg_bids</td >";
+        echo "<td id='avgbidresult'>$avg_bids</td >";
         echo "
             <form method = 'get' class='form-inline' >
               <td>
