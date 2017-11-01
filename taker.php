@@ -15,8 +15,8 @@ if (isset($_SESSION["user_id"])) {
     <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
     <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
+
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -48,19 +48,22 @@ $user_address = $row[2];
 ?>
 
 
-<!--navigation bar-->
-<nav class="navbar navbar-default navigation-bar navbar-fixed-top navbar-taker">
+
+<nav class="navbar navigation-bar navbar-inverse navbar-taker navbar-fixed-top">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
-        <div class="collapse navbar-collapse pull-right">
+        <div class="navbar-header pull-left"><a class="navbar-brand" href=""> PetCare</a></div>
+        <div class="collapse pull-right navbar-collapse">
             <ul class="nav navbar-nav">
+                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
                 <li><a href="logout.php"> Log Out </a></li>
-                <li><a href="admin.php"> Admin </a></li>
             </ul>
         </div>
     </div>
 </nav>
+
+
+
 <div class="content-container container">
     <!-- page content -->
     <div class="container-fluid">
@@ -75,15 +78,8 @@ $user_address = $row[2];
                             <h2>Hello, <?php echo $user_name; ?> </h2>
                         </div>
                         <table>
-
-                            <tr>
-                                <th>Email:</th>
-                                <td><?php echo $user_email; ?></td>
-                            </tr>
-                            <tr>
-                                <th>Address:</th>
-                                <td><?php echo $user_address; ?></td>
-                            </tr>
+                            <tr><th>Email:</th><td><?php echo $user_email; ?></td></tr>
+                            <tr><th>Address:</th><td><?php echo $user_address; ?></td></tr>
                         </table>
                     </div>
                 </div>
@@ -153,12 +149,10 @@ $user_address = $row[2];
 
                             echo "<tr>";
                             echo "<td >$owner_name<br>$owner_email</td >";
-                            echo "<td >$request_pet_name</td >";
-                            echo "<td >$request_pet_species</td >";
-                            echo "<td >$request_pet_age</td >";
-                            echo "<td >$request_pet_size</td >";
+                            echo "<td >$request_pet_name<br>$request_pet_species<br>$request_pet_age<br>$request_pet_size</td >";
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
+                            echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "<td >
                                     <form class='form-inline' action='requestAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Accept'></div><input type='hidden' name='accept_id' value=$request_id></form>
@@ -171,10 +165,10 @@ $user_address = $row[2];
 
                     </table>
 
+
                     <div class="container">
                         <h4>Ongoing Requests</h4>
                     </div>
-
 
                     <table class="table table-striped">
 
@@ -223,10 +217,17 @@ $user_address = $row[2];
                             echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "</tr>";
+
+                            echo "
+                            
+                            
+                            ";
                         }
                         ?>
 
                     </table>
+
+
 
 
                     <div class="container">
@@ -296,3 +297,4 @@ $user_address = $row[2];
         </div>
     </div>
 </body>               
+</html>               

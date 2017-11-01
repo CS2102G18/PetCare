@@ -15,6 +15,10 @@ session_start();
         body {
             background: url('./media/background_login.png');
         }
+        .container{
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
