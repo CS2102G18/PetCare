@@ -27,7 +27,6 @@ if (isset($_GET["p_id"])) {
     <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
     <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
@@ -169,3 +168,4 @@ if (isset($_GET['update'])) {
 }
 ?>
 </body>
+</html>
