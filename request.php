@@ -9,7 +9,7 @@ if (isset($_SESSION["user_id"])) {
 }
 ?>
 
-<!DOCTYPE html>2
+<!DOCTYPE html>
 <html>
 <head>
     <title>PetCare</title>
@@ -74,7 +74,32 @@ $bids = $_GET['bids'];
     <div class="panel new-task-panel">
 
         <div class="container">
-        <form>
+        <form name="frm" onchange="checkComplete()">
+
+            <script>
+                var complete = false;
+                function checkComplete() {
+                    if(document.frm.start_time.value == "" || document.frm.end_time.value == "" ||
+                        document.frm.pet_name.value == "" || document.frm.remarks.value == "" ||
+                        document.frm.bids.value == "") {
+                        complete = false;
+                        var btn = document.getElementById("send_btn");
+                        btn.style.color = 'darkred';
+                        btn.style.backgroundColor = 'lightgray';
+                        btn.type = "button";
+                    }else{
+                        complete = true;
+                        var btn = document.getElementById("send_btn");
+                        btn.style.color = 'blue';
+                        btn.style.backgroundColor = 'white';
+                        btn.type = "submit";
+                    }
+                }
+
+
+            </script>
+
+
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-12">
@@ -165,8 +190,14 @@ $bids = $_GET['bids'];
                 </div>
                 <br>
 
+
+
+
                 <div class="row"  style="display:block; text-align:center; padding-left: 0px " >
-                    <button type="submit" name="find" class="btn btn-default">Find takers</button>
+
+                    <button type="submit" name="find" class="btn btn-default">Find Takers</button>
+
+                    <button type="button" id="send_btn" name="find" class="btn btn-default" style="color:darkred; margin-left:50px; background-color: lightgray ">Send Request</button>
                 </div>
             </div>
             <br>
