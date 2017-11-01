@@ -21,6 +21,10 @@ session_start();
         h4 {
             font-family: Impact, Charcoal, sans-serif;
         }
+        .container{
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
