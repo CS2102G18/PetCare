@@ -39,7 +39,7 @@ if (isset($_SESSION["user_id"])) {
 
         #avgbidselect {
             all: inherit;
-            height: initial;
+
         }
 
 
