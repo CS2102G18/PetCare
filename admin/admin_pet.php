@@ -153,12 +153,12 @@ if (isset($_SESSION["user_id"])) {
                         <br>
                         <table class="table table-striped" id="pet_info">
                             <tr>
-                                <th onclick="sortTable(0, 'pet_info')">Pet ID</th>
-                                <th onclick="sortTable(1, 'pet_info')">Pet Name</th>
-                                <th onclick="sortTable(2, 'pet_info')">Pet Owner</th>
-                                <th onclick="sortTable(3, 'pet_info')">Pet Species</th>
-                                <th onclick="sortTable(4, 'pet_info')">Pet Size</th>
-                                <th onclick="sortTable(5, 'pet_info')">Pet Age</th>
+                                <th >Pet ID</th>
+                                <th >Pet Name</th>
+                                <th >Pet Owner</th>
+                                <th >Pet Species</th>
+                                <th >Pet Size</th>
+                                <th >Pet Age</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -202,7 +202,7 @@ if (isset($_SESSION["user_id"])) {
                                           FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
                                                      INNER JOIN pet_user u ON p.owner_id = u.user_id
                                           WHERE p.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false") .
-                                    " ORDER BY p.pets_id;";
+                                        " ORDER BY p.pets_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 

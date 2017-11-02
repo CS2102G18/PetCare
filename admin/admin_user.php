@@ -24,6 +24,8 @@ if (isset($_SESSION["user_id"])) {
     <script src="../vendor/js/jquery.ns-autogrow.min.js"></script>
     <script src="../vendor/js/bootstrap-datetimepicker.min.js"></script>
 
+    <script src="../vendor/sortTable.js"></script>
+
     <style>
         .navbar-admin {
             color: #FFFFFF;
@@ -80,13 +82,9 @@ if (isset($_SESSION["user_id"])) {
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="num_pet">User's Email</label>
-                            <input id="num_pet" name="num_pet" type="text" class="form-control" placeholder="Keywords">
+                            <label for="em_kw">User's Email</label>
+                            <input id="em_kw" name="em_kw" type="text" class="form-control" placeholder="Keywords">
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
                         <div class="col-sm-3">
                             <label for="user_role">Role</label>
                             <select name="user_role" id="pet_size" class="form-control">
@@ -95,12 +93,21 @@ if (isset($_SESSION["user_id"])) {
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
-
-                        <div class="col-sm-3">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-sm-12">
                             <br>
-                            <a href="admin_addpet.php" class="btn-success btn">Add</a>
                             <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
                             <a href="admin_pet.php" class="btn-default btn">Cancel</a>
+                            <a href="admin_addpet.php" class="btn-success btn">Add new user</a>
+                            <?php echo (!isset($_GET['show_deleted']))
+                                ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
+                                   value=\"Show Deleted\">"
+                                : "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"back\"
+                                   value=\"Back\">" ?>
+                            <a href="admin_addpet.php" class="btn-success btn">Show statistics</a>
                         </div>
 
                     </div>
@@ -108,57 +115,52 @@ if (isset($_SESSION["user_id"])) {
                 <br><br>
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="user_info">
                             <tr>
-                                <th>User ID</th>
-                                <th>User Name</th>
-                                <th>User password</th>
-                                <th>User Species</th>
-                                <th>Pet Size</th>
-                                <th>Pet Age</th>
+                                <th >User ID</th>
+                                <th >User Name</th>
+                                <th >User Password</th>
+                                <th >User email</th>
+                                <th >User address</th>
+                                <th >User role</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             <?php
                             if (isset($_GET['search'])) {
-                                $pet_kw = $_GET['pet_kw'];
-                                $pet_species = $_GET['pet_species'];
-                                $pet_age = $_GET['pet_age'];
-                                $pet_size = $_GET['pet_size'];
-                                $pet_owner = $_GET['pet_owner'];
+                                $user_kw = $_GET['user_kw'];
+                                $add_kw = $_GET['add_kw'];
+                                $em_kw = $_GET['em_kw'];
+                                $user_role = $_GET['user_role'];
 
-                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
-                                          FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
-                                                     INNER JOIN pet_user u ON p.owner_id = u.user_id
-                                          WHERE p.is_deleted = false ";
+                                $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted
+                                          FROM pet_user u
+                                          WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false");
 
-                                if (trim($pet_kw)) {
-                                    $query .= " AND UPPER(p.pet_name) LIKE UPPER('%" . $pet_kw . "%')";
+                                if (trim($user_kw)) {
+                                    $query .= " AND UPPER(u.name) LIKE UPPER('%" . $user_kw . "%')";
                                 }
 
-                                if (trim($pet_owner)) {
-                                    $query .= " AND u.user_id = '" . $pet_owner . "'";
+                                if (trim($add_kw)) {
+                                    $query .= " AND UPPER(u.address) LIKE UPPER('%" . $add_kw . "%')";
                                 }
 
-                                if (trim($pet_age)) {
-                                    $query .= " AND pc.age = '" . $pet_age . "'";
+                                if (trim($em_kw)) {
+                                    $query .= " AND UPPER(u.email) LIKE UPPER('%" . $em_kw . "%')";
                                 }
 
-                                if (trim($pet_species)) {
-                                    $query .= " AND pc.species = '" . $pet_species . "'";
+                                if (trim($user_role)) {
+                                    $query .= " AND u.role ='" . $user_role . "')";
                                 }
 
-                                if (trim($pet_size)) {
-                                    $query .= " AND pc.size = '" . $pet_size . "'";
-                                }
-                                $query .= "ORDER BY p.pets_id;";
+                                $query .= " ORDER BY u.user_id;";
 
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
-                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
-                                          FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
-                                                     INNER JOIN pet_user u ON p.owner_id = u.user_id
-                                          WHERE p.is_deleted = false
-                                          ORDER BY p.pets_id;";
+                                $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted
+                                          FROM pet_user u
+                                          WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false") .
+                                        " ORDER BY u.user_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
@@ -167,14 +169,18 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$row[1]</td >";
-                                echo "<td >$row[5] (id: $row[6])" . (($row[7] == 'admin') ? " ***ADMIN***" : "");
-                                echo "<td >$row[2]</td >";
-                                echo "<td >$row[3]</td>";
-                                echo "<td >$row[4]</td >";
-                                echo "<td >
-                                <a class=\"btn btn-default\" role=\"button\" href=\"admin_edituser.php?p_id=$user_id\">Edit</a>
-                                <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?p_id=$user_id&usage=user\">Delete</a>
-                                </td>";
+                                echo "<td >$row[2]</td>";
+                                echo "<td >$row[3]</td >";
+                                echo "<td >$row[4]</td>";
+                                echo "<td >$row[5]</td >";
+                                echo "<td >" . (!$row[6] ? "Deleted" : "Active") . "</td >";
+                                echo "<td >" .
+                                    (!isset($_GET['show_deleted'])
+                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_edituser.php?u_id=$user_id\">Edit</a>
+                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?u_id=$user_id&usage=user\">Delete</a>"
+                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?u_id=$user_id&usage=user\">Restore</a>") .
+
+                                    "</td>";
                                 echo "</tr>";
                             }
                             pg_free_result($result2);
@@ -204,11 +210,11 @@ if (isset($_SESSION["user_id"])) {
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Pet Species</th>
-                    <th>Taker Name</th>
-                    <th>Taker Email</th>
-                    <th>Average Bids Provided</th>
-                    <th>Number of Successful Assignments Done</th>
+                    <th >Pet Species</th>
+                    <th >Taker Name</th>
+                    <th >Taker Email</th>
+                    <th >Average Bids Provided</th>
+                    <th >Number of Successful Assignments Done</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -276,9 +282,9 @@ if (isset($_SESSION["user_id"])) {
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Taker Name</th>
-                    <th>Average Bids Provided</th>
-                    <th>Number of Successful Assignments Done</th>
+                    <th >Taker Name</th>
+                    <th >Average Bids Provided</th>
+                    <th >Number of Successful Assignments Done</th>
                 </tr>
                 </thead>
                 <tbody>

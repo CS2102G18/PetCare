@@ -18,4 +18,14 @@ if ($_GET['usage'] == 'pet') {
     echo "<script>window.location = 'admin_pet.php';</script>";
     exit();
 }
+if ($_GET['usage'] == 'user') {
+    $u_id = $_GET['u_id'];
+    $query = "UPDATE pet_user SET is_deleted=false WHERE user_id=" . $u_id . ";";
+    $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
+    pg_free_result($result);
+
+    header("Location: admin_user.php");
+    echo "<script>window.location = 'admin_user.php';</script>";
+    exit();
+}
 ?>
