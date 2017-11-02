@@ -48,9 +48,11 @@ if (isset($_SESSION["user_id"])) {
         <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="request.php"> Send Request </a></li>
-                <li><a href="history.php"> View History </a></li>
-                <li><a href="logout.php"> Log Out </a></li>
+          	<li><a href="owner.php"> As a Pet Owner </a></li>
+            <li><a href="taker.php"> As a Care Taker </a></li>
+            <li><a href="history.php"> View History </a></li>
+            <li><a href="profile.php"> Your Profile </a></li>
+            <li><a href="logout.php"> Log Out </a></li>
             </ul>
         </div>
     </div>
@@ -74,5 +76,6 @@ if (isset($_SESSION["user_id"])) {
                 <a href="./admin/admin_req.php"><h4>Requests</h4></a>
             </div>
         </div>
+
     </div>
 </body>                                                                                                                                                              

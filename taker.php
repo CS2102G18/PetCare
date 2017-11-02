@@ -17,8 +17,8 @@ if (isset($_SESSION["user_id"])) {
     <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
     <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
+
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -51,24 +51,31 @@ $user_address = $row[2];
 ?>
 
 
-<!--navigation bar-->
-<nav class="navbar navbar-default navigation-bar navbar-fixed-top navbar-taker">
+
+<nav class="navbar navigation-bar navbar-inverse navbar-taker navbar-fixed-top">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
-        <div class="collapse navbar-collapse pull-right">
+        <div class="navbar-header pull-left"><a class="navbar-brand" href=""> PetCare</a></div>
+        <div class="collapse pull-right navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
+                <li><a href="profile.php"> Your Profile </a></li>
                 <?php
-                if ($role == 'admin') {
-                    echo "<li><a href=\"admin.php\"> Admin </a></li>";
-                }
+                    $admin_query = "SELECT role FROM pet_user WHERE user_id=" . $user_id . ";";
+                    $admin_result = pg_query($admin_query) or die('Query failed: ' . pg_last_error());
+                    $admin_row = pg_fetch_row($admin_result);
+                    if(strcmp($admin_row[0],"admin") == 0){
+                        echo '<li><a href="admin.php"> Admin </a></li>';
+                    }
+                    pg_free_result($admin_result);
                 ?>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
         </div>
     </div>
 </nav>
+
+
+
 <div class="content-container container">
     <!-- page content -->
     <div class="container-fluid">
@@ -83,15 +90,8 @@ $user_address = $row[2];
                             <h2>Hello, <?php echo $user_name; ?> </h2>
                         </div>
                         <table>
-
-                            <tr>
-                                <th>Email:</th>
-                                <td><?php echo $user_email; ?></td>
-                            </tr>
-                            <tr>
-                                <th>Address:</th>
-                                <td><?php echo $user_address; ?></td>
-                            </tr>
+                            <tr><th>Email:</th><td><?php echo $user_email; ?></td></tr>
+                            <tr><th>Address:</th><td><?php echo $user_address; ?></td></tr>
                         </table>
                     </div>
                 </div>
@@ -161,12 +161,10 @@ $user_address = $row[2];
 
                             echo "<tr>";
                             echo "<td >$owner_name<br>$owner_email</td >";
-                            echo "<td >$request_pet_name</td >";
-                            echo "<td >$request_pet_species</td >";
-                            echo "<td >$request_pet_age</td >";
-                            echo "<td >$request_pet_size</td >";
+                            echo "<td >$request_pet_name<br>$request_pet_species<br>$request_pet_age<br>$request_pet_size</td >";
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
+                            echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "<td >
                                     <form class='form-inline' action='requestAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Accept'></div><input type='hidden' name='accept_id' value=$request_id></form>
@@ -179,10 +177,10 @@ $user_address = $row[2];
 
                     </table>
 
+
                     <div class="container">
                         <h4>Ongoing Requests</h4>
                     </div>
-
 
                     <table class="table table-striped">
 
@@ -231,10 +229,17 @@ $user_address = $row[2];
                             echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "</tr>";
+
+                            echo "
+                            
+                            
+                            ";
                         }
                         ?>
 
                     </table>
+
+
 
 
                     <div class="container">
@@ -284,58 +289,7 @@ $user_address = $row[2];
                                   <td >$pet_size</td >
                                   <td >$pet_age</td >
                                   <td>
-                                    <form class='form-inline' action='availAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Delete Slot'></div><input type='hidden' name='delete_avail_id' value=$avail_id></form>
-                                  </td>
-                                  </tr>";
-
-                        }
-                        ?>
-                    </table>
-
-                    <table class="table table-striped">
-
-                        <div class="container">
-                            <h4>Deleted Slots</h4>
-                        </div>
-
-                        <tr>
-                            <th>Duration From</th>
-                            <th>Duration To</th>
-                            <th>Pet Species</th>
-                            <th>Pet Size</th>
-                            <th>Pet Age</th>
-                            <th>Action</th>
-                        </tr>
-
-                        <?php
-                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age 
-                                  FROM availability a, petcategory p 
-                                  WHERE a.pcat_id = p.pcat_id 
-                                        AND a.taker_id =$user_id 
-                                        AND a.is_deleted = TRUE 
-                                        AND a.start_time > CURRENT_TIMESTAMP 
-                                  ORDER BY a.start_time;";
-                        $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-
-                        while ($row = pg_fetch_row($result)) {
-
-                            $avail_id = $row[0];
-                            $start = $row[1];
-                            $end = $row[2];
-                            $pet_species = $row[3];
-                            $pet_size = $row[4];
-                            $pet_age = $row[5];
-
-
-                            echo "<tr>
-                                  <td >$start</td >
-                                  <td >$end</td >
-                                  <td >$pet_species</td >
-                                  <td >$pet_size</td >
-                                  <td >$pet_age</td >
-                                  <td>
-                                    <form class='form-inline' action='availAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Restore Slot'></div><input type='hidden' name='restore_avail_id' value=$avail_id></form>
+                                    <a class=\"btn btn-danger\" role=\"button\" href=\"deleteavail.php?avail_id=$avail_id\">Delete</a>
                                   </td>
                                   </tr>";
 
@@ -355,3 +309,4 @@ $user_address = $row[2];
         </div>
     </div>
 </body>               
+</html>               

@@ -27,6 +27,7 @@ CREATE TABLE petcategory(
     size VARCHAR(20),
     species VARCHAR(30)
 );
+
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','cat');
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','dog');
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','rabbit');
@@ -66,6 +67,7 @@ CREATE TABLE pet(
     owner_id INT REFERENCES pet_user(user_id) ON DELETE CASCADE,
     pcat_id INT REFERENCES petcategory(pcat_id) ON DELETE CASCADE ON UPDATE CASCADE,
     pet_name VARCHAR(64),
+    is_deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (owner_id, pet_name)
 );
 
@@ -138,6 +140,14 @@ AFTER INSERT
 ON request
 FOR EACH ROW
 EXECUTE PROCEDURE addRequestSlot();
+
+
+CREATE VIEW requesttime AS
+    SELECT ((DATE_PART('day', (care_end):: TIMESTAMP - (care_begin):: TIMESTAMP) * 24 +
+             DATE_PART('hour', (care_end):: TIMESTAMP - (care_begin):: TIMESTAMP)) * 60 +
+            DATE_PART('minute', (care_end):: TIMESTAMP - (care_begin):: TIMESTAMP))  AS mins, r.bids, r.taker_id, p.pcat_id
+    FROM request AS r INNER JOIN pet AS p ON r.pets_id = p.pets_id;
+
 
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xia Rui',12345,'e0012672@u.nus.edu','30 Ang Mo Kio Ave 8', 'admin');
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Chen Penghao',12345,'e0004801@u.nus.edu','33 Lorong 2 Toa Payoh', 'admin');

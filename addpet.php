@@ -16,7 +16,6 @@ if (isset($_SESSION["user_id"])) {
     <title>PetCare</title>
     <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
     <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
 
     <script src="./vendor/js/jquery-3.2.0.min.js"></script>
@@ -41,12 +40,16 @@ if (isset($_SESSION["user_id"])) {
         <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="request.php"> Send Request </a></li>
                 <li><a href="history.php"> View History </a></li>
+                <li><a href="profile.php"> Your Profile </a></li>
                 <?php
-                if ($role == 'admin') {
-                    echo "<li><a href=\"admin.php\"> Admin </a></li>";
-                }
+                    $admin_query = "SELECT role FROM pet_user WHERE user_id=" . $user_id . ";";
+                    $admin_result = pg_query($admin_query) or die('Query failed: ' . pg_last_error());
+                    $admin_row = pg_fetch_row($admin_result);
+                    if(strcmp($admin_row[0],"admin") == 0){
+                        echo '<li><a href="admin.php"> Admin </a></li>';
+                    }
+                    pg_free_result($admin_result);
                 ?>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -126,8 +129,13 @@ if (isset($_SESSION["user_id"])) {
                             </select>
                         </div>
                     </div>
-
-                    <button type="submit" name="create" class="btn btn-default">Submit</button>
+                    <br>
+                    
+                    <div class="container">
+                        <button type="submit" name="create" class="btn btn-default">Submit</button>
+                        <a class="btn btn-danger" role="button" href="owner.php">Cancel</a>
+                    </div>
+                    
             </form>
         </div>
     </div>
@@ -156,3 +164,5 @@ if (isset($_GET['create'])) {
 }
 ?>
 </body>
+</html>
+
