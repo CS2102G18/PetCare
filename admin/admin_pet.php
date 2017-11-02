@@ -73,6 +73,25 @@ if (isset($_SESSION["user_id"])) {
                             <label for="pet_kw">Pet's Name</label>
                             <input id="pet_kw" name="pet_kw" type="text" class="form-control" placeholder="Keywords">
                         </div>
+                        <div class="col-sm-3">
+                            <label for="pet_species">Pet's Owner</label>
+                            <select name="pet_owner" class="form-control">
+                                <option value="">Select Owner</option>
+                                <?php
+                                $query = "SELECT user_id, name, role FROM pet_user";
+                                $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
+                                    if ($row[2] == "admin") {
+                                        $option .= " ***ADMIN***";
+                                    }
+                                    $option .= "</option><br>";
+                                    echo $option;
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
+                        </div>
                         <div class="col-sm-2">
                             <label for="pet_species">Pet's Species</label>
                             <select id="pet_species" name="pet_species" class="form-control">
@@ -130,6 +149,7 @@ if (isset($_SESSION["user_id"])) {
                             <tr>
                                 <th>Pet ID</th>
                                 <th>Pet Name</th>
+                                <th>Pet Owner</th>
                                 <th>Pet Species</th>
                                 <th>Pet Size</th>
                                 <th>Pet Age</th>
@@ -141,13 +161,19 @@ if (isset($_SESSION["user_id"])) {
                                 $pet_species = $_GET['pet_species'];
                                 $pet_age = $_GET['pet_age'];
                                 $pet_size = $_GET['pet_size'];
+                                $pet_owner = $_GET['pet_owner'];
 
-                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age
+                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
                                           FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
+                                                     INNER JOIN pet_user u ON p.owner_id = u.user_id
                                           WHERE 1 = 1 ";
 
                                 if (trim($pet_kw)) {
                                     $query .= " AND UPPER(p.pet_name) LIKE UPPER('%" . $pet_kw . "%')";
+                                }
+
+                                if (trim($pet_owner)) {
+                                    $query .= " AND u.user_id = '" . $pet_owner . "'";
                                 }
 
                                 if (trim($pet_age)) {
@@ -161,12 +187,14 @@ if (isset($_SESSION["user_id"])) {
                                 if (trim($pet_size)) {
                                     $query .= " AND pc.size = '" . $pet_size . "'";
                                 }
-                                $query .= ";";
+                                $query .= "ORDER BY p.pets_id;";
 
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
-                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age
-                                          FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id;";
+                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
+                                          FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
+                                                     INNER JOIN pet_user u ON p.owner_id = u.user_id
+                                          ORDER BY p.pets_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
@@ -175,11 +203,12 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$row[1]</td >";
+                                echo "<td >$row[5] (id: $row[6])". (($row[7]=='admin') ? " ***ADMIN***" : "");
                                 echo "<td >$row[2]</td >";
                                 echo "<td >$row[3]</td>";
                                 echo "<td >$row[4]</td >";
                                 echo "<td >
-                                <a class=\"btn btn-default\" role=\"button\" href=\"../editpet.php?p_id=$pet_id\">Edit</a>
+                                <a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
                                 <a class=\"btn btn-danger\" role=\"button\" href=\"../deletepet.php?pet_id=$pet_id\">Delete</a>
                                 </td>";
                                 echo "</tr>";
