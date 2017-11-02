@@ -166,7 +166,7 @@ if (isset($_SESSION["user_id"])) {
                                 $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
                                           FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
                                                      INNER JOIN pet_user u ON p.owner_id = u.user_id
-                                          WHERE 1 = 1 ";
+                                          WHERE p.is_deleted = 'false' ";
 
                                 if (trim($pet_kw)) {
                                     $query .= " AND UPPER(p.pet_name) LIKE UPPER('%" . $pet_kw . "%')";
@@ -194,6 +194,7 @@ if (isset($_SESSION["user_id"])) {
                                 $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
                                           FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
                                                      INNER JOIN pet_user u ON p.owner_id = u.user_id
+                                          WHERE p.is_deleted = 'false'
                                           ORDER BY p.pets_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
@@ -203,13 +204,13 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$row[1]</td >";
-                                echo "<td >$row[5] (id: $row[6])". (($row[7]=='admin') ? " ***ADMIN***" : "");
+                                echo "<td >$row[5] (id: $row[6])" . (($row[7] == 'admin') ? " ***ADMIN***" : "");
                                 echo "<td >$row[2]</td >";
                                 echo "<td >$row[3]</td>";
                                 echo "<td >$row[4]</td >";
                                 echo "<td >
                                 <a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
-                                <a class=\"btn btn-danger\" role=\"button\" href=\"../deletepet.php?pet_id=$pet_id\">Delete</a>
+                                <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?p_id=$pet_id&usage=pet\">Delete</a>
                                 </td>";
                                 echo "</tr>";
                             }

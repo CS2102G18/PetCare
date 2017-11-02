@@ -175,7 +175,7 @@ if (isset($_GET['create'])) {
     } else {
         pg_free_result($result);
         header("Location: owner.php");
-        echo "<script>window.location = 'admin_addpet.php';</script>";
+        echo "<script>window.location = 'admin_pet.php';</script>";
     }
     exit();
 }

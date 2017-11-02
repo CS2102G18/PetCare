@@ -87,7 +87,7 @@ if (isset($_GET["p_id"])) {
                     </div>
                     <div class="col-sm-8">
                         <select name="pet_owner" class="form-control" required="true">
-                            <option value="<?php echo $owner_info; ?>"><?php echo $owner_info; ?></option>
+                            <option value="<?php echo $pet_owner; ?>"><?php echo $owner_info; ?></option>
                             <?php
                             $query = "SELECT user_id, name, role FROM pet_user WHERE user_id <> $pet_owner";
                             $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
