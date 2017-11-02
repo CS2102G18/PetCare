@@ -152,7 +152,7 @@ CREATE VIEW requesttime AS
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xia Rui',12345,'e0012672@u.nus.edu','30 Ang Mo Kio Ave 8', 'admin');
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Chen Penghao',12345,'e0004801@u.nus.edu','33 Lorong 2 Toa Payoh', 'admin');
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xie Peiyi',12345,'peiyi@u.nus.edu','55 Hougang Ave 10', 'admin');
-INSERT INTO pet_user(name, password, email, address, role) VALUES ('Kuang Ming',12345,'km@msn.com','', 'admin');
+INSERT INTO pet_user(name, password, email, address, role) VALUES ('Kuang Ming',12345,'km@msn.com','165 Tampines Ave 10', 'admin');
 
 INSERT INTO pet_user(name, password, email, address) VALUES ('Patti Dennis',12345,'empathy@msn.com','157 Foxrun Street Newnan, GA 30263');
 INSERT INTO pet_user(name, password, email, address) VALUES ('Carmen Grant',23456,'presoff@hotmail.com','9 South Surrey Street Rockford, MI 49341');
@@ -185,3 +185,27 @@ INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (2,9,'Ah Seng');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (5,6,'Ah Leong');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (2,10,'Ah Mah');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (8,7,'Ah Wai');
+
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 1);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 1);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 1);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 1);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 1);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 6, 2);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 2);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 2);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 2);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 2);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 3);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 6, 3);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 3);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 3);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 3);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 4);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 4);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 6, 4);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 4);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 4);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 5);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 5);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 5);

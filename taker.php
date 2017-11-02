@@ -3,11 +3,13 @@
 session_start();
 if (isset($_SESSION["user_id"])) {
     $user_id = $_SESSION["user_id"];
+    $role = $_SESSION["role"];
 } else {
     header("Location: login.php");
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -27,6 +29,7 @@ if (isset($_SESSION["user_id"])) {
             color: #FFFFFF;
             background-color: #035f72;
         }
+
         body {
             background: url('./media/background_taker.png');
         }
