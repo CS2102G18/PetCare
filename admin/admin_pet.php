@@ -71,7 +71,7 @@ if (isset($_SESSION["user_id"])) {
                             <label for="pet_kw">Pet's Name</label>
                             <input id="pet_kw" name="pet_kw" type="text" class="form-control" placeholder="Keywords">
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <label for="pet_species">Pet's Species</label>
                             <select id="pet_species" name="pet_species" class="form-control">
                                 <option value="">Select Category</option>
@@ -113,8 +113,9 @@ if (isset($_SESSION["user_id"])) {
                                 ?>
                             </select>
                         </div>
-                        <div class="col-sm-2">
-                            <input type="submit" class="btn-success btn" id="findBtn" name="add" value="Add">
+                        <div class="col-sm-3">
+                            <br>
+                            <a href="admin_addpet.php" class="btn-success btn">Add</a>
                             <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
                             <a href="admin_pet.php" class="btn-default btn">Cancel</a>
                         </div>
