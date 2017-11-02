@@ -24,6 +24,8 @@ if (isset($_SESSION["user_id"])) {
     <script src="../vendor/js/jquery.ns-autogrow.min.js"></script>
     <script src="../vendor/js/bootstrap-datetimepicker.min.js"></script>
 
+    <script src="../vendor/sortTable.js"></script>
+
     <style>
         .navbar-admin {
             color: #FFFFFF;
@@ -145,14 +147,14 @@ if (isset($_SESSION["user_id"])) {
                 <br><br>
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="pet_info">
                             <tr>
-                                <th>Pet ID</th>
-                                <th>Pet Name</th>
-                                <th>Pet Owner</th>
-                                <th>Pet Species</th>
-                                <th>Pet Size</th>
-                                <th>Pet Age</th>
+                                <th onclick="sortTable(0, 'pet_info')">Pet ID</th>
+                                <th onclick="sortTable(1, 'pet_info')">Pet Name</th>
+                                <th onclick="sortTable(2, 'pet_info')">Pet Owner</th>
+                                <th onclick="sortTable(3, 'pet_info')">Pet Species</th>
+                                <th onclick="sortTable(4, 'pet_info')">Pet Size</th>
+                                <th onclick="sortTable(5, 'pet_info')">Pet Age</th>
                                 <th>Actions</th>
                             </tr>
                             <?php

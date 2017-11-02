@@ -71,76 +71,38 @@ if (isset($_SESSION["user_id"])) {
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-sm-3">
-                            <label for="pet_kw">User's Name</label>
-                            <input id="pet_kw" name="pet_kw" type="text" class="form-control" placeholder="Keywords">
+                            <label for="user_kw">User's Name</label>
+                            <input id="user_kw" name="user_kw" type="text" class="form-control" placeholder="Keywords">
                         </div>
                         <div class="col-sm-3">
-                            <label for="pet_species">Pet's Owner</label>
-                            <select name="pet_owner" class="form-control">
-                                <option value="">Select Owner</option>
-                                <?php
-                                $query = "SELECT user_id, name, role FROM pet_user";
-                                $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
-                                    if ($row[2] == "admin") {
-                                        $option .= " ***ADMIN***";
-                                    }
-                                    $option .= "</option><br>";
-                                    echo $option;
-                                }
-                                pg_free_result($result);
-                                ?>
+                            <label for="add_kw">User's Address</label>
+                            <input id="add_kw" name="add_kw" type="text" class="form-control" placeholder="Keywords">
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="num_pet">User's Email</label>
+                            <input id="num_pet" name="num_pet" type="text" class="form-control" placeholder="Keywords">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-sm-3">
+                            <label for="user_role">Role</label>
+                            <select name="user_role" id="pet_size" class="form-control">
+                                <option value="">Select Role</option>
+                                <option value="normal">Normal</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </div>
-                        <div class="col-sm-2">
-                            <label for="pet_species">Pet's Species</label>
-                            <select id="pet_species" name="pet_species" class="form-control">
-                                <option value="">Select Category</option>
-                                <?php
-                                $query = "SELECT DISTINCT species FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_age">Pet's Age</label>
-                            <select id="pet_age" name="pet_age" class="form-control">
-                                <option value="">Select Age</option>
-                                <?php
-                                $query = "SELECT DISTINCT age FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_size">Pet's Size</label>
-                            <select name="pet_size" id="pet_size" class="form-control">
-                                <option value="">Select Size</option>
-                                <?php
-                                $query = "SELECT DISTINCT size FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
+
                         <div class="col-sm-3">
                             <br>
                             <a href="admin_addpet.php" class="btn-success btn">Add</a>
                             <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
                             <a href="admin_pet.php" class="btn-default btn">Cancel</a>
                         </div>
+
                     </div>
                 </div>
                 <br><br>
@@ -148,10 +110,10 @@ if (isset($_SESSION["user_id"])) {
                     <div class="col-md-12">
                         <table class="table table-striped">
                             <tr>
-                                <th>Pet ID</th>
-                                <th>Pet Name</th>
-                                <th>Pet Owner</th>
-                                <th>Pet Species</th>
+                                <th>User ID</th>
+                                <th>User Name</th>
+                                <th>User password</th>
+                                <th>User Species</th>
                                 <th>Pet Size</th>
                                 <th>Pet Age</th>
                                 <th>Actions</th>
@@ -201,7 +163,7 @@ if (isset($_SESSION["user_id"])) {
                             }
 
                             while ($row = pg_fetch_row($result)) {
-                                $pet_id = $row[0];
+                                $user_id = $row[0];
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$row[1]</td >";
@@ -210,8 +172,8 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$row[3]</td>";
                                 echo "<td >$row[4]</td >";
                                 echo "<td >
-                                <a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
-                                <a class=\"btn btn-danger\" role=\"button\" href=\"admin_deletepet.php?p_id=$pet_id\">Delete</a>
+                                <a class=\"btn btn-default\" role=\"button\" href=\"admin_edituser.php?p_id=$user_id\">Edit</a>
+                                <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?p_id=$user_id&usage=user\">Delete</a>
                                 </td>";
                                 echo "</tr>";
                             }
