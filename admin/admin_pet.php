@@ -212,7 +212,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$row[2]</td >";
                                 echo "<td >$row[3]</td>";
                                 echo "<td >$row[4]</td >";
-                                echo "<td >" . ($row[8] ? "Deleted" : "Active") . "</td >";
+                                echo "<td >" . ($row[8]=="t" ? "Deleted" : "Active") . "</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
                                         ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
