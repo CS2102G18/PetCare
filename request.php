@@ -288,8 +288,67 @@ if (isset($_GET['find'])) {
                 <h4>Available care takers</h4>
                 </div>";
 
-    while ($row = pg_fetch_row($avail_result)) {
+    echo "
+    
+    
+    <table class=\"table table - striped\" >
+                <tr>
+                <th>Taker Name</th>
+                <th>Availability Start Time</th>
+                <th>Availability End Time</th>
+                <th>
+                
+                
+                <select id = \"avgbidselect\" name=\"AvgBid\" onchange=\"bid_function()\" class=\"table table-striped\" style=''>
+                            <option value=\"hour\">Average Bids/Hour</option>
+                            <option value=\"day\">Average Bids/Day</option>
+                            <option value=\"min\">Average Bids/Min</option>
+                </select>
+                
+                                                              
+                </th>
+                <th>Your Bids</th>
+                <th>Send Request</th>
+                
+                
+                <script>
+                    function bid_function() {
+                        
+                        var select = document.getElementById(\"avgbidselect\");
+                        var result = document.getElementsByName(\"avgbidhourresult\");
+                        
+                        for (var i = 0, max=result.length; i < max; i++) {
+                                
+                                var bid_hour = result[i].value;
+                                
+                                if (bid_hour == 'N/A, no request yet')
+                                    continue;
+                                
+                                var change_id = 'avgbidresult' + i;
+                                
+                                var tochange = document.getElementById(change_id);
+                                
+                                if(select.value == \"day\") 
+                                    tochange.innerHTML = (parseFloat(bid_hour) * 24).toFixed(2).toString();
+                                
+                                if(select.value == \"min\") 
+                                    tochange.innerHTML = (parseFloat(bid_hour) / 60).toFixed(2).toString();
+                                
+                                if(select.value == \"hour\") 
+                                    tochange.innerHTML = bid_hour;
+                                
+                         }       
+                                
+                    }    
+                        
+                </script>
+    
+    ";
 
+
+    $count = 0;
+
+    while ($row = pg_fetch_row($avail_result)) {
 
         $avail_id = $row[0];
         $start_avail_time = $row[2];
@@ -311,49 +370,18 @@ if (isset($_GET['find'])) {
             $avg_bids = 'N/A, no request yet';
 
         echo "
-                <table class=\"table table-striped\" >
-                <tr>
-                <th>Taker Name</th>
-                <th>Availability Start Time</th>
-                <th>Availability End Time</th>
-                <th>
-                
-                <script>
-                    function avgbidfn() {
-                        var select = document.getElementById(\"avgbidselect\");
-                        var result = '$avg_bids';
-                        if (result == 'N/A, no request yet')
-                            return;
-                        if(select.value == \"day\") {
-                            document.getElementById(\"avgbidresult\").innerHTML = (parseFloat(result) * 24).toString();
-                        }
-                        if(select.value == \"min\") {
-                            document.getElementById(\"avgbidresult\").innerHTML = (parseFloat(result) / 60).toFixed(2).toString();
-                        }
-                        if(select.value == \"hour\") {
-                            document.getElementById(\"avgbidresult\").innerHTML = '$avg_bids';
-                        }
-                    }
-                </script>
-                
-                
-                <select id = \"avgbidselect\" name=\"AvgBid\" onchange=\"avgbidfn()\" class=\"table table-striped\" style=''>
-                            <option value=\"hour\">Average Bids/Hour</option>
-                            <option value=\"day\">Average Bids/Day</option>
-                            <option value=\"min\">Average Bids/Min</option>
-                </select>
-                
-                                                              
-                </th>
-                <th>Your Bids</th>
-                <th>Send Request</th>
-                
                 </tr>";
         echo "<tr>";
         echo "<td >$taker_name</td >";
         echo "<td >$start_avail_time</td >";
         echo "<td >$end_avail_time</td >";
-        echo "<td id='avgbidresult'>$avg_bids</td >";
+
+        echo" <input type = 'hidden' name = 'avgbidhourresult' value = $avg_bids > ";
+
+        $td_name = 'avgbidresult' . $count;
+        $count = $count + 1;
+        echo "<td id=$td_name>$avg_bids</td >";
+
         echo "
             <form method = 'get' class='form-inline' >
               <td>
@@ -384,11 +412,11 @@ if (isset($_GET['find'])) {
               ";
         }
 
-        echo "</tr>";
-        echo "</table>";
+
 
     }
-
+    echo "</tr>";
+    echo "</table>";
     exit();
 }
 ?>
