@@ -260,11 +260,12 @@ $user_address = $row[2];
                             <th>Pet Species</th>
                             <th>Pet Size</th>
                             <th>Pet Age</th>
+                            <th>Remarks</th>
                             <th>Action</th>
                         </tr>
 
                         <?php
-                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age 
+                        $query = "SELECT a.avail_id, a.start_time, a.end_time, a.remarks, p.species, p.size, p.age 
                                   FROM availability a, petcategory p 
                                   WHERE a.pcat_id = p.pcat_id 
                                         AND a.taker_id =$user_id 
@@ -279,9 +280,10 @@ $user_address = $row[2];
                             $avail_id = $row[0];
                             $start = $row[1];
                             $end = $row[2];
-                            $pet_species = $row[3];
-                            $pet_size = $row[4];
-                            $pet_age = $row[5];
+                            $remarks = $row[3];
+                            $pet_species = $row[4];
+                            $pet_size = $row[5];
+                            $pet_age = $row[6];
 
 
                             echo "<tr>
@@ -290,6 +292,7 @@ $user_address = $row[2];
                                   <td >$pet_species</td >
                                   <td >$pet_size</td >
                                   <td >$pet_age</td >
+                                  <td >$remarks</td >
                                   <td>
                                     <a class=\"btn btn-danger\" role=\"button\" href=\"deleteavail.php?avail_id=$avail_id\">Delete</a>
                                   </td>
