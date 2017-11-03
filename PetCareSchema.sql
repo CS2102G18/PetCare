@@ -59,7 +59,8 @@ CREATE TABLE pet_user(
     password VARCHAR(64) NOT NULL,
     email VARCHAR(64) UNIQUE,
     address VARCHAR(64),
-    role VARCHAR(10) DEFAULT 'normal' CONSTRAINT CHK_role CHECK (role in ('admin', 'normal'))
+    role VARCHAR(10) DEFAULT 'normal' CONSTRAINT CHK_role CHECK (role in ('admin', 'normal')),
+    is_deleted BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE pet(
