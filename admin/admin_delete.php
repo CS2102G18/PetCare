@@ -38,7 +38,7 @@ if ($_GET['usage'] == 'user') {
     $result = pg_query($query) or die('Query failedb: ' . pg_last_error());
     pg_free_result($result);
 
-    $query = "UPDATE request SET status='cancelled' 
+    $query = "UPDATE request SET status='failed' 
               WHERE status='pending' 
               AND pets_id IN (
                   SELECT pets_id FROM pet
@@ -61,7 +61,11 @@ if ($_GET['usage'] == 'avail') {
     $query = "UPDATE request SET status='failed' 
               WHERE status='pending' 
               AND care_begin >= ALL (SELECT a.start_time FROM availability a WHERE a.avail_id = " . $a_id . ")
-              AND care_end <= ALL (SELECT a.end_time FROM availability a WHERE a.avail_id = " . $a_id . ");";
+              AND care_end <= ALL (SELECT a.end_time FROM availability a WHERE a.avail_id = " . $a_id . ")
+              AND taker_id = ALL (SELECT a.taker_id FROM availability a WHERE a.avail_id = " . $a_id . ")
+              AND pets_id IN (SELECT p.pets_id 
+                              FROM availability a INNER JOIN pet p ON a.pcat_id = p.pcat_id
+                              WHERE a.avail_id = " . $a_id . ")";
     $result = pg_query($query) or die('Query failedb: ' . pg_last_error());
     pg_free_result($result);
 

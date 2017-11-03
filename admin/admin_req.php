@@ -236,7 +236,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$bids</td>";
                                 echo "<td >$slots</td>";
                                 echo "<td >$remarks</td>";
-                                echo "<td >" . ($status=="t" ? "Deleted" : "Active") . "</td >";
+                                echo "<td >" . ($status=="failed" ? "Deleted" : "Active") . "</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
                                         ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editreq.php?r_id=$req_id\">Edit</a>
