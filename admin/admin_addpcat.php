@@ -91,7 +91,7 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                     <br><br>
                     <button type="submit" name="create" class="btn btn-primary">Submit</button>
-                    <a href="admin_addpet.php" class="btn-default btn">Cancel</a>
+                    <a href="admin_addpcat.php" class="btn-default btn">Cancel</a>
             </form>
         </div>
     </div>

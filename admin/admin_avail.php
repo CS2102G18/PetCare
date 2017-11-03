@@ -23,6 +23,16 @@ if (isset($_SESSION["user_id"])) {
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../vendor/js/jquery.ns-autogrow.min.js"></script>
     <script src="../vendor/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#successmodal").modal('show');
+            $('#start-datetimepicker').datetimepicker();
+            $('#end-datetimepicker').datetimepicker();
+            $('#sb-datetimepicker').datetimepicker();
+            $('#se-datetimepicker').datetimepicker();
+        });
+
+    </script>
 
     <style>
         .navbar-admin {
@@ -66,86 +76,147 @@ if (isset($_SESSION["user_id"])) {
             <form action="" id="findForm">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="col-sm-3">
-                            <label for="pet_kw">Pet's Name</label>
-                            <input id="pet_kw" name="pet_kw" type="text" class="form-control" placeholder="Keywords">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-sm-3">
+                                    <label for="care_giver">Care Giver</label>
+                                    <select name="care_giver" class="form-control">
+                                        <option value="">Select Owner</option>
+                                        <?php
+                                        $query = "SELECT user_id, name, role FROM pet_user";
+                                        $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
+                                            if ($row[2] == "admin") {
+                                                $option .= " ***ADMIN***";
+                                            }
+                                            $option .= "</option><br>";
+                                            echo $option;
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label for="pet_species">Pet's Species</label>
+                                    <select id="pet_species" name="pet_species" class="form-control">
+                                        <option value="">Select Category</option>
+                                        <?php
+                                        $query = "SELECT DISTINCT species FROM petcategory";
+                                        $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label for="pet_age">Pet's Age</label>
+                                    <select id="pet_age" name="pet_age" class="form-control">
+                                        <option value="">Select Age</option>
+                                        <?php
+                                        $query = "SELECT DISTINCT age FROM petcategory";
+                                        $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label for="pet_size">Pet's Size</label>
+                                    <select name="pet_size" id="pet_size" class="form-control">
+                                        <option value="">Select Size</option>
+                                        <?php
+                                        $query = "SELECT DISTINCT size FROM petcategory";
+                                        $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">Post Start</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group date" id="start-datetimepicker">
+                                            <input type="text" class="form-control" name="post_start">
+                                            <div class="input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">Post End</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group date" id="end-datetimepicker">
+                                            <input type="text" class="form-control" name="post_end">
+                                            <div class="input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-3">
-                            <label for="pet_species">Pet's Owner</label>
-                            <select name="pet_owner" class="form-control">
-                                <option value="">Select Owner</option>
-                                <?php
-                                $query = "SELECT user_id, name, role FROM pet_user";
-                                $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
-                                    if ($row[2] == "admin") {
-                                        $option .= " ***ADMIN***";
-                                    }
-                                    $option .= "</option><br>";
-                                    echo $option;
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">Slot Start</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group date" id="sb-datetimepicker">
+                                            <input type="text" class="form-control" name="slot_start">
+                                            <div class="input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">Slot End</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group date" id="se-datetimepicker">
+                                            <input type="text" class="form-control" name="slot_end">
+                                            <div class="input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-2">
-                            <label for="pet_species">Pet's Species</label>
-                            <select id="pet_species" name="pet_species" class="form-control">
-                                <option value="">Select Category</option>
-                                <?php
-                                $query = "SELECT DISTINCT species FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_age">Pet's Age</label>
-                            <select id="pet_age" name="pet_age" class="form-control">
-                                <option value="">Select Age</option>
-                                <?php
-                                $query = "SELECT DISTINCT age FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_size">Pet's Size</label>
-                            <select name="pet_size" id="pet_size" class="form-control">
-                                <option value="">Select Size</option>
-                                <?php
-                                $query = "SELECT DISTINCT size FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <br>
-                            <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
-                            <a href="admin_pet.php" class="btn-default btn">Cancel</a>
-                            <a href="admin_addpet.php" class="btn-success btn">Add New Pet</a>
-                            <?php echo (!isset($_GET['show_deleted']))
-                                ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
+
+                       <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-sm-6">
+                                    <br>
+                                    <input type="submit" class="btn-primary btn" id="findBtn" name="search"
+                                           value="Search">
+                                    <a href="admin_avail.php" class="btn-default btn">Cancel</a>
+                                    <a href="admin_addavail.php" class="btn-success btn">Add Availability Slots</a>
+                                    <?php echo (!isset($_GET['show_deleted']))
+                                        ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
                                    value=\"Show Deleted\">"
-                                : "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"back\"
+                                        : "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"back\"
                                    value=\"Back\">" ?>
 
+                                </div>
+                            </div>
                         </div>
+                        <br><br>
                     </div>
+                    <br>
                     <div class="col-md-12">
-                        <br>
                         <table class="table table-striped" id="pet_info">
                             <tr>
                                 <th>Availability ID</th>
@@ -159,24 +230,22 @@ if (isset($_SESSION["user_id"])) {
                             </tr>
                             <?php
                             if (isset($_GET['search'])) {
-                                $pet_kw = $_GET['pet_kw'];
                                 $pet_species = $_GET['pet_species'];
                                 $pet_age = $_GET['pet_age'];
                                 $pet_size = $_GET['pet_size'];
-                                $pet_owner = $_GET['pet_owner'];
+                                $care_giver = $_GET['care_giver'];
 
-                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
-                                          FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
-                                                     INNER JOIN pet_user u ON p.owner_id = u.user_id
-                                          WHERE p.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false");
+                                $slot_start = $_GET['slot_start'];
+                                $slot_end = $_GET['slot_end'];
+                                $post_start = $_GET['post_start'];
+                                $post_end = $_GET['post_end'];
 
-                                if (trim($pet_kw)) {
-                                    $query .= " AND UPPER(p.pet_name) LIKE UPPER('%" . $pet_kw . "%')";
-                                }
 
-                                if (trim($pet_owner)) {
-                                    $query .= " AND u.user_id = '" . $pet_owner . "'";
-                                }
+                                $query = "SELECT a.avail_id, a.post_time, a.start_time, a.end_time,
+                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species
+                                          FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
+                                                              INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
+                                          WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'");
 
                                 if (trim($pet_age)) {
                                     $query .= " AND pc.age = '" . $pet_age . "'";
@@ -186,10 +255,31 @@ if (isset($_SESSION["user_id"])) {
                                     $query .= " AND pc.species = '" . $pet_species . "'";
                                 }
 
+                                if (trim($care_giver)) {
+                                    $query .= " AND a.taker_id = '" . $care_giver . "'";
+                                }
+
                                 if (trim($pet_size)) {
                                     $query .= " AND pc.size = '" . $pet_size . "'";
                                 }
-                                $query .= " ORDER BY p.pets_id;";
+
+                                if (trim($post_start)) {
+                                    $query .= " AND a.post_time >= '" . $post_start . "'";
+                                }
+
+                                if (trim($post_end)) {
+                                    $query .= " AND a.post_time <= '" . $post_end . "'";
+                                }
+
+                                if (trim($slot_start)) {
+                                    $query .= " AND a.start_time >= '" . $slot_start . "'";
+                                }
+
+                                if (trim($slot_end)) {
+                                    $query .= " AND a.end_time <= '" . $slot_end . "'";
+                                }
+
+                                $query .= " ORDER BY a.avail_id;";
 
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
@@ -198,7 +288,7 @@ if (isset($_SESSION["user_id"])) {
                                           FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
                                                               INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
                                           WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'") .
-                                        " ORDER BY a.avail_id;";
+                                    " ORDER BY a.avail_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
@@ -231,7 +321,6 @@ if (isset($_SESSION["user_id"])) {
                             ?>
                         </table>
                     </div>
-                </div>
             </form>
         </div>
     </div>
