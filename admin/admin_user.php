@@ -100,8 +100,8 @@ if (isset($_SESSION["user_id"])) {
                         <div class="col-sm-12">
                             <br>
                             <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
-                            <a href="admin_pet.php" class="btn-default btn">Cancel</a>
-                            <a href="admin_addpet.php" class="btn-success btn">Add new user</a>
+                            <a href="admin_user.php" class="btn-default btn">Cancel</a>
+                            <a href="admin_adduser.php" class="btn-success btn">Add new user</a>
                             <?php echo (!isset($_GET['show_deleted']))
                                 ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
                                    value=\"Show Deleted\">"

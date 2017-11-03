@@ -60,7 +60,7 @@ if (isset($_GET["u_id"])) {
     <div class="panel new-task-panel">
         <div class="container">
             <h2>User profile</h2>
-            <form action="admin_user.php">
+            <form action="admin_edituser.php">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-2">
@@ -100,7 +100,7 @@ if (isset($_GET["u_id"])) {
                         <div class="col-sm-8">
                             <input name="address" type="text" class="form-control"
                                    value="<?php echo $address ?>">
-                            <input name="user_id" type="hidden"
+                            <input name="id" type="hidden" class="form-control"
                                    value="<?php echo $user_id ?>">
                         </div>
                     </div>
@@ -117,15 +117,14 @@ if (isset($_GET["u_id"])) {
 
 <?php
 if (isset($_GET['update'])) {
-    $user_id = $_GET['user_id'];
-    die($user_id);
+    $u_id = $_GET['id'];
     $u_name = $_GET["name"];
     $u_password = $_GET["password"];
     $u_email = $_GET["email"];
     $u_address = $_GET["address"];
     $update_query = "UPDATE pet_user
                      SET name = '$u_name', password = '$u_password', email = '$u_email', address = '$u_address'
-                     WHERE user_id = $user_id;";
+                     WHERE user_id = $u_id;";
     $result = pg_query($update_query) or die('Query failed: ' . pg_last_error());
     if ($result) {
         pg_free_result($result);
