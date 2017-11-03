@@ -39,20 +39,17 @@ if (isset($_SESSION["user_id"])) {
     </style>
 </head>
 <body>
-<!-- include php -->
 <?php include "../config/db-connection.php"; ?>
-
-<!--navigation bar-->
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="../owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="owner.php"> As a Pet Owner </a></li>
-                <li><a href="taker.php"> As a Care Taker </a></li>
-                <li><a href="history.php"> View History </a></li>
-                <li><a href="profile.php"> Your Profile </a></li>
-                <li><a href="logout.php"> Log Out </a></li>
+                <li><a href="../owner.php"> As a Pet Owner </a></li>
+                <li><a href="../taker.php"> As a Care Taker </a></li>
+                <li><a href="../history.php"> View History </a></li>
+                <li><a href="../profile.php"> Your Profile </a></li>
+                <li><a href="../logout.php"> Log Out </a></li>
             </ul>
         </div>
     </div>

@@ -19,6 +19,7 @@ if (isset($_GET["u_id"])) {
     $password = $row[2];
     $email = $row[3];
     $address = $row[4];
+    $role = $row[5];
 }
 ?>
 
@@ -44,14 +45,14 @@ if (isset($_GET["u_id"])) {
 <body>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="../owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="owner.php"> As a Pet Owner </a></li>
-                <li><a href="taker.php"> As a Care Taker </a></li>
-                <li><a href="history.php"> View History </a></li>
-                <li><a href="profile.php"> Your Profile </a></li>
-                <li><a href="logout.php"> Log Out </a></li>
+                <li><a href="../owner.php"> As a Pet Owner </a></li>
+                <li><a href="../taker.php"> As a Care Taker </a></li>
+                <li><a href="../history.php"> View History </a></li>
+                <li><a href="../profile.php"> Your Profile </a></li>
+                <li><a href="../logout.php"> Log Out </a></li>
             </ul>
         </div>
     </div>
@@ -60,7 +61,7 @@ if (isset($_GET["u_id"])) {
     <div class="panel new-task-panel">
         <div class="container">
             <h2>User profile</h2>
-            <form action="admin_user.php">
+            <form action="admin_edituser.php">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-2">
@@ -100,8 +101,27 @@ if (isset($_GET["u_id"])) {
                         <div class="col-sm-8">
                             <input name="address" type="text" class="form-control"
                                    value="<?php echo $address ?>">
-                            <input name="user_id" type="hidden"
+                            <input name="id" type="hidden" class="form-control"
                                    value="<?php echo $user_id ?>">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>Role</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <select name="role" class="form-control">
+                                <option value="<?php echo $role ?>"><?php echo $role ?></option>
+                                <?php
+                                $query = "SELECT DISTINCT role FROM pet_user WHERE role <> '" . $role . "';";
+                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+                                while ($row = pg_fetch_row($result)) {
+                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
+                                }
+                                pg_free_result($result);
+                                ?>
+                            </select>
                         </div>
                     </div>
                     <br>
@@ -117,15 +137,15 @@ if (isset($_GET["u_id"])) {
 
 <?php
 if (isset($_GET['update'])) {
-    $user_id = $_GET['user_id'];
-    die($user_id);
+    $u_id = $_GET['id'];
     $u_name = $_GET["name"];
     $u_password = $_GET["password"];
     $u_email = $_GET["email"];
     $u_address = $_GET["address"];
+    $u_role = $_GET['role'];
     $update_query = "UPDATE pet_user
-                     SET name = '$u_name', password = '$u_password', email = '$u_email', address = '$u_address'
-                     WHERE user_id = $user_id;";
+                     SET name = '$u_name', password = '$u_password', email = '$u_email', address = '$u_address', role = '$u_role'
+                     WHERE user_id = $u_id;";
     $result = pg_query($update_query) or die('Query failed: ' . pg_last_error());
     if ($result) {
         pg_free_result($result);
