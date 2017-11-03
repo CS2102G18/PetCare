@@ -51,7 +51,7 @@ if (isset($_SESSION["user_id"])) {
         <div class="page-heading">
             <ol class="breadcrumb">
                 <li><a href="../admin.php">Admin</a></li>
-                <li><a href="admin_pet.php">Pet</a></li>
+                <li><a href="admin_user.php">User</a></li>
                 <li>Add new user</li>
             </ol>
         </div>
@@ -65,7 +65,7 @@ if (isset($_SESSION["user_id"])) {
                         </div>
                         <div class="col-sm-8">
                             <input name="name" type="text" class="form-control"
-                                   value="<?php echo $name ?>">
+                                   value="">
                         </div>
                     </div>
                     <br>
@@ -75,7 +75,7 @@ if (isset($_SESSION["user_id"])) {
                         </div>
                         <div class="col-sm-8">
                             <input name="password" type="text" class="form-control"
-                                   value="<?php echo $password ?>">
+                                   value="">
                         </div>
                     </div>
                     <br>
@@ -85,7 +85,7 @@ if (isset($_SESSION["user_id"])) {
                         </div>
                         <div class="col-sm-8">
                             <input name="email" type="text" class="form-control"
-                                   value="<?php echo $email ?>">
+                                   value="">
                         </div>
                     </div>
                     <br>
@@ -96,13 +96,22 @@ if (isset($_SESSION["user_id"])) {
                         </div>
                         <div class="col-sm-8">
                             <input name="address" type="text" class="form-control"
-                                   value="<?php echo $address ?>">
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="col-sm-2">
+                            </div>
+                            <div class="checkbox">
+                                <label><input name="admin" type="checkbox" value="admin">Admin User</label>
+                            </div>
                         </div>
                     </div>
                     <br>
 
                     <div class="container">
-                        <button type="submit" name="update" class="btn btn-default">Update</button>
+                        <button type="submit" name="create" class="btn btn-default">Update</button>
                     </div>
                 </div>
             </form>
@@ -111,24 +120,23 @@ if (isset($_SESSION["user_id"])) {
 </div>
 <?php
 if (isset($_GET['create'])) {
-    $pet_owner = $_GET['pet_owner'];
-    $pet_age = $_GET["pet_age"];
-    $pet_size = $_GET["pet_size"];
-    $pet_species = $_GET["pet_species"];
-    $pcat_query = "SELECT pcat_id FROM petcategory WHERE age = '$pet_age'
-                      AND size = '$pet_size'
-                      AND species = '$pet_species';";
-    $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
-    $pcat_id = pg_fetch_row($pcat_result)[0];
-    $pet_name = $_GET["pet_name"];
-    $insert_query = "INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES ($pcat_id,$pet_owner,'$pet_name');";
+    $user_name = $_GET['name'];
+    $user_add = $_GET["address"];
+    $user_email = $_GET["email"];
+    $user_password = $_GET["password"];
+
+    if (!$_GET['admin']=='admin') {
+        $insert_query = "INSERT INTO pet_user(name, password, email, address) VALUES ('$user_name', '$user_password', '$user_email','$user_add');";
+    } else {
+        $insert_query = "INSERT INTO pet_user(name, password, email, address, role) VALUES ('$user_name', '$user_password', '$user_email','$user_add', 'admin');";
+    }
     $result = pg_query($insert_query);
     if (!$result) {
         die('Query failed: ' . pg_last_error());
     } else {
         pg_free_result($result);
-        header("Location: owner.php");
-        echo "<script>window.location = 'admin_pet.php';</script>";
+        header("Location: admin_user.php");
+        echo "<script>window.location = 'admin_user.php';</script>";
     }
     exit();
 }
