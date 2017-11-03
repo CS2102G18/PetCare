@@ -198,7 +198,7 @@ if (isset($_SESSION["user_id"])) {
                                           FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
                                                               INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
                                           WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'") .
-                                    " ORDER BY a.avail_id;";
+                                        " ORDER BY a.avail_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
@@ -220,9 +220,9 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$a_status</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
-                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
-                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?p_id=$pet_id&usage=pet\">Delete</a>"
-                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?p_id=$pet_id&usage=pet\">Restore</a>") .
+                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editavail.php?a_id=$a_id\">Edit</a>
+                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?a_id=$a_id&usage=avail\">Delete</a>"
+                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?a_id=$a_id&usage=avail\">Restore</a>") .
 
                                     "</td>";
                                 echo "</tr>";

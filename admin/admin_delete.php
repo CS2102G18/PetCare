@@ -26,7 +26,7 @@ if ($_GET['usage'] == 'user') {
     $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
     pg_free_result($result);
 
-    $query = "UPDATE request SET status='cancelled' WHERE status='pending' AND (owner_id=$u_id OR taker_id=$u_id);";
+    $query = "UPDATE request SET status='failed' WHERE status='pending' AND (owner_id=$u_id OR taker_id=$u_id);";
     $result = pg_query($query) or die('Query failedb: ' . pg_last_error());
     pg_free_result($result);
 
@@ -48,7 +48,26 @@ if ($_GET['usage'] == 'user') {
     pg_free_result($result);
 
     header("Location: admin_user.php");
-    echo "<script>window.location = 'admin_pet.php';</script>";
+    echo "<script>window.location = 'admin_user.php';</script>";
+    exit();
+}
+
+if ($_GET['usage'] == 'avail') {
+    $a_id = $_GET['a_id'];
+    $query = "UPDATE availability SET is_deleted=true WHERE avail_id=" . $a_id . ";";
+    $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
+    pg_free_result($result);
+
+    $query = "UPDATE request SET status='failed' 
+              WHERE status='pending' 
+              AND care_begin >= ALL (SELECT a.start_time FROM availability a WHERE a.avail_id = " . $a_id . ")
+              AND care_end <= ALL (SELECT a.end_time FROM availability a WHERE a.avail_id = " . $a_id . ");";
+    $result = pg_query($query) or die('Query failedb: ' . pg_last_error());
+    pg_free_result($result);
+
+
+    header("Location: admin_avail.php");
+    echo "<script>window.location = 'admin_avail.php';</script>";
     exit();
 }
 ?>

@@ -28,4 +28,14 @@ if ($_GET['usage'] == 'user') {
     echo "<script>window.location = 'admin_user.php';</script>";
     exit();
 }
+if ($_GET['usage'] == 'avail') {
+    $u_id = $_GET['a_id'];
+    $query = "UPDATE availability SET is_deleted=false WHERE avail_id=" . $u_id . ";";
+    $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
+    pg_free_result($result);
+
+    header("Location: admin_avail.php");
+    echo "<script>window.location = 'admin_avail.php';</script>";
+    exit();
+}
 ?>
