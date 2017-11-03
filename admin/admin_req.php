@@ -239,9 +239,9 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >" . ($status=="t" ? "Deleted" : "Active") . "</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
-                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
-                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?p_id=$pet_id&usage=pet\">Delete</a>"
-                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?p_id=$pet_id&usage=pet\">Restore</a>") .
+                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editreq.php?r_id=$req_id\">Edit</a>
+                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?r_id=$req_id&usage=req\">Delete</a>"
+                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?r_id=$req_id&usage=req\">Restore</a>") .
 
                                     "</td>";
                                 echo "</tr>";

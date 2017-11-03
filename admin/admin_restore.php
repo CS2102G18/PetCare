@@ -38,4 +38,15 @@ if ($_GET['usage'] == 'avail') {
     echo "<script>window.location = 'admin_avail.php';</script>";
     exit();
 }
+
+if ($_GET['usage'] == 'req') {
+    $r_id = $_GET['r_id'];
+    $query = "UPDATE request SET status='pending' WHERE request_id=" . $r_id . ";";
+    $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
+    pg_free_result($result);
+
+    header("Location: admin_req.php");
+    echo "<script>window.location = 'admin_req.php';</script>";
+    exit();
+}
 ?>
