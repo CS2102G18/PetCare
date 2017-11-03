@@ -31,16 +31,20 @@ if (isset($_SESSION["user_id"])) {
 </head>
 <body>
 <?php
-if (isset($_GET["reject_id"])) {
-    $reject_id = $_GET["reject_id"];
+
+$mode = $_GET["mode"];
+$request_id = $_GET["request_id"];
+
+if ($mode==0) {
+    $reject_id = $request_id;
     $reject_query = "UPDATE request SET status = 'failed' WHERE request_id =$reject_id;";
     $result = pg_query($reject_query) or die('Query failed: ' . pg_last_error());
     pg_free_result($result);
     echo "<script>window.location = 'taker.php';</script>";
 }
 
-if (isset($_GET["accept_id"])) {
-    $accept_id = $_GET["accept_id"];
+if ($mode==1) {
+    $accept_id = $request_id;
     $check_query = "SELECT COUNT(*) FROM request r1,request r2 WHERE r1.request_id = $accept_id AND r2.taker_id = $user_id AND r2.status = 'successful' AND r1.care_begin < r2.care_end AND r1.care_end > r2.care_begin;";
     $check_result = pg_query($check_query) or die('Query failed: ' . pg_last_error());
     $row = pg_fetch_row($check_result);
@@ -77,7 +81,7 @@ if (isset($_GET["accept_id"])) {
 
 }
 if ((isset($_GET['accept']))) {
-    $accept_id = $_GET["accept_id"];
+    $accept_id = $request_id;
     $accept_query = "UPDATE request SET status = 'successful' WHERE request_id =$accept_id;";
     $result = pg_query($accept_query) or die('Query failed: ' . pg_last_error());
     pg_free_result($result);

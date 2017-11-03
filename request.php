@@ -168,7 +168,7 @@ $bids = $_GET['bids'];
                         <select name="pet_name" class="form-control">
                             <option value="">Select Pet</option>
                             <?php
-                            $query = "SELECT pet_name FROM pet WHERE owner_id = $user_id";
+                            $query = "SELECT pet_name FROM pet WHERE owner_id = $user_id AND is_deleted = false";
                             $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                             while ($row = pg_fetch_row($result)) {
                                 echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -242,24 +242,24 @@ if (isset($_GET['find'])) {
 
     $complete = true;
 
-    $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
+    $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
     $pid_result = pg_query($pid_query) or die('Query failed: ' . pg_last_error());
     $pet_id = pg_fetch_row($pid_result)[0];
-    $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
+    $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
     $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
     $pcat_id = pg_fetch_row($pcat_result)[0];
     $avail_query = "SELECT *
                     FROM availability a, pet_user p
-                    WHERE is_deleted = false
+                    WHERE p.is_deleted = false
                     AND p.user_id = a.taker_id
                     AND taker_id <> '$user_id'";
 
 
     if(trim($pet_name)) {
-        $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
+        $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
         $pid_result = pg_query($pid_query) or die('Query failed: ' . pg_last_error());
         $pet_id = pg_fetch_row($pid_result)[0];
-        $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name'";
+        $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
         $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
         $pcat_id = pg_fetch_row($pcat_result)[0];
 

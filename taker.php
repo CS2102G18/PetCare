@@ -140,6 +140,7 @@ $user_address = $row[2];
                                         AND p.pets_id = r.pets_id 
                                         AND p.pcat_id = c.pcat_id
                                         AND u.user_id = r.owner_id
+                                        AND p.is_deleted = false
                                   ORDER BY r.bids DESC;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
@@ -167,8 +168,8 @@ $user_address = $row[2];
                             echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "<td >
-                                    <form class='form-inline' action='requestAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Accept'></div><input type='hidden' name='accept_id' value=$request_id></form>
-                                    <form class='form-inline' action='requestAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Reject'></div><input type='hidden' name='reject_id' value=$request_id></form>
+                                      <a class=\"btn btn-default\" role=\"button\" href=\"requestAction.php?mode=1&request_id=$request_id\">Accept</a>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"requestAction.php?mode=0&request_id=$request_id\">Reject</a>
                                   </td>";
 
                             echo "</tr>";
@@ -202,6 +203,7 @@ $user_address = $row[2];
                                         AND p.pets_id = r.pets_id 
                                         AND p.pcat_id = c.pcat_id
                                         AND u.user_id = r.owner_id
+                                        AND p.is_deleted = false
                                   ORDER BY r.bids DESC;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
