@@ -250,7 +250,7 @@ if (isset($_GET['find'])) {
     $pcat_id = pg_fetch_row($pcat_result)[0];
     $avail_query = "SELECT *
                     FROM availability a, pet_user p
-                    WHERE is_deleted = false
+                    WHERE a.is_deleted = false
                     AND p.user_id = a.taker_id
                     AND taker_id <> '$user_id'";
 
