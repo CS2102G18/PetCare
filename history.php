@@ -14,38 +14,32 @@ if (isset($_SESSION["user_id"])) {
 <html>
 <head>
     <title>PetCare</title>
-    <link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../vendor/css/style.css">
-    <link rel="stylesheet" type="text/css" href="../vendor/css/new-task-styling.css">
-    <link rel="stylesheet" href="../vendor/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendor/css/style.css">
+    <link rel="stylesheet" type="text/css" href="./vendor/css/new-task-styling.css">
+    <link rel="stylesheet" href="./vendor/css/bootstrap-datetimepicker.min.css">
 
-    <script src="../vendor/js/jquery-3.2.0.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../vendor/js/jquery.ns-autogrow.min.js"></script>
-    <script src="../vendor/js/bootstrap-datetimepicker.min.js"></script>
-
-    <script src="../vendor/sortTable.js"></script>
+    <script src="./vendor/js/jquery-3.2.0.min.js"></script>
+    <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./vendor/js/jquery.ns-autogrow.min.js"></script>
+    <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
 
     <style>
-        .navbar-admin {
+        .navbar-owner {
             color: #FFFFFF;
-            background-color: #793585;
+            background-color: #8a3541;
         }
-
-        .col-centered {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
+        body {
+            background: url('./media/background_owner.png');
         }
     </style>
 </head>
 <body>
 <!-- include php -->
-<?php include "../config/db-connection.php"; ?>
+<?php include "config/db-connection.php"; ?>
 
 <!--navigation bar-->
-<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
+<nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-owner">
     <div class="container navbar-container">
         <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
@@ -62,7 +56,7 @@ if (isset($_SESSION["user_id"])) {
 <div class="content-container container">
     <div class="page-heading">
         <ol class="breadcrumb">
-            <li><a href="../admin.php">Admin</a></li>
+            <li><a href="admin.php">Admin</a></li>
             <li>View Pets</li>
         </ol>
     </div>
