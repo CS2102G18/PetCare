@@ -250,10 +250,10 @@ if (isset($_GET['find'])) {
     $pcat_id = pg_fetch_row($pcat_result)[0];
     $avail_query = "SELECT *
                     FROM availability a, pet_user p
-                    WHERE p.is_deleted = false
+                    WHERE a.is_deleted = false
+                    AND p.is_deleted = false
                     AND p.user_id = a.taker_id
                     AND taker_id <> '$user_id'";
-
 
     if(trim($pet_name)) {
         $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
