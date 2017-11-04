@@ -224,6 +224,7 @@ if (isset($_SESSION["user_id"])) {
                                 <th>Begin time</th>
                                 <th>End time</th>
                                 <th>Pet Category Available</th>
+                                <th>Is Work Going On</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -239,12 +240,12 @@ if (isset($_SESSION["user_id"])) {
                                 $post_start = $_GET['post_start'];
                                 $post_end = $_GET['post_end'];
 
-
                                 $query = "SELECT a.avail_id, a.post_time, a.start_time, a.end_time,
-                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species
+                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species, pc.pcat_id
                                           FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
                                                               INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
                                           WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'");
+
 
                                 if (trim($pet_age)) {
                                     $query .= " AND pc.age = '" . $pet_age . "'";
@@ -283,7 +284,7 @@ if (isset($_SESSION["user_id"])) {
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
                                 $query = "SELECT a.avail_id, a.post_time, a.start_time, a.end_time,
-                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species
+                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species, pc.pcat_id
                                           FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
                                                               INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
                                           WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'") .
@@ -299,6 +300,17 @@ if (isset($_SESSION["user_id"])) {
                                 $a_user = $row[5] . " (id: " . $row[4] . ")";
                                 $a_pcat = $row[8] . " " . $row[7] . " " . $row[9];
                                 $a_status = ($row[6] == 't' ? 'Deleted' : 'Active');
+
+                                $work_go_on_query = "SELECT r.request_id
+                                                     FROM request r INNER JOIN availability a ON (r.taker_id = a.taker_id)
+                                                                    INNER JOIN pet p ON (r.pets_id = p.pets_id)
+                                                                    INNER JOIN petcategory pc ON (pc.pcat_id = a.pcat_id AND pc.pcat_id = p.pcat_id)
+                                                     WHERE r.care_begin >= a.start_time
+                                                     AND r.care_end <= a.end_time
+                                                     AND r.status = 'successful'
+                                                     AND a.avail_id = ".$a_id. " AND a.pcat_id = ".$row[10];
+                                $work_go_on_result = pg_query($work_go_on_query) or die('Query failed 3 : ' . pg_last_error());
+
                                 echo "<tr>";
                                 echo "<td >$a_id</td >";
                                 echo "<td >$a_user</td >";
@@ -306,6 +318,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$a_start</td >";
                                 echo "<td >$a_end</td>";
                                 echo "<td >$a_pcat</td >";
+                                echo "<td>".(pg_num_rows($work_go_on_result) == 0 ? "NO" : "YES (request id: ".pg_fetch_row($work_go_on_result)[0].")")."</td>";
                                 echo "<td >$a_status</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
