@@ -33,7 +33,6 @@ if (isset($_SESSION["user_id"])) {
         });
 
     </script>
-
     <style>
         .navbar-admin {
             color: #FFFFFF;
@@ -217,7 +216,7 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                     <br>
                     <div class="col-md-12">
-                        <table class="table table-striped" id="pet_info">
+                        <table class="table table-striped" id='avail_info'>
                             <tr>
                                 <th>Availability ID</th>
                                 <th>User</th>

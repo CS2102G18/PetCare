@@ -150,12 +150,12 @@ if (isset($_SESSION["user_id"])) {
                         <br>
                         <table class="table table-striped" id="pet_info">
                             <tr>
-                                <th >Pet ID</th>
-                                <th >Pet Name</th>
-                                <th >Pet Owner</th>
-                                <th >Pet Species</th>
-                                <th >Pet Size</th>
-                                <th >Pet Age</th>
+                                <th>Pet ID</th>
+                                <th>Pet Name</th>
+                                <th>Pet Owner</th>
+                                <th>Pet Species</th>
+                                <th>Pet Size</th>
+                                <th>Pet Age</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -199,7 +199,7 @@ if (isset($_SESSION["user_id"])) {
                                           FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
                                                      INNER JOIN pet_user u ON p.owner_id = u.user_id
                                           WHERE p.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false") .
-                                        " ORDER BY p.pets_id;";
+                                    " ORDER BY p.pets_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
@@ -212,7 +212,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$row[2]</td >";
                                 echo "<td >$row[3]</td>";
                                 echo "<td >$row[4]</td >";
-                                echo "<td >" . ($row[8]=="t" ? "Deleted" : "Active") . "</td >";
+                                echo "<td >" . ($row[8] == "t" ? "Deleted" : "Active") . "</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
                                         ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>

@@ -152,6 +152,48 @@ ON request
 FOR EACH ROW
 EXECUTE PROCEDURE addRequestInfo();
 
+CREATE OR REPLACE FUNCTION cleanOutdatedAvail()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE availability
+  SET is_deleted = TRUE
+  WHERE end_time <= CURRENT_TIMESTAMP
+  and is_deleted = FALSE
+  RETURN NULL;
+END; $$
+LANGUAGE PLPGSQL
+
+CREATE OR REPLACE FUNCTION cleanOutdatedReq()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE request
+  SET status = 'cancelled'
+  WHERE (end_time <= CURRENT_TIMESTAMP
+  AND status = 'pending')
+  OR
+  (request_id NOT IN (SELECT r.request_id
+                      FROM request r INNER JOIN pet p ON r.pets_id = p.pets_id
+                                     INNER JOIN availability a ON a.pcat_id = p.pcat_id
+                      WHERE r.taker_id = a.taker_id
+                      AND a.is_deleted = FALSE
+                      AND p.is_deleted = FALSE
+                      AND r.care_end <= a.end_time
+                      AND r.care_begin >= a.begin_time)
+  AND status = 'pending')
+  RETURN NULL;
+END; $$
+LANGUAGE PLPGSQL
+
+CREATE TRIGGER changeAvail
+BEFORE INSERT OR UPDATE availability
+FOR EACH STATEMENT
+EXECUTE PROCEDURE cleanOutdatedAvail();
+
+CREATE TRIGGER changeReq
+BEFORE INSERT OR UPDATE request
+FOR EACH STATEMENT
+EXECUTE PROCEDURE cleanOutdatedReq();
+
 
 CREATE VIEW requesttime AS
     SELECT SUM(r.bids)/SUM(r.totaltime)*60 AS avgbids, r.taker_id AS taker_id

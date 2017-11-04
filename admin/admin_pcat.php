@@ -122,12 +122,12 @@ if (isset($_SESSION["user_id"])) {
                         <br>
                         <table class="table table-striped" id="pet_info">
                             <tr>
-                                <th >Category ID</th>
-                                <th >Species</th>
-                                <th >Size</th>
-                                <th >Age</th>
-                                <th >Number of pets in this category</th>
-                                <th >Number of available slots for this category</th>
+                                <th>Category ID</th>
+                                <th>Species</th>
+                                <th>Size</th>
+                                <th>Age</th>
+                                <th>Number of pets in this category</th>
+                                <th>Number of available slots for this category</th>
                             </tr>
                             <?php
                             if (isset($_GET['search'])) {
