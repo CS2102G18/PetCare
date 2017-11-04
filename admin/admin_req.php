@@ -337,7 +337,7 @@ if (isset($_SESSION["user_id"])) {
                                 }
 
                                 if (trim($slot_end)) {
-                                    $query .= " AND r.care_end <= '" . $slot_start . "'";
+                                    $query .= " AND r.care_end <= '" . $slot_end . "'";
                                 }
 
                                 if (trim($req_status)) {
