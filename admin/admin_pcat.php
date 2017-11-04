@@ -115,11 +115,6 @@ if (isset($_SESSION["user_id"])) {
                             <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
                             <a href="admin_pet.php" class="btn-default btn">Cancel</a>
                             <a href="admin_addpcat.php" class="btn-success btn">Add New Category</a>
-                            <?php echo (!isset($_GET['show_deleted']))
-                                ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
-                                   value=\"Show Deleted\">"
-                                : "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"back\"
-                                   value=\"Back\">" ?>
 
                         </div>
                     </div>
@@ -133,7 +128,6 @@ if (isset($_SESSION["user_id"])) {
                                 <th >Age</th>
                                 <th >Number of pets in this category</th>
                                 <th >Number of available slots for this category</th>
-                                <th>Actions</th>
                             </tr>
                             <?php
                             if (isset($_GET['search'])) {
@@ -183,13 +177,6 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$pcat_age</td >";
                                 echo "<td> $pcat_pcount</td>";
                                 echo "<td> $pcat_acount</td>";
-                                echo "<td >" .
-                                    (!isset($_GET['show_deleted'])
-                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editpet.php?p_id=$pet_id\">Edit</a>
-                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?p_id=$pet_id&usage=pet\">Delete</a>"
-                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?p_id=$pet_id&usage=pet\">Restore</a>") .
-
-                                    "</td>";
                                 echo "</tr>";
                             }
                             pg_free_result($result);
