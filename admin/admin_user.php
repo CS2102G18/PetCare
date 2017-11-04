@@ -213,7 +213,7 @@ if (isset($_SESSION["user_id"])) {
                                           COUNT(DISTINCT a.avail_id),
                                           COUNT(DISTINCT r1.request_id),
                                           COUNT(DISTINCT r2.request_id),
-                                          ROUND(COALESCE(COUNT(DISTINCT r2.request_id)::DECIMAL/NULLIF(COUNT(DISTINCT r1.request_id),0),0) * 100,2),
+                                          COALESCE(COUNT(DISTINCT r2.request_id)::DECIMAL/NULLIF(COUNT(DISTINCT r1.request_id),0),-1),
                                           COALESCE(ROUND(AVG(DISTINCT r1.bids),2),0),
                                           COUNT(DISTINCT r3.request_id)
                                           FROM pet_user u LEFT OUTER JOIN pet p ON (p.owner_id = u.user_id)
@@ -238,7 +238,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$row[2]</td>";
                                 echo "<td >$row[3]</td >";
                                 echo "<td >$row[4]</td>";
-                                echo "<td >$row[5]%</td>";
+                                echo "<td >".($row[5] != -1 ? round($row[5]*100 ,2)."%": "NA")."</td>";
                                 echo "<td >$row[6]</td>";
                                 echo "<td >$row[7]</td>";
                                 echo "</tr>";
