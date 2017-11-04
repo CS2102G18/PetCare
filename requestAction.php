@@ -35,7 +35,7 @@ if (isset($_SESSION["user_id"])) {
 $mode = $_GET["mode"];
 $request_id = $_GET["request_id"];
 
-if ($mode==0) {
+if ($mode==2) {
     $reject_id = $request_id;
     $reject_query = "UPDATE request SET status = 'failed' WHERE request_id =$reject_id;";
     $result = pg_query($reject_query) or die('Query failed: ' . pg_last_error());
@@ -64,7 +64,7 @@ if ($mode==1) {
                 </div>
                 
                 <div class='modal-footer'>
-                  <form method='get'><button type='submit' class='btn btn-default' name='accept'>Accept Anyway</button><input type='hidden' name='accept_id' value=$accept_id></form>>
+                  <form method='get'><button type='submit' class='btn btn-default' name='accept'>Accept Anyway</button><input type='hidden' name='request_id' value=$accept_id></form>>
                   <button type='button' class='btn btn-default'><a href='taker.php'>Cancel</a></button>
                 </div>
             </div>
@@ -74,8 +74,19 @@ if ($mode==1) {
     }
     else {
         $accept_query = "UPDATE request SET status = 'successful' WHERE request_id =$accept_id;";
-        $result = pg_query($accept_query) or die('Query failed: ' . pg_last_error());
-        pg_free_result($result);
+        $accept_result = pg_query($accept_query) or die('Query failed: ' . pg_last_error());
+        pg_free_result($accept_result);
+        $info_query = "SELECT owner_id, pets_id, care_begin, care_end FROM request WHERE request_id = $accept_id;";
+        $info_result = pg_query($info_query) or die('Query failed: ' . pg_last_error());
+        $row = pg_fetch_row($info_result);
+        $owner_id = $row[0];
+        $pets_id = $row[1];
+        $start = $row[2];
+        $end = $row[3];
+        $cancel_query = "UPDATE request SET status = 'cancelled' WHERE request_id <> $accept_id AND pets_id = $pets_id AND '$start' < care_end AND '$end' > care_begin;";
+        $cancel_result = pg_query($cancel_query) or die('Query failed: ' . pg_last_error());
+        pg_free_result($info_result);
+        pg_free_result($cancel_result);
         echo "<script>window.location = 'taker.php';</script>";
     }
 
@@ -83,8 +94,19 @@ if ($mode==1) {
 if ((isset($_GET['accept']))) {
     $accept_id = $request_id;
     $accept_query = "UPDATE request SET status = 'successful' WHERE request_id =$accept_id;";
-    $result = pg_query($accept_query) or die('Query failed: ' . pg_last_error());
-    pg_free_result($result);
+    $accept_result = pg_query($accept_query) or die('Query failed: ' . pg_last_error());
+    pg_free_result($accept_result);
+    $info_query = "SELECT owner_id, pets_id, care_begin, care_end FROM request WHERE request_id = $accept_id;";
+    $info_result = pg_query($info_query) or die('Query failed: ' . pg_last_error());
+    $row = pg_fetch_row($info_result);
+    $owner_id = $row[0];
+    $pets_id = $row[1];
+    $start = $row[2];
+    $end = $row[3];
+    $cancel_query = "UPDATE request SET status = 'cancelled' WHERE request_id <> $accept_id AND pets_id = $pets_id AND '$start' < care_end AND '$end' > care_begin;";
+    $cancel_result = pg_query($cancel_query) or die('Query failed: ' . pg_last_error());
+    pg_free_result($info_result);
+    pg_free_result($cancel_result);
     echo "<script>window.location = 'taker.php';</script>";
 }
 ?>
