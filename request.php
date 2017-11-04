@@ -91,17 +91,18 @@ $bids = $_GET['bids'];
                 <script>
                     var complete = false;
                     function checkComplete() {
+                        var btn = document.getElementById("send_btn");
+
+
                         if(document.frm.start_time.value == "" || document.frm.end_time.value == "" ||
                             document.frm.pet_name.value == "" || document.frm.remarks.value == "" ||
                             document.frm.bids.value == "") {
                             complete = false;
-                            var btn = document.getElementById("send_btn");
                             btn.style.color = 'darkred';
                             btn.style.backgroundColor = 'lightgray';
                             btn.type = "button";
                         }else{
                             complete = true;
-                            var btn = document.getElementById("send_btn");
                             btn.style.color = 'blue';
                             btn.style.backgroundColor = 'white';
                             btn.type = "submit";
@@ -110,13 +111,10 @@ $bids = $_GET['bids'];
                 </script>
 
 
-
-
-
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h4>Choose time slots</h4>
+                            <h4>Choose time slot</h4>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group row">
@@ -177,7 +175,6 @@ $bids = $_GET['bids'];
                         </div>
                         <div class="col-sm-8">
                             <input name="taker_name" class="form-control" value = '<?php echo $taker_name;?>' >
-                            </input>
                         </div>
                     </div>
                     <br>
@@ -188,7 +185,6 @@ $bids = $_GET['bids'];
                         </div>
                         <div class="col-sm-8">
                             <input name="remarks" class="form-control" value = '<?php echo $remarks;?>' >
-                            </input>
                         </div>
                     </div>
                     <br>
@@ -198,15 +194,11 @@ $bids = $_GET['bids'];
                         </div>
                         <div class="col-sm-8">
                             <input type="number" name="bids" min = "1" class="form-control"  value = '<?php echo $bids;?>' >
-                            </input>
                         </div>
                     </div>
                     <br>
 
-
-
-
-                    <div class="row"  style="display:block; text-align:center; padding-left: 0px " >
+                    <div class="row"  style="display:block; text-align:center; padding-left: 0 " >
 
                         <button type="submit" name="find" class="btn btn-default">Find Takers</button>
 
@@ -216,7 +208,6 @@ $bids = $_GET['bids'];
                 <br>
             </form>
         </div>
-
 
 
 
@@ -238,9 +229,9 @@ $bids = $_GET['bids'];
             $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
             $pcat_id = pg_fetch_row($pcat_result)[0];
 
-            $avail_query = "SELECT a.avail_id, a.start_time, a.end_time, a.taker_id, p.name, (CASE WHEN t.avgbids is NULL THEN 0 ELSE t.avgbids END) AS avgbids
+            $avail_query = "SELECT a.avail_id, a.start_time, a.end_time, a.taker_id, p.name, (CASE WHEN t.bids is NULL THEN 0 ELSE t.bids END) AS avgbids
                             FROM (availability a INNER JOIN pet_user p ON p.user_id = a.taker_id AND a.is_deleted = FALSE AND p.is_deleted = FALSE) 
-                                  LEFT JOIN requesttime t ON a.taker_id = t.taker_id 
+                                  LEFT JOIN (SELECT AVG(bids) AS bids, taker_id FROM requesttime GROUP BY taker_id) AS t ON a.taker_id = t.taker_id 
                             WHERE a.taker_id <> '$user_id'";
 
             if(trim($pet_name)) {
@@ -349,6 +340,7 @@ $bids = $_GET['bids'];
                 $count = $count + 1;
                 echo "<td id=$td_name>$avg_bids</td >";
                 echo "
+
             <form method = 'get' class='form-inline' >
               <td>
                 <input type='number' name='bids' min = '1' value=$bids>                                                            
