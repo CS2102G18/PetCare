@@ -130,7 +130,7 @@ if (isset($_SESSION["user_id"])) {
                                 $em_kw = $_GET['em_kw'];
                                 $user_role = $_GET['user_role'];
 
-                                $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted
+                                $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted, 
                                           FROM pet_user u
                                           WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false");
 
@@ -185,6 +185,68 @@ if (isset($_SESSION["user_id"])) {
                         </table>
                     </div>
                 </div>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-sm-6">
+                            <h3>User statistics</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-striped" id="user_info" style="overflow: auto">
+                            <tr>
+                                <th>User ID</th>
+                                <th>User Name</th>
+                                <th>Status</th>
+                                <th>Number of Pets Owned</th>
+                                <th>Number of Availability Slots</th>
+                                <th>Number of Requests sent</th>
+                                <th>Number of Successful Request</th>
+                                <th>Success Rate</th>
+                                <th>Average Bids offered</th>
+                                <th>Number of Requests accepted</th>
+                            </tr>
+                            <?php
+                            $query = "SELECT u.user_id, 
+                                          COUNT(DISTINCT p.pets_id),
+                                          COUNT(DISTINCT a.avail_id),
+                                          COUNT(DISTINCT r1.request_id),
+                                          COUNT(DISTINCT r2.request_id),
+                                          ROUND(COALESCE(COUNT(DISTINCT r2.request_id)::DECIMAL/NULLIF(COUNT(DISTINCT r1.request_id),0),0) * 100,2),
+                                          COALESCE(ROUND(AVG(DISTINCT r1.bids),2),0),
+                                          COUNT(DISTINCT r3.request_id)
+                                          FROM pet_user u LEFT OUTER JOIN pet p ON (p.owner_id = u.user_id)
+                                                          LEFT OUTER JOIN availability a ON (a.taker_id = u.user_id)
+                                                          LEFT OUTER JOIN request r1 ON (r1.owner_id = u.user_id)
+                                                          LEFT OUTER JOIN request r2 ON (r2.owner_id = u.user_id AND r2.status = 'successful')
+                                                          LEFT OUTER JOIN request r3 ON (r3.taker_id = u.user_id)
+                                          GROUP BY u.user_id";
+                            $result = pg_query($query) or die('Query failed 55: ' . pg_last_error());
+                            while ($row = pg_fetch_row($result)) {
+                                $user_id = $row[0];
+                                $row_query = "SELECT u.name, u.is_deleted FROM pet_user u WHERE u.user_id = " . $user_id . ";";
+                                $row_result = pg_query($row_query) or die('Query Filed 66' . pg_last_error());
+                                $name_status = pg_fetch_row($row_result);
+                                $user_name = $name_status[0];
+                                $user_status = (!$name_status[1] ? 'Deleted' : 'Active');
+                                echo "<tr>";
+                                echo "<td >$row[0]</td >";
+                                echo "<td >$user_name</td >";
+                                echo "<td >$user_status</td>";
+                                echo "<td >$row[1]</td >";
+                                echo "<td >$row[2]</td>";
+                                echo "<td >$row[3]</td >";
+                                echo "<td >$row[4]</td>";
+                                echo "<td >$row[5]%</td>";
+                                echo "<td >$row[6]</td>";
+                                echo "<td >$row[7]</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                            </tr>
+                        </table>
+                    </div>
             </form>
         </div>
     </div>
