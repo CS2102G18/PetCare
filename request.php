@@ -335,7 +335,7 @@ $bids = $_GET['bids'];
                 echo "<td >$taker_name</td >";
                 echo "<td >$start_avail_time</td >";
                 echo "<td >$end_avail_time</td >";
-                echo" <input type = 'hidden' name = 'avgbidhourresult' value = $avg_bids > ";
+                echo" <input type = 'hidden' name = 'avgbidhourresult' value = '$avg_bids' > ";
                 $td_name = 'avgbidresult' . $count;
                 $count = $count + 1;
                 echo "<td id=$td_name>$avg_bids</td >";
