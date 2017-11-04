@@ -191,6 +191,17 @@ if (isset($_SESSION["user_id"])) {
                             </select>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>Remarks</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <textarea name="remarks" class="form-control autosize"
+                                      style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 56px;"
+                            ></textarea>
+                        </div>
+                    </div>
                 </div>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
@@ -209,6 +220,7 @@ if (isset($_GET['create'])) {
     $pet_age = $_GET['pet_age'];
     $pet_species = $_GET['pet_species'];
     $pet_size = $_GET['pet_size'];
+    $remarks = $_GET['remarks'];
     $pcat_query = "SELECT pcat_id FROM petcategory
                    WHERE age = '$pet_age'
                    AND size = '$pet_size'
@@ -216,8 +228,8 @@ if (isset($_GET['create'])) {
     $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
     $pcat_id = pg_fetch_row($pcat_result)[0];
 
-    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id) 
-                     VALUES ('$start_time', '$end_time', $pcat_id, $care_taker);";
+    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id, remarks) 
+                     VALUES ('$start_time', '$end_time', $pcat_id, $care_taker, $remarks);";
     $result = pg_query($insert_query);
     print $insert_query;
     if (!$result) {

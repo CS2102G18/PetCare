@@ -166,7 +166,7 @@ if (isset($_GET["a_id"])) {
                             <select name="pet_species" class="form-control" required="true">
                                 <option value="<?php echo $a_species ?>"><?php echo $a_species ?></option>
                                 <?php
-                                $query = "SELECT DISTINCT species FROM petcategory WHERE species <> '" . $a_species. "'";
+                                $query = "SELECT DISTINCT species FROM petcategory WHERE species <> '" . $a_species . "'";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -214,6 +214,17 @@ if (isset($_GET["a_id"])) {
                             </select>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>Remarks</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <textarea name="remarks" class="form-control autosize"
+                                      style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 56px;"
+                            ></textarea>
+                        </div>
+                    </div>
                 </div>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
@@ -232,6 +243,7 @@ if (isset($_GET['create'])) {
     $a_age = $_GET['pet_age'];
     $a_species = $_GET['pet_species'];
     $a_size = $_GET['pet_size'];
+    $a_remarks = $_GET['remarks'];
     $pcat_query = "SELECT pcat_id FROM petcategory
                    WHERE age = '$a_age'
                    AND size = '$a_size'
@@ -267,10 +279,11 @@ if (isset($_GET['create'])) {
     }
 
     $update_query = "UPDATE availability
-                     SET start_time = '".$a_start."',
-                         end_time = '".$a_end."',
+                     SET start_time = '" . $a_start . "',
+                         end_time = '" . $a_end . "',
                          pcat_id = $pcat_id, 
                          taker_id = $a_uid
+                         remarks = '".$a_remarks."'
                      WHERE avail_id = $avail_id;";
     $result = pg_query($update_query);
     if (!$result) {

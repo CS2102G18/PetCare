@@ -225,6 +225,7 @@ if (isset($_SESSION["user_id"])) {
                                 <th>End time</th>
                                 <th>Pet Category Available</th>
                                 <th>Is Work Going On</th>
+                                <th>Remarks</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -241,7 +242,7 @@ if (isset($_SESSION["user_id"])) {
                                 $post_end = $_GET['post_end'];
 
                                 $query = "SELECT a.avail_id, a.post_time, a.start_time, a.end_time,
-                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species, pc.pcat_id
+                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species, pc.pcat_id, a.remarks
                                           FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
                                                               INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
                                           WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'");
@@ -284,7 +285,7 @@ if (isset($_SESSION["user_id"])) {
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
                                 $query = "SELECT a.avail_id, a.post_time, a.start_time, a.end_time,
-                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species, pc.pcat_id
+                                                 u.user_id, u.name, a.is_deleted, pc.age, pc.size, pc.species, pc.pcat_id, a.remarks
                                           FROM availability a INNER JOIN pet_user u ON a.taker_id = u.user_id
                                                               INNER JOIN petcategory pc ON a.pcat_id = pc.pcat_id
                                           WHERE a.is_deleted " . (isset($_GET['show_deleted']) ? "='t'" : "='f'") .
@@ -300,6 +301,7 @@ if (isset($_SESSION["user_id"])) {
                                 $a_user = $row[5] . " (id: " . $row[4] . ")";
                                 $a_pcat = $row[8] . " " . $row[7] . " " . $row[9];
                                 $a_status = ($row[6] == 't' ? 'Deleted' : 'Active');
+                                $a_remarks = $row[11];
 
                                 $work_go_on_query = "SELECT r.request_id
                                                      FROM request r INNER JOIN availability a ON (r.taker_id = a.taker_id)
@@ -319,6 +321,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$a_end</td>";
                                 echo "<td >$a_pcat</td >";
                                 echo "<td>".(pg_num_rows($work_go_on_result) == 0 ? "NO" : "YES (request id: ".pg_fetch_row($work_go_on_result)[0].")")."</td>";
+                                echo "<td>".$a_remarks."</td>";
                                 echo "<td >$a_status</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
