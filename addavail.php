@@ -168,7 +168,14 @@ if (isset($_SESSION["user_id"])) {
                             </select>
                         </div>
                     </div>
-                </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>Remarks</h5>
+                        </div>
+                        <div class="col-sm-8">
+                        	  <input name="remarks" type="text" class="form-control" required="true">
+                        </div>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
                     <a class="btn btn-danger" role="button" href="taker.php">Cancel</a>
@@ -185,6 +192,7 @@ if (isset($_GET['create'])) {
     $pet_age = $_GET['pet_age'];
     $pet_species = $_GET['pet_species'];
     $pet_size = $_GET['pet_size'];
+    $remarks = $_GET['remarks'];
     $pcat_query = "SELECT pcat_id FROM petcategory
                    WHERE age = '$pet_age'
                    AND size = '$pet_size'
@@ -246,8 +254,8 @@ if (isset($_GET['create'])) {
     pg_free_result($check_result);
     //complete check overlap
  
-    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id)
-                     VALUES ('$start_time', '$end_time', $pcat_id, $user_id);";
+    $insert_query = "INSERT INTO availability(start_time, end_time, pcat_id, taker_id, remarks)
+                     VALUES ('$start_time', '$end_time', $pcat_id, $user_id, '$remarks');";
     $result = pg_query($insert_query);
     //print $insert_query;
     if (!$result) {

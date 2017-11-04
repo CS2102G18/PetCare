@@ -134,6 +134,7 @@ if (isset($_SESSION["user_id"])) {
                                          AND r.care_end > current_timestamp 
                                          AND r.taker_id = u.user_id
                                          AND r.pets_id = p.pets_id
+                                         AND p.is_deleted = false
                                    ORDER BY care_begin;";
                         $result3 = pg_query($query3) or die('Query failed: ' . pg_last_error());
 
@@ -186,6 +187,7 @@ if (isset($_SESSION["user_id"])) {
                                          AND r.status = 'failed' 
                                          AND r.taker_id = u.user_id
                                          AND r.pets_id = p.pets_id
+                                         AND p.is_deleted = false
                                    ORDER BY care_begin;;";
                         $result4 = pg_query($query4) or die('Query failed: ' . pg_last_error());
 
@@ -206,9 +208,9 @@ if (isset($_SESSION["user_id"])) {
                             echo "<td >$care_begin</td >";
                             echo "<td >$care_end</td >";
                             echo "<td >$bids</td >";
-                            echo "<td>
-                                        <a class=\"btn btn-danger\" role=\"button\" href=\"read.php?request_id=$request_id\">Read</a>
-                                        <a class=\"btn btn-default\" role=\"button\" href=\"request.php\">Request Again</a>
+                            echo "<td>                                      
+                                      <a class=\"btn btn-default\" role=\"button\" href=\"request.php\">Request Again</a>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"read.php?request_id=$request_id\">Read</a>
                                   </td>";
                             echo "</tr>";
                             };

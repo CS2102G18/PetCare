@@ -140,6 +140,7 @@ $user_address = $row[2];
                                         AND p.pets_id = r.pets_id 
                                         AND p.pcat_id = c.pcat_id
                                         AND u.user_id = r.owner_id
+                                        AND p.is_deleted = false
                                   ORDER BY r.bids DESC;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
@@ -167,8 +168,8 @@ $user_address = $row[2];
                             echo "<td >$remarks</td >";
                             echo "<td >$bids</td >";
                             echo "<td >
-                                    <form class='form-inline' action='requestAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Accept'></div><input type='hidden' name='accept_id' value=$request_id></form>
-                                    <form class='form-inline' action='requestAction.php' method='get'><div class='form-group' style='float: left;'><input type='submit' class='form-control' value='Reject'></div><input type='hidden' name='reject_id' value=$request_id></form>
+                                      <a class=\"btn btn-default\" role=\"button\" href=\"requestAction.php?mode=1&request_id=$request_id\">Accept</a>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"requestAction.php?mode=0&request_id=$request_id\">Reject</a>
                                   </td>";
 
                             echo "</tr>";
@@ -202,6 +203,7 @@ $user_address = $row[2];
                                         AND p.pets_id = r.pets_id 
                                         AND p.pcat_id = c.pcat_id
                                         AND u.user_id = r.owner_id
+                                        AND p.is_deleted = false
                                   ORDER BY r.bids DESC;";
                         $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
@@ -258,11 +260,12 @@ $user_address = $row[2];
                             <th>Pet Species</th>
                             <th>Pet Size</th>
                             <th>Pet Age</th>
+                            <th>Remarks</th>
                             <th>Action</th>
                         </tr>
 
                         <?php
-                        $query = "SELECT a.avail_id, a.start_time, a.end_time, p.species, p.size, p.age 
+                        $query = "SELECT a.avail_id, a.start_time, a.end_time, a.remarks, p.species, p.size, p.age 
                                   FROM availability a, petcategory p 
                                   WHERE a.pcat_id = p.pcat_id 
                                         AND a.taker_id =$user_id 
@@ -277,9 +280,10 @@ $user_address = $row[2];
                             $avail_id = $row[0];
                             $start = $row[1];
                             $end = $row[2];
-                            $pet_species = $row[3];
-                            $pet_size = $row[4];
-                            $pet_age = $row[5];
+                            $remarks = $row[3];
+                            $pet_species = $row[4];
+                            $pet_size = $row[5];
+                            $pet_age = $row[6];
 
 
                             echo "<tr>
@@ -288,6 +292,7 @@ $user_address = $row[2];
                                   <td >$pet_species</td >
                                   <td >$pet_size</td >
                                   <td >$pet_age</td >
+                                  <td >$remarks</td >
                                   <td>
                                     <a class=\"btn btn-danger\" role=\"button\" href=\"deleteavail.php?avail_id=$avail_id\">Delete</a>
                                   </td>
