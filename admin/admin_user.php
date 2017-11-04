@@ -229,7 +229,7 @@ if (isset($_SESSION["user_id"])) {
                                 $row_result = pg_query($row_query) or die('Query Filed 66' . pg_last_error());
                                 $name_status = pg_fetch_row($row_result);
                                 $user_name = $name_status[0];
-                                $user_status = (!$name_status[1] ? 'Deleted' : 'Active');
+                                $user_status = ($name_status[1]=='t' ? 'Deleted' : 'Active');
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$user_name</td >";
