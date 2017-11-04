@@ -63,17 +63,20 @@ if (isset($_SESSION["user_id"])) {
             <h2>Managing Entry Data</h2>
         </div>
         <div class="row">
-            <div class="col-sm-3 col-centered">
+            <div class="col-sm-2 col-centered">
                 <a href="./admin/admin_pet.php"><h4>Pets</h4></a>
             </div>
             <div class="col-sm-3 col-centered">
                 <a href="./admin/admin_avail.php"><h4>Availability</h4></a>
             </div>
-            <div class="col-sm-3 col-centered">
+            <div class="col-sm-2 col-centered">
                 <a href="./admin/admin_user.php"><h4>Users</h4></a>
             </div>
             <div class="col-sm-3 col-centered">
                 <a href="./admin/admin_req.php"><h4>Requests</h4></a>
+            </div>
+            <div class="col-sm-2 col-centered">
+                <a href="./admin/admin_pcat.php"><h4>Pet Categories</h4></a>
             </div>
         </div>
 
