@@ -25,7 +25,8 @@ CREATE TABLE petcategory(
     pcat_id INT PRIMARY KEY DEFAULT nextval('pcat_seq'),
     age VARCHAR(10),
     size VARCHAR(20),
-    species VARCHAR(30)
+    species VARCHAR(30),
+    UNIQUE (age, size, species)
 );
 
 INSERT INTO petcategory (age, size, species) VALUES ('puppy','small','cat');
