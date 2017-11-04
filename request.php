@@ -279,12 +279,6 @@ $lowerbound = $_GET['lowerbound'];
                 $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
                 $pcat_id = pg_fetch_row($pcat_result)[0];
                 $avail_query .= " AND a.pcat_id = $pcat_id ";
-                $avail_query .= " AND a.taker_id NOT IN (SELECT r.taker_id
-                                                         FROM request r
-                                                         WHERE r.care_end > '$start_time'
-                                                               AND r.care_begin < '$end_time'
-                                                               AND r.pets_id = '$pet_id'
-                                                               AND r.status='pending') ";
 
             }else
                 $complete = false;
@@ -296,6 +290,10 @@ $lowerbound = $_GET['lowerbound'];
                 $avail_query .= " AND a.end_time >= '$end_time' ";
             }else
                 $complete = false;
+            print $avail_query;
+            if($complete){
+                $avail_query .= " AND a.taker_id NOT IN (SELECT r.taker_id FROM request r WHERE r.care_end > '$start_time' AND r.care_begin < '$end_time' AND r.pets_id = $pet_id AND r.status='pending') ";
+            }
             if(!trim($bids))
                 $complete = false;
             if(trim($taker_name)) {
