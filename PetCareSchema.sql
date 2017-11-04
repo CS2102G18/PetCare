@@ -1,4 +1,3 @@
-DROP TABLE assignment;
 DROP VIEW requesttime;
 DROP TABLE request;
 DROP TABLE availability;
@@ -98,6 +97,7 @@ CREATE TABLE request(
     bids NUMERIC NOT NULL,
     pets_id INT REFERENCES pet(pets_id) ON DELETE CASCADE ON UPDATE CASCADE,
     slot VARCHAR(64),
+    totaltime DOUBLE PRECISION,
     status VARCHAR(20) CHECK (status IN ('pending', 'failed', 'successful', 'cancelled')) DEFAULT 'pending',
     CONSTRAINT CHK_start_end CHECK (care_end > care_begin),
     CONSTRAINT CHK_post CHECK (care_begin > post_time)
@@ -121,29 +121,43 @@ RETURN slot;
 END; $$
 LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION addRequestSlot()
+CREATE OR REPLACE FUNCTION calculateTotalTime(requestNum INTEGER)
+RETURNS DOUBLE PRECISION AS $$
+DECLARE totalmins DOUBLE PRECISION; days DOUBLE PRECISION; hours DOUBLE PRECISION; mins DOUBLE PRECISION;
+startTime timestamp; endTime timestamp;
+BEGIN
+SELECT care_begin, care_end INTO startTime, endTime FROM request WHERE request_id = requestNum;
+mins = extract(MINUTE FROM (endTime - startTime));
+days = extract(DAY FROM (endTime - startTime));
+hours = extract(HOUR FROM (endTime - startTime));
+totalmins = mins + 60 * (hours + 24 * days);
+RETURN totalmins;
+END; $$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION addRequestInfo()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE request
-    SET slot = timeslot(new.request_id)
+    SET slot= timeslot(new.request_id), totaltime = calculateTotalTime(new.request_id)
     WHERE request_id = new.request_id;
     RETURN NULL;
 END; $$
 LANGUAGE PLPGSQL;
 
+
 CREATE TRIGGER addSlot
 AFTER INSERT
 ON request
 FOR EACH ROW
-EXECUTE PROCEDURE addRequestSlot();
+EXECUTE PROCEDURE addRequestInfo();
 
 
 CREATE VIEW requesttime AS
-    SELECT SUM(temp.bids)/SUM(temp.mins)*60 AS avgbids, temp.taker_id AS taker_id FROM (SELECT ((DATE_PART('day', (r.care_end):: TIMESTAMP - (r.care_begin):: TIMESTAMP) * 24 +
-                                                                                                 DATE_PART('hour', (r.care_end):: TIMESTAMP - (r.care_begin):: TIMESTAMP)) * 60 +
-                                                                                                DATE_PART('minute', (r.care_end):: TIMESTAMP - (r.care_begin):: TIMESTAMP))  AS mins, r.taker_id AS taker_id, r.bids AS bids
-                                                                                        FROM request AS r WHERE r.status = 'successful') AS temp
-    GROUP BY temp.taker_id;
+    SELECT SUM(r.bids)/SUM(r.totaltime)*60 AS avgbids, r.taker_id AS taker_id
+    FROM request r
+    WHERE r.status = 'successful'
+    GROUP BY r.taker_id;
 
 
 INSERT INTO pet_user(name, password, email, address, role) VALUES ('Xia Rui',12345,'e0012672@u.nus.edu','30 Ang Mo Kio Ave 8', 'admin');
