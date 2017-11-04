@@ -210,7 +210,6 @@ INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-
 INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 5);
 */
 
-
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (21,1,'1');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (17,1,'2');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (6,2,'3');
@@ -259,7 +258,6 @@ INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (21,23,'45');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (10,23,'46');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (8,24,'47');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (17,24,'48');
-
 
 INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 00:00:00','2018-02-01 01:00:00',3,1);
 INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 18:00:00','2018-01-21 20:00:00',3,1);
@@ -1117,4 +1115,3 @@ INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pet
 INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id, status) VALUES (24,7,'2018-01-01 12:00:00','2018-01-01 13:00:00','No',38,48,'successful');
 INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id, status) VALUES (24,11,'2018-01-01 00:00:00','2018-01-01 01:00:00','No',44,48,'successful');
 INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id, status) VALUES (24,13,'2018-01-01 04:00:00','2018-01-01 05:00:00','No',76,48,'successful');
-
