@@ -173,7 +173,7 @@ if (isset($_SESSION["user_id"])) {
                         <div class="col-sm-8">
                             <textarea name="remarks" class="form-control autosize"
                                       style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 56px;"
-                                      required="true"></textarea>
+                            ></textarea>
                         </div>
                     </div>
                     <br>
@@ -269,7 +269,7 @@ if (isset($_GET['create'])) {
         //die('ownerownerowner'. $owner_id);
 
         $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
-                         VALUES ($owner_id," . $care_taker . ",'" . $proposed_start . "','" . $proposed_end . "','" . $remarks . "'," . $bids . "," . $pet_concerned .");";
+                         VALUES ($owner_id," . $care_taker . ",'" . $proposed_start . "','" . $proposed_end . "','" . $remarks . "'," . $bids . "," . $pet_concerned . ");";
         $insert_result = pg_query($insert_query) or die('Query failedd: ' . pg_last_error());
         if ($insert_result) {
             echo " 
