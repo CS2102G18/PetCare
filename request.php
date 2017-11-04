@@ -229,9 +229,9 @@ $bids = $_GET['bids'];
             $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
             $pcat_id = pg_fetch_row($pcat_result)[0];
 
-            $avail_query = "SELECT a.avail_id, a.start_time, a.end_time, a.taker_id, p.name, (CASE WHEN t.bids is NULL THEN 0 ELSE t.bids END) AS avgbids
+            $avail_query = "SELECT a.avail_id, a.start_time, a.end_time, a.taker_id, p.name, (CASE WHEN t.avgbids is NULL THEN 0 ELSE t.avgbids END) AS avgbids
                             FROM (availability a INNER JOIN pet_user p ON p.user_id = a.taker_id AND a.is_deleted = FALSE AND p.is_deleted = FALSE) 
-                                  LEFT JOIN (SELECT AVG(bids) AS bids, taker_id FROM requesttime GROUP BY taker_id) AS t ON a.taker_id = t.taker_id 
+                                  LEFT JOIN requesttime AS t ON a.taker_id = t.taker_id 
                             WHERE a.taker_id <> '$user_id'";
 
             if(trim($pet_name)) {
