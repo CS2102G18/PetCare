@@ -66,85 +66,137 @@ if (isset($_SESSION["user_id"])) {
         <div class="panel new-task-panel">
             <form action="" id="findForm">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-sm-3">
-                            <label for="pet_kw">Pet's Name</label>
-                            <input id="pet_kw" name="pet_kw" type="text" class="form-control" placeholder="Keywords">
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="pet_species">Pet's Owner</label>
-                            <select name="pet_owner" class="form-control">
-                                <option value="">Select Owner</option>
-                                <?php
-                                $query = "SELECT user_id, name, role FROM pet_user";
-                                $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
-                                    if ($row[2] == "admin") {
-                                        $option .= " ***ADMIN***";
-                                    }
-                                    $option .= "</option><br>";
-                                    echo $option;
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_species">Pet's Species</label>
-                            <select id="pet_species" name="pet_species" class="form-control">
-                                <option value="">Select Category</option>
-                                <?php
-                                $query = "SELECT DISTINCT species FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_age">Pet's Age</label>
-                            <select id="pet_age" name="pet_age" class="form-control">
-                                <option value="">Select Age</option>
-                                <?php
-                                $query = "SELECT DISTINCT age FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="pet_size">Pet's Size</label>
-                            <select name="pet_size" id="pet_size" class="form-control">
-                                <option value="">Select Size</option>
-                                <?php
-                                $query = "SELECT DISTINCT size FROM petcategory";
-                                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                                while ($row = pg_fetch_row($result)) {
-                                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
-                                }
-                                pg_free_result($result);
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <br>
-                            <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
-                            <a href="admin_pet.php" class="btn-default btn">Cancel</a>
-                            <a href="admin_addpet.php" class="btn-success btn">Add New Pet</a>
-                            <?php echo (!isset($_GET['show_deleted']))
-                                ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
-                                   value=\"Show Deleted\">"
-                                : "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"back\"
-                                   value=\"Back\">" ?>
 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-6">
+                                <div class="col-sm-3">
+                                    <label for="pet_owner">Pet's Owner</label>
+                                    <select name="pet_owner" class="form-control">
+                                        <option value="">Select Owner</option>
+                                        <?php
+                                        $query = "SELECT user_id, name, role FROM pet_user ORDER BY user_id";
+                                        $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
+                                            if ($row[2] == "admin") {
+                                                $option .= " ***ADMIN***";
+                                            }
+                                            $option .= "</option><br>";
+                                            echo $option;
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="care_giver">Care Giver</label>
+                                    <select name="care_giver" class="form-control">
+                                        <option value="">Select Care Giver</option>
+                                        <?php
+                                        $query = "SELECT user_id, name, role FROM pet_user ORDER BY user_id";
+                                        $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
+                                            if ($row[2] == "admin") {
+                                                $option .= " ***ADMIN***";
+                                            }
+                                            $option .= "</option><br>";
+                                            echo $option;
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="care_giver">Pet</label>
+                                    <select name="care_giver" class="form-control">
+                                        <option value="">Select Care Giver</option>
+                                        <?php
+                                        $query = "SELECT pets_id, pet_name FROM pet ORDER BY pets_id";
+                                        $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            $option = "<option value='" . $row[0] . "'>" . $row[1] . " (id: " . $row[0] . ")";
+                                            $option .= "</option><br>";
+                                            echo $option;
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Post Start</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="start-datetimepicker">
+                                        <input type="text" class="form-control" name="post_start">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Post End</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="end-datetimepicker">
+                                        <input type="text" class="form-control" name="post_end">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Slot Start</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="sb-datetimepicker">
+                                        <input type="text" class="form-control" name="slot_start">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Slot End</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group date" id="se-datetimepicker">
+                                        <input type="text" class="form-control" name="slot_end">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-3">
+                                <label for="lower_bound">Lower bound</label>
+                                <input id="user_kw" name="user_kw" type="text" class="form-control" placeholder="Keywords">
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="add_kw">Upper bound</label>
+                                <input id="add_kw" name="add_kw" type="text" class="form-control" placeholder="Keywords">
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <div class="col-md-12" style="overflow: auto;">
                         <br>
                         <table class="table table-striped" id="pet_info">

@@ -140,7 +140,8 @@ if (isset($_SESSION["user_id"])) {
                                     </select>
                                 </div>
                             </div>
-                        </div><br>
+                        </div>
+                        <br>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-sm-6">
@@ -194,8 +195,7 @@ if (isset($_SESSION["user_id"])) {
                                 </div>
                             </div>
                         </div>
-
-                       <br>
+                        <br>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-sm-6">
