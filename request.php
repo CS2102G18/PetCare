@@ -57,6 +57,8 @@ $pet_name = $_GET['pet_name'];
 $taker_name = $_GET['taker_name'];
 $remarks = $_GET['remarks'];
 $bids = $_GET['bids'];
+$upperbound = $_GET['upperbound'];
+$lowerbound = $_GET['lowerbound'];
 ?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-owner">
     <div class="container navbar-container">
@@ -92,8 +94,6 @@ $bids = $_GET['bids'];
                     var complete = false;
                     function checkComplete() {
                         var btn = document.getElementById("send_btn");
-
-
                         if(document.frm.start_time.value == "" || document.frm.end_time.value == "" ||
                             document.frm.pet_name.value == "" || document.frm.remarks.value == "" ||
                             document.frm.bids.value == "") {
@@ -151,7 +151,7 @@ $bids = $_GET['bids'];
 
                     <div class="row">
                         <div class="col-sm-2">
-                            <h5>Pet to be taken care of</h5>
+                            <h5>Pet to be care for</h5>
                         </div>
                         <div class="col-sm-8">
                             <select name="pet_name" class="form-control">
@@ -190,6 +190,40 @@ $bids = $_GET['bids'];
                     <br>
                     <div class="row">
                         <div class="col-sm-2">
+                            <h5>Consider New Takers? </h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="radio-inline"><input type="radio" name="newtakers" value=0>Yes</label>
+                            <label class="radio-inline"><input type="radio" name="newtakers" value=1>No</label>
+                        </div>
+                    </div>
+                    <br>
+
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <h5>Average Bids/Hour</h5>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                <span class="input-group-addon">LOWER THAN</span>
+                                <span class="input-group-addon">$</span>
+                                <input type="number" name="upperbound" class="form-control"  value = '<?php echo $upperbound;?>' >
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                <span class="input-group-addon">HIGHER THAN</span>
+                                <span class="input-group-addon">$</span>
+                                <input type="number" name="lowerbound" class="form-control"  value = '<?php echo $lowerbound;?>' >
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-sm-2">
                             <h5>Bids</h5>
                         </div>
                         <div class="col-sm-8">
@@ -221,6 +255,10 @@ $bids = $_GET['bids'];
             $bids = $_GET['bids'];
             $pcat_id = $_GET['pcat_id'];
             $taker_name = $_GET['taker_name'];
+            $newtaker = $_GET['newtakers'];
+            $upperbound = $_GET['upperbound'];
+            $lowerbound = $_GET['lowerbound'];
+
             $complete = true;
             $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
             $pid_result = pg_query($pid_query) or die('Query failed: ' . pg_last_error());
@@ -228,12 +266,11 @@ $bids = $_GET['bids'];
             $pcat_query = "SELECT pcat_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
             $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
             $pcat_id = pg_fetch_row($pcat_result)[0];
-
-            $avail_query = "SELECT a.avail_id, a.start_time, a.end_time, a.taker_id, p.name, (CASE WHEN t.avgbids is NULL THEN 0 ELSE t.avgbids END) AS avgbids
+            $avail_query = "SELECT a.avail_id, a.start_time, a.end_time, a.taker_id, p.name,
+                            (CASE WHEN t.avgbids is NULL THEN 0 ELSE t.avgbids END) AS avgbids, a.remarks
                             FROM (availability a INNER JOIN pet_user p ON p.user_id = a.taker_id AND a.is_deleted = FALSE AND p.is_deleted = FALSE) 
                                   LEFT JOIN requesttime AS t ON a.taker_id = t.taker_id 
                             WHERE a.taker_id <> '$user_id'";
-
             if(trim($pet_name)) {
                 $pid_query = "SELECT pets_id FROM pet WHERE owner_id = $user_id AND pet_name = '$pet_name' AND is_deleted = false";
                 $pid_result = pg_query($pid_query) or die('Query failed: ' . pg_last_error());
@@ -242,6 +279,7 @@ $bids = $_GET['bids'];
                 $pcat_result = pg_query($pcat_query) or die('Query failed: ' . pg_last_error());
                 $pcat_id = pg_fetch_row($pcat_result)[0];
                 $avail_query .= " AND a.pcat_id = $pcat_id ";
+
             }else
                 $complete = false;
             if(trim($start_time)) {
@@ -252,8 +290,22 @@ $bids = $_GET['bids'];
                 $avail_query .= " AND a.end_time >= '$end_time' ";
             }else
                 $complete = false;
+            if($complete){
+                $avail_query .= " AND a.taker_id NOT IN (SELECT r.taker_id FROM request r WHERE r.care_end > '$start_time' AND r.care_begin < '$end_time' AND r.pets_id = $pet_id AND r.status='pending') ";
+            }
+            if(!trim($bids))
+                $complete = false;
             if(trim($taker_name)) {
                 $avail_query .= " AND UPPER(p.name) LIKE UPPER('%$taker_name%') ";
+            }
+            if($upperbound){
+                $avail_query .= " AND (t.avgbids <= $upperbound OR t.avgbids is NULL) ";
+            }
+            if($lowerbound){
+                $avail_query .= " AND (t.avgbids >= $lowerbound OR t.avgbids is NULL) ";
+            }
+            if($newtaker){
+                $avail_query .= " AND t.avgbids is NOT NULL ";
             }
             $avail_query .= "ORDER BY avgbids ASC";
             $avail_result = pg_query($avail_query) or die('Query failed: ' . pg_last_error());
@@ -280,6 +332,7 @@ $bids = $_GET['bids'];
                 
                                                               
                 </th>
+                <th>Remarks</th>
                 <th>Your Bids</th>
                 <th>Send Request</th>
                 
@@ -325,7 +378,6 @@ $bids = $_GET['bids'];
                 $taker_id = $row[3];
                 $taker_name = $row[4];
                 $avg = $row[5];
-
                 $avg_bids = number_format((float)$avg/1, 2, '.', '');
                 if($avg_bids == 0.00)
                     $avg_bids = 'N/A, no request yet';
@@ -337,21 +389,44 @@ $bids = $_GET['bids'];
                 echo "<td >$end_avail_time</td >";
                 echo" <input type = 'hidden' name = 'avgbidhourresult' value = '$avg_bids' > ";
                 $td_name = 'avgbidresult' . $count;
-                $count = $count + 1;
+                $bid_id = 'bid' . $count;
                 echo "<td id=$td_name>$avg_bids</td >";
+                echo "<td > $remarks </td>";
                 echo "
-
-            <form method = 'get' class='form-inline' >
+            <form method = 'get' class='form-inline'  >
               <td>
-                <input type='number' name='bids' min = '1' value=$bids>                                                            
+              
+                
+                <input type='number' id = $bid_id name='bids_updated' min = '1' onchange = 'sendBtn($count, this.value)' value = $bids >
+                
+                <script>
+                
+                    function sendBtn(count, val) {
+                        var id = 'sendbtn' + count;
+                        var send_btn = document.getElementById(id);
+                                                
+                        if('$start_time' == \"\" || '$end_time' == \"\" 
+                        || '$pet_name' == \"\" || '$remarks' == \"\" 
+                        || val == '') {
+                            send_btn.style.color = 'darkred';
+                            send_btn.style.backgroundColor = 'gainsboro';
+                            send_btn.type = \"button\";
+                        }else{
+                            send_btn.style.color = 'blue';
+                            send_btn.style.backgroundColor = 'white';
+                            send_btn.type = \"submit\";
+                        }
+                    }
+                
+                
+                </script>
+                
+                                                                            
               </td>
                                                   
               </div>                       
               <td >                
-                <div class='form-group' style='float: left;'>";
-                if($complete) {
-                    echo "  
-                <input type='submit' class='form-control' name = 'send_req' value='Send'>
+                <div class='form-group' style='float: left;'>
                 <input type='hidden' name='taker_id' value=$taker_id>
                 <input type='hidden' name='user_id' value=$user_id>
                 <input type='hidden' name='start_time' value='$start_time'>
@@ -359,17 +434,24 @@ $bids = $_GET['bids'];
                 <input type='hidden' name='pet_id' value=$pet_id>
                 <input type='hidden' name='remarks' value='$remarks'>
                 <input type='hidden' name='pet_name' value='$pet_name'>
-                <input type='hidden' name='pcat_id' value=$pcat_id>    
+                <input type='hidden' name='pcat_id' value=$pcat_id>  
+                
+                ";
+                $td_name = 'sendbtn' . $count;
+                if($complete) {
+                    echo "  
+                        <input type='submit' id = $td_name class='form-control' name = 'send_req' value='Send'>
                 ";
                 }else {
                     echo "
-                Incomplete Info, Unable to Send                                              
-              </td >
-              </form>
-              ";
+                          <input type='button' id = $td_name class='form-control' name = 'send_req' value='Send' style = 'color: darkred ; background-color: gainsboro'>                                               
+                          </td >
+                          </form>
+                          ";
                 }
+                $count = $count + 1;
             }
-            echo "</tr>";
+            echo "</tr> ";
             echo "</table>";
             exit();
         }
@@ -381,15 +463,24 @@ $bids = $_GET['bids'];
             $start_time = $_GET["start_time"];
             $end_time = $_GET["end_time"];
             $pet_id = $_GET["pet_id"];
-            $bids = $_GET["bids"];
+            $bids = $_GET["bids_updated"];
             $remarks = $_GET["remarks"];
             $pet_name = $_GET["pet_name"];
-            $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
+            $check_query = "SELECT * FROM request r WHERE r.care_begin <'$end_time' AND r.care_end > '$start_time' AND r.pets_id = $pet_id AND r.status = 'successful';";
+            $check_result = pg_query($insert_query);
+            if (pg_fetch_row($check_result)){
+                echo"<div class=\"container\"  style=\"text-align:center\">
+                       <p style=\"color:red;\" >Your pet has already been taken care of during the period!</p>
+                     </div>";
+            }
+            else {
+                $insert_query = "INSERT INTO request(owner_id, taker_id, care_begin, care_end, remarks, bids, pets_id)
                      VALUES ($user_id, $taker_id, '$start_time', '$end_time', '$remarks', $bids, $pet_id);";
-            //print $insert_query;
-            $result = pg_query($insert_query) or die('Query failed: ' . pg_last_error());
-            pg_free_result($result);
-            echo "
+                print $insert_query;
+                print 'Bid value is: ' . $bids;
+                $result = pg_query($insert_query) or die('Query failed: ' . pg_last_error());
+                pg_free_result($result);
+                echo "
             
             <div class=\"container\"  style=\"text-align:center\">
             <form method = 'get' class='form-inline' >
@@ -401,8 +492,6 @@ $bids = $_GET['bids'];
                     <input type='hidden' name='start_time' value='$start_time'>
                     <input type='hidden' name='end_time' value='$end_time'>
                     <input type='hidden' name='pet_id' value=$pet_id>
-                    <input type='hidden' min = '1' name='bids' value=$bids>
-                    <input type='hidden' name='pet_id' value=$pet_id>
                     <input type='hidden' name='remarks' value='$remarks'>
                     <input type='hidden' name='pet_name' value='$pet_name'>
                     </div>
@@ -412,6 +501,7 @@ $bids = $_GET['bids'];
             </div>
             
             ";
+            }
         }
         ?>
 
@@ -420,5 +510,3 @@ $bids = $_GET['bids'];
 </div>
 </body>
 </html>
-
-
