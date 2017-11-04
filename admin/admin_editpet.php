@@ -80,6 +80,8 @@ if (isset($_GET["p_id"])) {
         </div>
         <div class="container">
             <h2>Update pet information</h2>
+            <h8>Warning: Update pet information will change status of all pending request regarding the affected pet to "failed"</h8>
+            <h8><br><br></h8>
             <form action="admin_editpet.php">
                 <div class="row">
                     <div class="col-sm-2">
@@ -126,7 +128,7 @@ if (isset($_GET["p_id"])) {
                             <select name="pet_species" class="form-control">
                                 <option value="<?php echo $pet_species ?>"><?php echo $pet_species ?></option>
                                 <?php
-                                $query = "SELECT DISTINCT species FROM petcategory WHERE species <> '" . $pet_species . "';";
+                                $query = "SELECT DISTINCT species FROM petcategory;";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -145,7 +147,7 @@ if (isset($_GET["p_id"])) {
                             <select name="pet_age" class="form-control">
                                 <option value="<?php echo $pet_age ?>"> <?php echo $pet_age ?> </option>
                                 <?php
-                                $query = "SELECT DISTINCT age FROM petcategory WHERE age <> '" . $pet_age . "';";
+                                $query = "SELECT DISTINCT age FROM petcategory;";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -165,7 +167,7 @@ if (isset($_GET["p_id"])) {
                             <select name="pet_size" class="form-control">
                                 <option value="<?php echo $pet_size ?>"> <?php echo $pet_size ?> </option>
                                 <?php
-                                $query = "SELECT DISTINCT size FROM petcategory WHERE size <> '" . $pet_size . "';";
+                                $query = "SELECT DISTINCT size FROM petcategory;";
                                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                                 while ($row = pg_fetch_row($result)) {
                                     echo "<option value='" . $row[0] . "'>" . $row[0] . "</option><br>";
@@ -199,10 +201,17 @@ if (isset($_GET['update'])) {
     $pcat_result = pg_query($pcat_query) or die('Query failed: a' . pg_last_error());
     $pcat_id = pg_fetch_row($pcat_result)[0];
     $pet_name = $_GET["pet_name"];
+
+    $fail_query = "UPDATE request
+                     SET status = 'failed'
+                     WHERE pets_id = $pet_id AND status = 'pending';";
+    $fail_result = pg_query($fail_query) or die('Query failed: b' . pg_last_error());
+  
     $update_query = "UPDATE pet
                      SET pcat_id = $pcat_id, pet_name = '$pet_name', owner_id = $owner_id
                      WHERE pets_id = $pet_id;";
     $result = pg_query($update_query) or die('Query failed: b' . pg_last_error());
+       
     if ($result) {
         pg_free_result($result);
         header("Location: admin_pet.php");

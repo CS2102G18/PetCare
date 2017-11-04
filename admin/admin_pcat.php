@@ -113,7 +113,7 @@ if (isset($_SESSION["user_id"])) {
                         <div class="col-sm-6">
                             <br>
                             <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
-                            <a href="admin_pet.php" class="btn-default btn">Cancel</a>
+                            <a href="admin_pcat.php" class="btn-default btn">Cancel</a>
                             <a href="admin_addpcat.php" class="btn-success btn">Add New Category</a>
 
                         </div>
@@ -136,8 +136,8 @@ if (isset($_SESSION["user_id"])) {
                                 $pet_size = $_GET['pet_size'];
 
                                 $query = "SELECT pc.pcat_id, pc.species, pc.size, pc.age, COUNT(DISTINCT p.pets_id), COUNT(DISTINCT a.avail_id)
-                                          FROM petcategory pc INNER JOIN pet p ON p.pcat_id= pc.pcat_id
-                                                              INNER JOIN availability a ON a.pcat_id = pc.pcat_id
+                                          FROM petcategory pc LEFT JOIN pet p ON p.pcat_id= pc.pcat_id
+                                                              LEFT JOIN availability a ON a.pcat_id = pc.pcat_id
                                           WHERE 1=1";
 
                                 if (trim($pet_age)) {
@@ -156,8 +156,8 @@ if (isset($_SESSION["user_id"])) {
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
                                 $query = "SELECT pc.pcat_id, pc.age, pc.size, pc.species, COUNT(DISTINCT p.pets_id), COUNT(DISTINCT a.avail_id)
-                                          FROM petcategory pc INNER JOIN pet p ON p.pcat_id= pc.pcat_id
-                                                              INNER JOIN availability a ON a.pcat_id = pc.pcat_id
+                                          FROM petcategory pc LEFT JOIN pet p ON p.pcat_id= pc.pcat_id
+                                                              LEFT JOIN availability a ON a.pcat_id = pc.pcat_id
                                           GROUP BY pc.pcat_id
                                           ORDER BY pc.pcat_id";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
