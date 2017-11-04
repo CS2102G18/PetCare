@@ -37,6 +37,17 @@ if (isset($_SESSION["user_id"])) {
             text-align: center;
         }
     </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#successmodal").modal('show');
+            $('#start-datetimepicker').datetimepicker();
+            $('#end-datetimepicker').datetimepicker();
+            $('#sb-datetimepicker').datetimepicker();
+            $('#se-datetimepicker').datetimepicker();
+        });
+
+    </script>
+
 </head>
 <body>
 <!-- include php -->
@@ -69,7 +80,7 @@ if (isset($_SESSION["user_id"])) {
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-sm-6">
+                            <div class="col-sm-10">
                                 <div class="col-sm-3">
                                     <label for="pet_owner">Pet's Owner</label>
                                     <select name="pet_owner" class="form-control">
@@ -109,9 +120,9 @@ if (isset($_SESSION["user_id"])) {
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
-                                    <label for="care_giver">Pet</label>
-                                    <select name="care_giver" class="form-control">
-                                        <option value="">Select Care Giver</option>
+                                    <label for="pet_info">Pet</label>
+                                    <select name="pet_info" class="form-control">
+                                        <option value="">Select Pet</option>
                                         <?php
                                         $query = "SELECT pets_id, pet_name FROM pet ORDER BY pets_id";
                                         $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
@@ -183,70 +194,168 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div class="col-sm-3">
-                                <label for="lower_bound">Lower bound</label>
-                                <input id="user_kw" name="user_kw" type="text" class="form-control" placeholder="Keywords">
+                        <div class="col-md-12">
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Request Status</label>
+                                <div class="col-sm-6">
+                                    <select name="status" class="form-control">
+                                        <option value="">Select Status</option>
+                                        <?php
+                                        $query = "SELECT DISTINCT status FROM request";
+                                        $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            $option = "<option value='" . $row[0] . "'>" . $row[0];
+                                            $option .= "</option><br>";
+                                            echo $option;
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-sm-3">
-                                <label for="add_kw">Upper bound</label>
-                                <input id="add_kw" name="add_kw" type="text" class="form-control" placeholder="Keywords">
+                            <div class="col-sm-6">
+
+                                <label class="col-sm-3 control-label">Request Time Slot</label>
+                                <div class="col-sm-6">
+                                    <select name="req_slot" class="form-control">
+                                        <option value="">Select Time Slot</option>
+                                        <?php
+                                        $query = "SELECT DISTINCT slot FROM request";
+                                        $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+                                        while ($row = pg_fetch_row($result)) {
+                                            $option = "<option value='" . $row[0] . "'>" . $row[0];
+                                            $option .= "</option><br>";
+                                            echo $option;
+                                        }
+                                        pg_free_result($result);
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
-
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Bid Lower Bound</label>
+                                <div class="col-sm-6">
+                                    <input id="bid_low" name="bid_low" type="text" class="form-control"
+                                           placeholder="Keywords">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">Bid Upper Bound</label>
+                                <div class="col-sm-6">
+                                    <input id="bid_upp" name="bid_upp" type="text" class="form-control"
+                                           placeholder="Keywords">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br>
+                            <div class="col-sm-6">
+                                <div class="col-sm-3">
+                                    <input type="submit" class="btn-primary btn" id="findBtn" name="search"
+                                           value="Search">
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="admin_req.php" class="btn-default btn">Cancel</a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="admin_addreq.php" class="btn-success btn">Add New Request</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12" style="overflow: auto;">
                         <br>
                         <table class="table table-striped" id="pet_info">
                             <tr>
-                                <th >Request ID</th>
-                                <th >Pet Owner</th>
-                                <th >Care Giver</th>
-                                <th >Pet Name</th>
-                                <th >Pet Category</th>
-                                <th >Post at</th>
-                                <th >Begin at</th>
-                                <th >End at</th>
-                                <th >Bids</th>
-                                <th >Slot</th>
-                                <th >Remarks</th>
-                                <th >Status</th>
+                                <th>Request ID</th>
+                                <th>Pet Owner</th>
+                                <th>Care Giver</th>
+                                <th>Pet Name</th>
+                                <th>Pet Category</th>
+                                <th>Post at</th>
+                                <th>Begin at</th>
+                                <th>End at</th>
+                                <th>Bids</th>
+                                <th>Slot</th>
+                                <th>Remarks</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             <?php
                             if (isset($_GET['search'])) {
-                                $pet_kw = $_GET['pet_kw'];
-                                $pet_species = $_GET['pet_species'];
-                                $pet_age = $_GET['pet_age'];
-                                $pet_size = $_GET['pet_size'];
                                 $pet_owner = $_GET['pet_owner'];
+                                $care_giver = $_GET['care_giver'];
+                                $pet_info = $_GET['pet_info'];
+                                $post_start = $_GET['post_start'];
+                                $post_end = $_GET['post_end'];
+                                $slot_start = $_GET['slot_start'];
+                                $slot_end = $_GET['slot_end'];
+                                $req_status = $_GET['status'];
+                                $req_slot = $_GET['req_slot'];
+                                $bid_low = $_GET['bid_low'];
+                                $bid_upp = $_GET['bid_upp'];
 
-                                $query = "SELECT p.pets_id, p.pet_name, pc.species, pc.size, pc.age, u.name, u.user_id, u.role
-                                          FROM pet p INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
-                                                     INNER JOIN pet_user u ON p.owner_id = u.user_id
-                                          WHERE p.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false");
-
-                                if (trim($pet_kw)) {
-                                    $query .= " AND UPPER(p.pet_name) LIKE UPPER('%" . $pet_kw . "%')";
-                                }
+                                $query = "SELECT r.request_id, u1.user_id, u1.name, u1.role, u2.user_id, u2.name, u2.role,
+                                                 r.post_time, r.care_begin, r.care_end, r.bids, r.remarks, r.slot, r.status,
+                                                 p.pets_id, p.pet_name, pc.age, pc.size, pc.species
+                                          FROM request r INNER JOIN pet_user u1 ON r.owner_id = u1.user_id
+                                                         INNER JOIN pet_user u2 ON r.taker_id = u2.user_id
+                                                         INNER JOIN pet p ON r.pets_id = p.pets_id
+                                                         INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
+                                          WHERE 1=1";
 
                                 if (trim($pet_owner)) {
-                                    $query .= " AND u.user_id = '" . $pet_owner . "'";
+                                    $query .= " AND u1.user_id = $pet_owner";
                                 }
 
-                                if (trim($pet_age)) {
-                                    $query .= " AND pc.age = '" . $pet_age . "'";
+                                if (trim($care_giver)) {
+                                    $query .= " AND u2.user_id = $care_giver";
                                 }
 
-                                if (trim($pet_species)) {
-                                    $query .= " AND pc.species = '" . $pet_species . "'";
+                                if (trim($pet_info)) {
+                                    $query .= " AND p.pets_id = $pet_info";
                                 }
 
-                                if (trim($pet_size)) {
-                                    $query .= " AND pc.size = '" . $pet_size . "'";
+                                if (trim($post_start)) {
+                                    $query .= " AND r.post_time >= '" . $post_start . "'";
                                 }
+
+                                if (trim($post_end)) {
+                                    $query .= " AND r.post_time <= '" . $post_end . "'";
+                                }
+
+                                if (trim($slot_start)) {
+                                    $query .= " AND r.care_begin >= '" . $slot_start . "'";
+                                }
+
+                                if (trim($slot_end)) {
+                                    $query .= " AND r.care_end <= '" . $slot_start . "'";
+                                }
+
+                                if (trim($req_status)) {
+                                    $query .= " AND r.status = '" . $req_status . "'";
+                                }
+
+                                if (trim($req_slot)) {
+                                    $query .= " AND r.slot = '" . $req_slot . "'";
+                                }
+
+                                if (trim($bid_low)) {
+                                    $query .= " AND r.bids >= $bid_low";
+                                }
+
+                                if (trim($bid_upp)) {
+                                    $query .= " AND r.bids <= $bid_upp";
+                                }
+
                                 $query .= " ORDER BY p.pets_id;";
 
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
@@ -259,16 +368,16 @@ if (isset($_SESSION["user_id"])) {
                                                          INNER JOIN pet p ON r.pets_id = p.pets_id
                                                          INNER JOIN petcategory pc ON p.pcat_id = pc.pcat_id
                                           WHERE r.status " . (isset($_GET['show_deleted']) ? "='failed'" : "IN ('pending', 'successful', 'cancelled')") .
-                                        " ORDER BY r.request_id;";
+                                    " ORDER BY r.request_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
                             while ($row = pg_fetch_row($result)) {
                                 $req_id = $row[0];
-                                $owner_info = $row[2] . "(id: ". $row[1] . ")" . ($row[3] == 'admin' ? '***ADMIN***' : '');
-                                $taker_info = $row[5] . "(id: ". $row[4] . ")" . ($row[6] == 'admin' ? '***ADMIN***' : '');
-                                $pet_info = $row[15] . "(id: ". $row[14] . ")";
-                                $pet_cate = $row[16]." ".$row[17]." ".$row[18];
+                                $owner_info = $row[2] . "(id: " . $row[1] . ")" . ($row[3] == 'admin' ? '***ADMIN***' : '');
+                                $taker_info = $row[5] . "(id: " . $row[4] . ")" . ($row[6] == 'admin' ? '***ADMIN***' : '');
+                                $pet_info = $row[15] . "(id: " . $row[14] . ")";
+                                $pet_cate = $row[16] . " " . $row[17] . " " . $row[18];
                                 $post_time = $row[7];
                                 $begin_time = $row[8];
                                 $end_time = $row[9];
@@ -288,7 +397,7 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$bids</td>";
                                 echo "<td >$slots</td>";
                                 echo "<td >$remarks</td>";
-                                echo "<td >" . ($status=="failed" ? "Deleted" : "Active") . "</td >";
+                                echo "<td >$status</td >";
                                 echo "<td >" .
                                     (!isset($_GET['show_deleted'])
                                         ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editreq.php?r_id=$req_id\">Edit</a>
