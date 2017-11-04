@@ -38,6 +38,11 @@ if (isset($_SESSION["user_id"])) {
             margin-right: auto;
             text-align: center;
         }
+        img {
+            display: block;
+            margin: auto;
+            width: 40%;
+        }
     </style>
 </head>
 <body>
@@ -50,37 +55,41 @@ if (isset($_SESSION["user_id"])) {
         <div class="navbar-header pull-left"><a class="navbar-brand" href="owner.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
-          	<li><a href="owner.php"> As a Pet Owner </a></li>
-            <li><a href="taker.php"> As a Care Taker </a></li>
-            <li><a href="history.php"> View History </a></li>
-            <li><a href="profile.php"> Your Profile </a></li>
-            <li><a href="logout.php"> Log Out </a></li>
+                <li><a href="owner.php"> As a Pet Owner </a></li>
+                <li><a href="taker.php"> As a Care Taker </a></li>
+                <li><a href="history.php"> View History </a></li>
+                <li><a href="profile.php"> Your Profile </a></li>
+                <li><a href="logout.php"> Log Out </a></li>
             </ul>
         </div>
     </div>
 </nav>
 <div class="content-container container">
     <div class="panel new-task-panel">
-        <div class="container">
+        <div class="container" >
             <h2>Managing Entry Data</h2>
         </div>
-        <div class="row">
+        <div class="row" style="margin-bottom: 2cm;">
             <div class="col-sm-2 col-centered">
-                <a href="./admin/admin_pet.php"><h4>Pets</h4></a>
-            </div>
-            <div class="col-sm-3 col-centered">
-                <a href="./admin/admin_avail.php"><h4>Availability</h4></a>
+                <a class="btn-primary btn" href="./admin/admin_pet.php"><h4>Pets</h4></a>
             </div>
             <div class="col-sm-2 col-centered">
-                <a href="./admin/admin_user.php"><h4>Users</h4></a>
-            </div>
-            <div class="col-sm-3 col-centered">
-                <a href="./admin/admin_req.php"><h4>Requests</h4></a>
+                <a class="btn-primary btn" href="./admin/admin_avail.php"><h4>Availability</h4></a>
             </div>
             <div class="col-sm-2 col-centered">
-                <a href="./admin/admin_pcat.php"><h4>Pet Categories</h4></a>
+                <a class="btn-primary btn" href="./admin/admin_user.php"><h4>Users</h4></a>
+            </div>
+            <div class="col-sm-2 col-centered">
+                <a class="btn-primary btn" href="./admin/admin_req.php"><h4>Requests</h4></a>
+            </div>
+            <div class="col-sm-2 col-centered">
+                <a class="btn-primary btn" href="./admin/admin_pcat.php"><h4>Pet Categories</h4></a>
             </div>
         </div>
-
+        <div style="padding-bottom: 2cm">
+            <img src="media/admin_home.jpg">
+        </div>
     </div>
+
+</div>
 </body>                                                                                                                                                              
