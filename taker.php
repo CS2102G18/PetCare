@@ -169,7 +169,7 @@ $user_address = $row[2];
                             echo "<td >$bids</td >";
                             echo "<td >
                                       <a class=\"btn btn-default\" role=\"button\" href=\"requestAction.php?mode=1&request_id=$request_id\">Accept</a>
-                                      <a class=\"btn btn-danger\" role=\"button\" href=\"requestAction.php?mode=0&request_id=$request_id\">Reject</a>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"requestAction.php?mode=2&request_id=$request_id\">Reject</a>
                                   </td>";
 
                             echo "</tr>";
@@ -314,4 +314,4 @@ $user_address = $row[2];
         </div>
     </div>
 </body>               
-</html>               
+</html>   
