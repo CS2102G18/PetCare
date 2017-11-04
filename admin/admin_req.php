@@ -258,15 +258,12 @@ if (isset($_SESSION["user_id"])) {
                         <div class="col-md-12">
                             <br>
                             <div class="col-sm-6">
-                                <div class="col-sm-3">
+                                <div class="container">
                                     <input type="submit" class="btn-primary btn" id="findBtn" name="search"
                                            value="Search">
-                                </div>
-                                <div class="col-sm-3">
                                     <a href="admin_req.php" class="btn-default btn">Cancel</a>
-                                </div>
-                                <div class="col-sm-3">
                                     <a href="admin_addreq.php" class="btn-success btn">Add New Request</a>
+                                    <a href="admin_reqstats.php" class="btn-warning btn">Show statistics</a>
                                 </div>
                             </div>
                         </div>
@@ -413,61 +410,6 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-<div class="content-container container">
-    <div class="panel new-task-panel">
-        <div class="container ">
-            <h2>Summary on Requests</h2>
-        </div>
-        <div class="table-vertical first-table">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Pet Category</th>
-                    <th>Time Period</th>
-                    <th>Number of Successful Requests</th>
-                    <th>Average bids</th>
-                    <th>User Post Most</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $query1 = " SELECT k.species, k.timeslot, k.RequestNum, k.average, r1.owner_id 
-                        FROM (SELECT c.species AS species, r.slot AS timeslot, COUNT(r.request_id) AS RequestNum, AVG(r.bids) AS average
-                              FROM petcategory c, pet p, request r 
-                              WHERE r.pets_id = p.pets_id AND c.pcat_id = p.pcat_id AND r.status = 'successful'
-                              GROUP BY r.slot, c.species) AS k, request r1, petcategory c1, pet p1
-                        WHERE r1.pets_id = p1.pets_id AND c1.pcat_id = p1.pcat_id AND r1.status = 'successful' AND c1.species = k.species AND r1.slot = k.timeslot
-                        GROUP BY r1.owner_id, k.species, k.timeslot, k.RequestNum, k.average
-                        HAVING COUNT(*) >= ALL(
-                                           SELECT COUNT(*)
-                                           FROM request r2, petcategory c2, pet p2
-                                           WHERE r2.pets_id = p2.pets_id AND c2.pcat_id = p2.pcat_id AND r2.status = 'successful' AND c2.species = k.species AND r2.slot = k.timeslot
-                                           GROUP BY r2.owner_id)
-                        ORDER BY k.RequestNum DESC;";
-
-                $result1 = pg_query($query1) or die('Query failed: ' . pg_last_error());
-
-
-                while ($row1 = pg_fetch_row($result1)) {
-                    $owner_name = pg_fetch_row(pg_query("SELECT name FROM pet_user WHERE user_id = " . $row1[4] . ";"))[0];
-                    $average = $row1[3] < 0 ? '' : round(floatval($row1[3]), 2);
-                    echo "
-                    <tr>
-                    <td>$row1[0]</td>
-                    <td>$row1[1]</td>
-                    <td>$row1[2]</td>
-                    <td>$average</td>
-                    <td>$owner_name</td>
-                    </tr>";
-                }
-
-                pg_free_result($result1);
-                ?>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
