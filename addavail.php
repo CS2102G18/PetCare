@@ -176,13 +176,16 @@ if (isset($_SESSION["user_id"])) {
                         <div class="col-sm-8">
                         	  <input name="remarks" type="text" class="form-control" required="true">
                         </div>
+
+            </form>
+            
+
+        </div>
+        <br>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
                     <a class="btn btn-danger" role="button" href="taker.php">Cancel</a>
                 </div>
-            </form>
-            <br>
-        </div>
     </div>
 </div>
 <?php
