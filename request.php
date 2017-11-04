@@ -290,7 +290,6 @@ $lowerbound = $_GET['lowerbound'];
                 $avail_query .= " AND a.end_time >= '$end_time' ";
             }else
                 $complete = false;
-            print $avail_query;
             if($complete){
                 $avail_query .= " AND a.taker_id NOT IN (SELECT r.taker_id FROM request r WHERE r.care_end > '$start_time' AND r.care_begin < '$end_time' AND r.pets_id = $pet_id AND r.status='pending') ";
             }
