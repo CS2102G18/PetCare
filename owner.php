@@ -219,6 +219,64 @@ if (isset($_SESSION["user_id"])) {
                         ?>
 
                     </table>
+
+
+
+                    <div class="container">
+                        <p style="font-size: 20px">  Pending Requests </p>
+                    </div>
+
+                    <table class="table table-striped">
+
+
+                        <tr>
+                            <th>Taker Name</th>
+                            <th>Pet Name</th>
+                            <th>Begin</th>
+                            <th>End</th>
+                            <th>Your bid</th>
+                            <th>Status</th>
+                        </tr>
+
+
+                        <?php
+                        $query4 = "SELECT u.name, r.care_begin, r.care_end, r.bids, p.pet_name, r.request_id FROM request r, pet_user u, pet p 
+                                   WHERE r.owner_id = $user_id 
+                                         AND r.status = 'pending' 
+                                         AND r.taker_id = u.user_id
+                                         AND r.pets_id = p.pets_id
+                                         AND p.is_deleted = false
+                                   ORDER BY care_begin;;";
+                        $result4 = pg_query($query4) or die('Query failed: ' . pg_last_error());
+
+
+                        while ($row = pg_fetch_row($result4)) {
+
+                            $taker_name = $row[0];
+                            $care_begin = $row[1];
+                            $care_end = $row[2];
+                            $bids = $row[3];
+                            $request_pet_name = $row[4];
+                            $request_id = $row[5];
+
+
+                            echo "<tr >";
+                            echo "<td >$taker_name</td >";
+                            echo "<td >$request_pet_name</td >";
+                            echo "<td >$care_begin</td >";
+                            echo "<td >$care_end</td >";
+                            echo "<td >$bids</td >";
+                            echo "<td>
+                                      <a class=\"btn btn-danger\" role=\"button\" href=\"read.php?request_id=$request_id\">Cancel</a>
+                                  </td>";
+                            echo "</tr>";
+                        };
+                        pg_free_result($result4);
+
+                        ?>
+
+                    </table>
+
                     <div class="container">
                         <a class="btn btn-info" role="button" href="request.php">Send Request +</a>
                     </div>
@@ -278,4 +336,3 @@ if (isset($_SESSION["user_id"])) {
     </div>
 </body>
 </html>
-

@@ -45,7 +45,7 @@ if (isset($_SESSION["user_id"])) {
 <?php include "../config/db-connection.php"; ?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="../owner.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="../admin.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="../owner.php"> As a Pet Owner </a></li>
@@ -61,81 +61,55 @@ if (isset($_SESSION["user_id"])) {
     <div class="page-heading">
         <ol class="breadcrumb">
             <li><a href="../admin.php">Admin</a></li>
-            <li>View Users</li>
+            <li><a href="admin_req.php">Request</a></li>
+            <li>Request Statistics</li>
         </ol>
     </div>
     <div class="container-fluid">
         <div class="panel new-task-panel">
             <form action="" id="findForm">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-sm-3">
-                            <label for="user_kw">User's Name</label>
-                            <input id="user_kw" name="user_kw" type="text" class="form-control" placeholder="Keywords">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="container">
+                                <h2>Summary on Takers</h2>
+                            </div>
                         </div>
-                        <div class="col-sm-3">
-                            <label for="add_kw">User's Address</label>
-                            <input id="add_kw" name="add_kw" type="text" class="form-control" placeholder="Keywords">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">
+                            <br><br>
+                            <a href="admin_req.php" class="btn-default btn">Back to Request page</a>
                         </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
 
-                        <div class="col-sm-3">
-                            <label for="em_kw">User's Email</label>
-                            <input id="em_kw" name="em_kw" type="text" class="form-control" placeholder="Keywords">
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="user_role">Role</label>
-                            <select name="user_role" id="pet_size" class="form-control">
-                                <option value="">Select Role</option>
-                                <option value="normal">Normal</option>
-                                <option value="admin">Admin</option>
-                            </select>
+                            <div class="container">
+                                <h4>Takers with highest average bids offered</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-sm-12">
-                            <br>
-                            <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
-                            <a href="admin_userstats.php" class="btn-default btn">Cancel</a>
-                            <a href="admin_adduser.php" class="btn-success btn">Add new user</a>
-                            <?php echo (!isset($_GET['show_deleted']))
-                                ? "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"show_deleted\"
-                                   value=\"Show Deleted\">"
-                                : "<input type=\"submit\" class=\"btn-info btn\" id=\"findBtn\" name=\"back\"
-                                   value=\"Back\">" ?>
-                            <a href="admin_userstats.php" class="btn-warning btn">Show statistics</a>
-                        </div>
+                    <div class="col-sm-12">
 
-                    </div>
-                </div>
-                <br><br>
-                <div class="container">
-                    <h2>Summary on Takers</h2>
-                </div>
-                <br>
-                <br>
-
-
-                <div class="container">
-                    <h4>Takers with highest average bids offered</h4>
-                </div>
-
-
-                <div class="table-vertical first-table">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th >Pet Species</th>
-                            <th >Taker Name</th>
-                            <th >Taker Email</th>
-                            <th >Average Bids Provided</th>
-                            <th >Number of Successful Assignments Done</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $query2 = "SELECT u.name, u.email, k.average, k.num
+                        <div class="table-vertical first-table">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Pet Species</th>
+                                    <th>Taker Name</th>
+                                    <th>Taker Email</th>
+                                    <th>Average Bids Provided</th>
+                                    <th>Number of Successful Assignments Done</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $query2 = "SELECT u.name, u.email, k.average, k.num
                        FROM (SELECT r.taker_id AS id, AVG(r.bids) AS average, COUNT(r.request_id) AS num
                              FROM request r
                              GROUP BY r.taker_id) AS k, pet_user u
@@ -143,11 +117,11 @@ if (isset($_SESSION["user_id"])) {
                                                              FROM (SELECT AVG(r1.bids) AS avg FROM request r1 GROUP BY r1.taker_id) AS k1 
                                                              WHERE k.average < k1.avg);";
 
-                        $result2 = pg_query($query2) or die('Query failed: ' . pg_last_error());
-                        $row2 = pg_fetch_row($result2);
+                                $result2 = pg_query($query2) or die('Query failed: ' . pg_last_error());
+                                $row2 = pg_fetch_row($result2);
 
-                        $average2 = $row2[2] < 0 ? '' : round(floatval($row2[2]), 2);
-                        echo "<tr>
+                                $average2 = $row2[2] < 0 ? '' : round(floatval($row2[2]), 2);
+                                echo "<tr>
                   <td>All</td>
                   <td>$row2[0]</td>
                   <td>$row2[1]</td>
@@ -155,7 +129,7 @@ if (isset($_SESSION["user_id"])) {
                   <td>$row2[3]</td>
 
                   </tr>";
-                        $query4 = "SELECT k.species, u.name, u.email, k.average, k.num
+                                $query4 = "SELECT k.species, u.name, u.email, k.average, k.num
                        FROM (SELECT r.taker_id AS id, AVG(r.bids) AS average, COUNT(r.request_id) AS num, c.species AS species
                              FROM request r, pet p, petcategory c
                              WHERE r.pets_id = p.pets_id AND p.pcat_id = c.pcat_id
@@ -167,11 +141,11 @@ if (isset($_SESSION["user_id"])) {
                                                                    GROUP BY r1.taker_id) AS k1 
                                                              WHERE k.average < k1.avg);";
 
-                        $result4 = pg_query($query4) or die('Query failed: ' . pg_last_error());
+                                $result4 = pg_query($query4) or die('Query failed: ' . pg_last_error());
 
-                        while ($row4 = pg_fetch_row($result4)) {
-                            $average4 = $row4[3] < 0 ? '' : round(floatval($row4[3]), 2);
-                            echo "
+                                while ($row4 = pg_fetch_row($result4)) {
+                                    $average4 = $row4[3] < 0 ? '' : round(floatval($row4[3]), 2);
+                                    echo "
                     <tr>
                     <td>$row4[0]</td>
                     <td>$row4[1]</td>
@@ -179,33 +153,40 @@ if (isset($_SESSION["user_id"])) {
                     <td>$average4</td>
                     <td>$row4[4]</td>
                     </tr>";
-                        };
+                                };
 
 
-                        pg_free_result($result2);
-                        ?>
-                        </tbody>
-                    </table>
+                                pg_free_result($result2);
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-
-
-                <div>
-                    <h4>Takers who have taken care of all species of pets</h4>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <div>
+                                <h4>Takers who have taken care of all species of pets</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-12">
 
-
-                <div class="table-vertical first-table">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th >Taker Name</th>
-                            <th >Average Bids Provided</th>
-                            <th >Number of Successful Assignments Done</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $query3 = "SELECT u.name, AVG(r1.bids) AS average, COUNT(r1.taker_id)
+                        <div class="table-vertical first-table">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Taker Name</th>
+                                    <th>Average Bids Provided</th>
+                                    <th>Number of Successful Assignments Done</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $query3 = "SELECT u.name, AVG(r1.bids) AS average, COUNT(r1.taker_id)
                        FROM request r1, pet_user u
                        WHERE r1.taker_id = u.user_id AND NOT EXISTS (SELECT c1.species
                                                                      FROM petcategory c1
@@ -218,28 +199,30 @@ if (isset($_SESSION["user_id"])) {
                        GROUP BY r1.taker_id, u.name
                        ORDER BY average DESC";
 
-                        $result3 = pg_query($query3) or die('Query failed: ' . pg_last_error());
-                        $flag = 0;
+                                $result3 = pg_query($query3) or die('Query failed: ' . pg_last_error());
+                                $flag = 0;
 
 
-                        while ($row3 = pg_fetch_row($result3)) {
-                            $flag = 1;
-                            $average = $row3[1] < 0 ? '' : round(floatval($row3[1]), 2);
-                            echo "
+                                while ($row3 = pg_fetch_row($result3)) {
+                                    $flag = 1;
+                                    $average = $row3[1] < 0 ? '' : round(floatval($row3[1]), 2);
+                                    echo "
                     <tr>
                     <td>$row3[0]</td>
                     <td>$average</td>
                     <td>$row3[2]</td>
                     </tr>";
-                        }
+                                }
 
-                        if (!$flag) {
-                            echo "<tr><td>No Such Takers Yet</td></tr>";
-                        }
-                        pg_free_result($result3);
-                        ?>
-                        </tbody>
-                    </table>
+                                if (!$flag) {
+                                    echo "<tr><td>No Such Takers Yet</td></tr>";
+                                }
+                                pg_free_result($result3);
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
