@@ -94,7 +94,7 @@ CREATE TABLE request(
     post_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
     care_begin TIMESTAMP NOT NULL,
     care_end TIMESTAMP NOT NULL,
-    remarks VARCHAR(64) DEFAULT 'No',,
+    remarks VARCHAR(64) DEFAULT 'No',
     bids NUMERIC NOT NULL,
     pets_id INT REFERENCES pet(pets_id) ON DELETE CASCADE ON UPDATE CASCADE,
     slot VARCHAR(64),
