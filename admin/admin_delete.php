@@ -13,7 +13,7 @@ if ($_GET['usage'] == 'pet') {
     $query = "UPDATE pet SET is_deleted=true WHERE pets_id=" . $p_id . ";";
     $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
     pg_free_result($result);
-    $query = "UPDATE request SET status='cancelled' WHERE status='pending' AND pets_id=$p_id;";
+    $query = "UPDATE request SET status='failed' WHERE status='pending' AND pets_id=$p_id;";
     $result = pg_query($query) or die('Query failedb: ' . pg_last_error());
     pg_free_result($result);
     header("Location: admin_pet.php");
