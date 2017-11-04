@@ -23,6 +23,8 @@ if (isset($_SESSION["user_id"])) {
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="./vendor/js/jquery.ns-autogrow.min.js"></script>
     <script src="./vendor/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="./vendor/d3/d3.min.js"></script>
+    <script src="./vendor/calendar_graph.js"></script>
 
     <style>
         .navbar-admin {
