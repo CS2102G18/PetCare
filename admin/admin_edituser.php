@@ -45,7 +45,7 @@ if (isset($_GET["u_id"])) {
 <body>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="../owner.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="../admin.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="../owner.php"> As a Pet Owner </a></li>
@@ -59,6 +59,13 @@ if (isset($_GET["u_id"])) {
 </nav>
 <div class="content-container container">
     <div class="panel new-task-panel">
+        <div class="page-heading">
+            <ol class="breadcrumb">
+                <li><a href="../admin.php">Admin</a></li>
+                <li><a href="admin_user.php">User</a></li>
+                <li>Update Users</li>
+            </ol>
+        </div>
         <div class="container">
             <h2>User profile</h2>
             <form action="admin_edituser.php">

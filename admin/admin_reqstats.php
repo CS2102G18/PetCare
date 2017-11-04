@@ -45,7 +45,7 @@ if (isset($_SESSION["user_id"])) {
 <?php include "../config/db-connection.php"; ?>
 <nav class="navbar navbar-inverse navigation-bar navbar-fixed-top navbar-admin">
     <div class="container navbar-container">
-        <div class="navbar-header pull-left"><a class="navbar-brand" href="../owner.php"> PetCare</a></div>
+        <div class="navbar-header pull-left"><a class="navbar-brand" href="../admin.php"> PetCare</a></div>
         <div class="collapse navbar-collapse pull-right">
             <ul class="nav navbar-nav">
                 <li><a href="../owner.php"> As a Pet Owner </a></li>
@@ -61,7 +61,8 @@ if (isset($_SESSION["user_id"])) {
     <div class="page-heading">
         <ol class="breadcrumb">
             <li><a href="../admin.php">Admin</a></li>
-            <li>View Users</li>
+            <li><a href="admin_req.php">Request</a></li>
+            <li>Request Statistics</li>
         </ol>
     </div>
     <div class="container-fluid">
