@@ -29,14 +29,13 @@ if (isset($_SESSION["user_id"])) {
             color: #FFFFFF;
             background-color: #035f72;
         }
-        .col-centered {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
+
         body {
             background: url('./media/background_taker.png');
+        }
+        .box {
+            /* Add shadows to create the "card" effect */
+            width: 50rem; margin-top: 2rem; margin-left:2rem; margin-bottom: 2rem; position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:0;word-wrap:break-word;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,1,0,.125);border-radius:.55rem
         }
     </style>
     <script type="text/javascript">
@@ -89,6 +88,29 @@ if (isset($_SESSION["user_id"])) {
     </div>
     <div class="container-fluid">
         <div class="panel new-task-panel">
+            <?php
+            $query = "SELECT u.name, COUNT(*), (SUM(r.bids)/SUM(r.totaltime))*60 AS avg FROM request r, pet_user u
+                  WHERE r.taker_id = $user_id AND r.status = 'successful' AND u.user_id = r.owner_id
+                  GROUP BY r.owner_id, u.name
+                  HAVING COUNT(*) >= ALL(SELECT COUNT(*) FROM
+                                         request r1
+                                         WHERE r1.taker_id = $user_id AND r1.status = 'successful'
+                                         GROUP BY r1.owner_id)
+                  ORDER BY (SUM(r.bids)/SUM(r.totaltime)) DESC;";
+            $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
+            $row = pg_fetch_row($result);
+            $favoritename = $row[0];
+            $favoritetime = $row[1];
+            $favoriteavg = $row[2];
+            ?>
+
+            <div class="box">
+                <div class="container">
+                    <h4><strong>Favorite Pet Owner:</strong> <?php echo"$favoritename"; ?></h4>
+                    <h4><strong>Number of successful Requests:</strong> <?php echo"$favoritetime"; ?></h4>
+                    <h4><strong>Average Bids/Hour the Owner provided:</strong> <?php echo"$favoriteavg"; ?></h4>
+                </div>
+            </div>
             <form action="" id="findForm">
                 <div class="row">
 
