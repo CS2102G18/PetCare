@@ -85,7 +85,8 @@ if (isset($_GET["a_id"])) {
     <div class="panel new-task-panel">
         <div class="container">
             <h2>Edit existing available slot</h2>
-            <form action="admin_editavail.php">
+            <form action="admin_editavail?a_id=$avail_id.php">
+                <input name="a_id" value="<?php echo $avail_id ?>" type='hidden'/>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-12">
@@ -101,7 +102,6 @@ if (isset($_GET["a_id"])) {
                                         <input type="text" class="form-control" name="start_time" required="true"
                                                placeholder="<?php echo $a_start ?>"
                                                value="<?php echo $a_start ?>">
-                                        <input name="a_id" value="<?php echo $avail_id ?>" type='hidden'/>
                                         <div class="input-group-addon">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </div>
@@ -228,7 +228,7 @@ if (isset($_GET["a_id"])) {
                 </div>
                 <div class="container">
                     <button type="submit" name="create" class="btn btn-default">Submit</button>
-                    <a class="btn btn-danger" role="button" href="admin_addavail.php">Cancel</a>
+                    <a class="btn btn-danger" role="button" href="admin_avail.php">Cancel</a>
                 </div>
             </form>
             <br>
@@ -244,6 +244,7 @@ if (isset($_GET['create'])) {
     $a_species = $_GET['pet_species'];
     $a_size = $_GET['pet_size'];
     $a_remarks = $_GET['remarks'];
+    $avail_id = $_GET['a_id'];
     $pcat_query = "SELECT pcat_id FROM petcategory
                    WHERE age = '$a_age'
                    AND size = '$a_size'
@@ -270,7 +271,7 @@ if (isset($_GET['create'])) {
                           <h4>Overlapping available slot exists!</h4>
                         </div>
                         <div class='modal-footer'>
-                          <button type='button' class='btn btn-default'><a href='admin_editavail.php'>Close</a></button>
+                          <button type='button' class='btn btn-default'><a href='admin_editavail?a_id=$avail_id.php'>Close</a></button>
                         </div>
                     </div>
                 </div>
@@ -282,7 +283,7 @@ if (isset($_GET['create'])) {
                      SET start_time = '" . $a_start . "',
                          end_time = '" . $a_end . "',
                          pcat_id = $pcat_id, 
-                         taker_id = $a_uid
+                         taker_id = $a_uid,
                          remarks = '".$a_remarks."'
                      WHERE avail_id = $avail_id;";
     $result = pg_query($update_query);

@@ -220,7 +220,7 @@ if (isset($_SESSION["user_id"])) {
                                                           LEFT OUTER JOIN availability a ON (a.taker_id = u.user_id)
                                                           LEFT OUTER JOIN request r1 ON (r1.owner_id = u.user_id)
                                                           LEFT OUTER JOIN request r2 ON (r2.owner_id = u.user_id AND r2.status = 'successful')
-                                                          LEFT OUTER JOIN request r3 ON (r3.taker_id = u.user_id)
+                                                          LEFT OUTER JOIN request r3 ON (r3.taker_id = u.user_id AND r3.status = 'successful')
                                           GROUP BY u.user_id
                                           ORDER BY u.user_id";
                             $result = pg_query($query) or die('Query failed 55: ' . pg_last_error());
