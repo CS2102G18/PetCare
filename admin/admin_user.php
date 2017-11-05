@@ -205,6 +205,8 @@ if (isset($_SESSION["user_id"])) {
                                 <th>Number of Successful Request</th>
                                 <th>Success Rate</th>
                                 <th>Average Bids offered</th>
+                                <th>Lowest Bids offered</th>
+                                <th>Highest Bids offered</th>
                                 <th>Number of Requests accepted</th>
                             </tr>
                             <?php
@@ -215,6 +217,8 @@ if (isset($_SESSION["user_id"])) {
                                           COUNT(DISTINCT r2.request_id),
                                           COALESCE(COUNT(DISTINCT r2.request_id)::DECIMAL/NULLIF(COUNT(DISTINCT r1.request_id),0),-1),
                                           COALESCE(ROUND(AVG(DISTINCT r1.bids),2),0),
+                                          COALESCE(MIN(r1.bids),0),
+                                          COALESCE(MAX(r1.bids),0),
                                           COUNT(DISTINCT r3.request_id)
                                           FROM pet_user u LEFT OUTER JOIN pet p ON (p.owner_id = u.user_id)
                                                           LEFT OUTER JOIN availability a ON (a.taker_id = u.user_id)
@@ -242,6 +246,8 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >".($row[5] != -1 ? round($row[5]*100 ,2)."%": "NA")."</td>";
                                 echo "<td >$row[6]</td>";
                                 echo "<td >$row[7]</td>";
+                                echo "<td >$row[8]</td>";
+                                echo "<td >$row[9]</td>";
                                 echo "</tr>";
                             }
                             ?>

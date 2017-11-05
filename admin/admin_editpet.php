@@ -23,7 +23,7 @@ if (isset($_GET["p_id"])) {
     $result_o = pg_query($query_o) or die('Query failed: ' . pg_last_error());
     $row_o = pg_fetch_row($result_o);
 
-    $owner_info = $row_o[0]." (id: ".$pet_owner.")";
+    $owner_info = $row_o[0] . " (id: " . $pet_owner . ")";
 
     if ($row_o[1] == "admin") {
         $owner_info .= " ***ADMIN***";
@@ -80,7 +80,9 @@ if (isset($_GET["p_id"])) {
         </div>
         <div class="container">
             <h2>Update pet information</h2>
-            <h8>Warning: Update pet information will change status of all pending request regarding the affected pet to "failed"</h8>
+            <h8>Warning: Update pet information will change status of all pending request regarding the affected pet to
+                "failed"
+            </h8>
             <h8><br><br></h8>
             <form action="admin_editpet.php">
                 <input type="hidden" value="<?php echo $pet_id ?>" name="p_id"/>
@@ -207,12 +209,12 @@ if (isset($_GET['update'])) {
                      SET status = 'failed'
                      WHERE pets_id = $pet_id AND status = 'pending';";
     $fail_result = pg_query($fail_query) or die('Query failed: b' . pg_last_error());
-  
+
     $update_query = "UPDATE pet
                      SET pcat_id = $pcat_id, pet_name = '$pet_name', owner_id = $owner_id
                      WHERE pets_id = $pet_id;";
     $result = pg_query($update_query) or die('Query failed: b' . pg_last_error());
-       
+
     if ($result) {
         pg_free_result($result);
         header("Location: admin_pet.php");
