@@ -18,6 +18,7 @@ if (isset($_GET["p_id"])) {
 
     $pet_name = $row[3];
     $pet_owner = $row[1];
+    $pcat_info = $row[2];
 
     $query_o = "SELECT name, role FROM pet_user WHERE user_id = $pet_owner";
     $result_o = pg_query($query_o) or die('Query failed: ' . pg_last_error());
@@ -86,6 +87,7 @@ if (isset($_GET["p_id"])) {
             <h8><br><br></h8>
             <form action="admin_editpet.php">
                 <input type="hidden" value="<?php echo $pet_id ?>" name="p_id"/>
+                <input type="hidden" value="<?php echo $pcat_info ?>" name="pcat_info"/>
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Owner</h5>
@@ -205,10 +207,12 @@ if (isset($_GET['update'])) {
     $pcat_id = pg_fetch_row($pcat_result)[0];
     $pet_name = $_GET["pet_name"];
 
-    $fail_query = "UPDATE request
+    if ($_GET['pcat_info'] != $pcat_id) {
+        $fail_query = "UPDATE request
                      SET status = 'failed'
                      WHERE pets_id = $pet_id AND status = 'pending';";
-    $fail_result = pg_query($fail_query) or die('Query failed: b' . pg_last_error());
+        $fail_result = pg_query($fail_query) or die('Query failed: b' . pg_last_error());
+    }
 
     $update_query = "UPDATE pet
                      SET pcat_id = $pcat_id, pet_name = '$pet_name', owner_id = $owner_id
