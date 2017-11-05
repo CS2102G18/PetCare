@@ -130,7 +130,7 @@ if (isset($_SESSION["user_id"])) {
                                 $em_kw = $_GET['em_kw'];
                                 $user_role = $_GET['user_role'];
 
-                                $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted, 
+                                $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted
                                           FROM pet_user u
                                           WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false");
 
@@ -147,7 +147,7 @@ if (isset($_SESSION["user_id"])) {
                                 }
 
                                 if (trim($user_role)) {
-                                    $query .= " AND u.role ='" . $user_role . "')";
+                                    $query .= " AND u.role ='" . $user_role . "'";
                                 }
 
                                 $query .= " ORDER BY u.user_id;";
