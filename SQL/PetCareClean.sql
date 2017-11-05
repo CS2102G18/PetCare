@@ -12,11 +12,8 @@ DROP SEQUENCE avail_id_seq;
 DROP SEQUENCE assn_id_seq;
 DROP SEQUENCE pcat_seq;
 
-DROP FUNCTION timeslot;
-DROP FUNCTION calculateTotalTime;
-DROP FUNCTION addRequestInfo;
-DROP FUNCTION cleanOutdatedAvail;
-DROP FUNCTION cleanOutdatedReq;
-DROP TRIGGER addSlot;
-DROP TRIGGER changeAvail;
-DROP TRIGGER changeReq;
+DROP FUNCTION timeslot(requestNum INTEGER);
+DROP FUNCTION calculateTotalTime(requestNum INTEGER);
+DROP FUNCTION addRequestInfo();
+DROP FUNCTION cleanOutdatedAvail();
+DROP FUNCTION cleanOutdatedReq();
