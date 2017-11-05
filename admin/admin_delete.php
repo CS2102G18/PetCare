@@ -74,7 +74,7 @@ if ($_GET['usage'] == 'avail') {
     echo "<script>window.location = 'admin_avail.php';</script>";
     exit();
 }
-if ($_GET['usage'] == 'request') {
+if ($_GET['usage'] == 'req') {
     $a_id = $_GET['r_id'];
     $query = "UPDATE request SET status='failed' WHERE request_id=" . $a_id . ";";
     $result = pg_query($query) or die('Query faileda: ' . pg_last_error());
