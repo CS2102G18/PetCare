@@ -9,7 +9,6 @@ DROP SEQUENCE user_id_seq;
 DROP SEQUENCE pets_id_seq;
 DROP SEQUENCE request_id_seq;
 DROP SEQUENCE avail_id_seq;
-DROP SEQUENCE assn_id_seq;
 DROP SEQUENCE pcat_seq;
 
 DROP FUNCTION timeslot(requestNum INTEGER);
