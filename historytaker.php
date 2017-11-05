@@ -27,7 +27,7 @@ if (isset($_SESSION["user_id"])) {
     <style>
         .navbar-owner {
             color: #FFFFFF;
-            background-color: #8a3541;
+            background-color: #035f72;
         }
         .col-centered {
             display: block;
@@ -36,7 +36,7 @@ if (isset($_SESSION["user_id"])) {
             text-align: center;
         }
         body {
-            background: url('./media/background_owner.png');
+            background: url('./media/background_taker.png');
         }
     </style>
     <script type="text/javascript">
@@ -64,13 +64,13 @@ if (isset($_SESSION["user_id"])) {
                 <li><a href="taker.php"> As a Care Taker </a></li>
                 <li><a href="profile.php"> Your Profile </a></li>
                 <?php
-                    $admin_query = "SELECT role FROM pet_user WHERE user_id=" . $user_id . ";";
-                    $admin_result = pg_query($admin_query) or die('Query failed: ' . pg_last_error());
-                    $admin_row = pg_fetch_row($admin_result);
-                    if(strcmp($admin_row[0],"admin") == 0){
-                        echo '<li><a href="admin.php"> Admin </a></li>';
-                    }
-                    pg_free_result($admin_result);
+                $admin_query = "SELECT role FROM pet_user WHERE user_id=" . $user_id . ";";
+                $admin_result = pg_query($admin_query) or die('Query failed: ' . pg_last_error());
+                $admin_row = pg_fetch_row($admin_result);
+                if(strcmp($admin_row[0],"admin") == 0){
+                    echo '<li><a href="admin.php"> Admin </a></li>';
+                }
+                pg_free_result($admin_result);
                 ?>
                 <li><a href="logout.php"> Log Out </a></li>
             </ul>
@@ -82,10 +82,9 @@ if (isset($_SESSION["user_id"])) {
 <div class="content-container container">
     <div class="page-heading">
         <ol class="breadcrumb">
-            <li><a href="owner.php">Home</a></li>
-            <li><a href="historytaker.php">History (Taker)</a></li>
-            <li>View Request History (Owner)</li>
-
+            <li><a href="taker.php">Home</a></li>
+            <li><a href="history.php">History (Owner)</a></li>
+            <li>View Request History (Taker)</li>
         </ol>
     </div>
     <div class="container-fluid">
@@ -96,13 +95,13 @@ if (isset($_SESSION["user_id"])) {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-sm-10">
-                               <div class="col-sm-3">
+                                <div class="col-sm-3">
                                     <label for="pet_id">Pet's Name</label>
                                     <select name="pet_id" class="form-control">
                                         <option value="">Select Pet</option>
                                         <?php
-                                        $query = "SELECT p.pets_id, p.pet_name FROM pet_user o, pet p
-                                              WHERE o.user_id = p.owner_id AND o.user_id = $user_id;";
+                                        $query = "SELECT p.pets_id, p.pet_name FROM request r, pet p
+                                              WHERE r.pets_id = p.pets_id AND r.taker_id = $user_id;";
                                         $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
                                         while ($row = pg_fetch_row($result)) {
                                             $option = "<option value='" . $row[0] . "'>" . $row[1];
@@ -114,12 +113,12 @@ if (isset($_SESSION["user_id"])) {
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
-                                    <label for="taker_id">Care Taker</label>
-                                    <select name="taker_id" class="form-control">
-                                        <option value="">Select Care Taker</option>
+                                    <label for="owner_id">Pet Owner</label>
+                                    <select name="owner_id" class="form-control">
+                                        <option value="">Select Pet Owner</option>
                                         <?php
-                                        $query = "SELECT DISTINCT t.user_id, t.name FROM pet_user o, pet_user t, request r
-                                          WHERE r.taker_id = t.user_id AND o.user_id = r.owner_id AND o.user_id = $user_id";
+                                        $query = "SELECT DISTINCT o.user_id, o.name FROM pet_user o, request r
+                                          WHERE o.user_id = r.owner_id AND r.taker_id = $user_id";
                                         $result = pg_query($query) or die('Query failed: ' . $query . pg_last_error());
                                         while ($row = pg_fetch_row($result)) {
                                             $option = "<option value='" . $row[0] . "'>" . $row[1];
@@ -161,7 +160,7 @@ if (isset($_SESSION["user_id"])) {
                                         pg_free_result($result);
                                         ?>
                                     </select>
-                                </div>        
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -241,7 +240,7 @@ if (isset($_SESSION["user_id"])) {
                     <br>
                     <div class="row">
                         <div class="col-md-12">
-                        	  <div class="col-sm-6">
+                            <div class="col-sm-6">
                                 <br>
                                 <input type="submit" class="btn-primary btn" id="findBtn" name="search" value="Search">
                                 <a href="history.php" class="btn-default btn">Cancel</a>
@@ -254,7 +253,7 @@ if (isset($_SESSION["user_id"])) {
                         <table class="table table-striped" id="pet_info">
                             <tr>
                                 <th >Pet </th>
-                                <th >Taker </th>
+                                <th >Owner </th>
                                 <th >Posted</th>
                                 <th >Begin</th>
                                 <th >End</th>
@@ -265,7 +264,7 @@ if (isset($_SESSION["user_id"])) {
                             <?php
                             if (isset($_GET['search'])) {
                                 $pet_id = $_GET['pet_id'];
-                                $taker_id = $_GET['taker_id'];
+                                $owner_id = $_GET['owner_id'];
                                 $status = $_GET['status'];
 
                                 $req_slot = $_GET['req_slot'];
@@ -276,21 +275,21 @@ if (isset($_SESSION["user_id"])) {
                                 $bid_low = $_GET['bid_low'];
                                 $bid_upp = $_GET['bid_upp'];
 
-                                $query = "SELECT p.pet_name, t.name, r.post_time, r.care_begin, r.care_end, r.bids, r.remarks, r.status FROM pet_user o, request r, pet p, pet_user t
-                                          WHERE r.owner_id = o.user_id AND r.pets_id = p.pets_id AND t.user_id = r.taker_id AND o.user_id = $user_id" ;
+                                $query = "SELECT p.pet_name, o.name, r.post_time, r.care_begin, r.care_end, r.bids, r.remarks, r.status FROM pet_user o, request r, pet p, pet_user t
+                                          WHERE r.owner_id = o.user_id AND r.pets_id = p.pets_id AND t.user_id = r.taker_id AND t.user_id = $user_id" ;
 
                                 if (trim($pet_id)) {
                                     $query .= " AND p.pets_id = " . $pet_id;
                                 }
 
-                                if (trim($taker_id)) {
-                                    $query .= " AND r.taker_id = '" . $taker_id . "'";
+                                if (trim($owner_id)) {
+                                    $query .= " AND r.owner_id = '" . $owner_id . "'";
                                 }
 
                                 if (trim($status)) {
                                     $query .= " AND r.status = '" . $status . "'";
                                 }
-                                
+
                                 if (trim($post_start)) {
                                     $query .= " AND r.post_time >= '" . $post_start . "'";
                                 }
@@ -321,8 +320,8 @@ if (isset($_SESSION["user_id"])) {
                                 $query .= " ORDER BY r.post_time;";
                                 $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
                             } else {
-                                $query = "SELECT p.pet_name, t.name, r.post_time, r.care_begin, r.care_end, r.bids, r.remarks, r.status FROM pet_user o, request r, pet p, pet_user t
-                                          WHERE r.owner_id = o.user_id AND r.pets_id = p.pets_id AND t.user_id = r.taker_id AND o.user_id = $user_id" ;
+                                $query = "SELECT p.pet_name, o.name, r.post_time, r.care_begin, r.care_end, r.bids, r.remarks, r.status FROM pet_user o, request r, pet p, pet_user t
+                                          WHERE r.owner_id = o.user_id AND r.pets_id = p.pets_id AND t.user_id = r.taker_id AND t.user_id = $user_id" ;
                                 $query .= " ORDER BY r.post_time;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }

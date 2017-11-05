@@ -57,7 +57,7 @@ $user_address = $row[2];
         <div class="navbar-header pull-left"><a class="navbar-brand" href=""> PetCare</a></div>
         <div class="collapse pull-right navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="history.php"> View History </a></li>
+                <li><a href="historytaker.php"> View History </a></li>
                 <li><a href="profile.php"> Your Profile </a></li>
                 <?php
                     $admin_query = "SELECT role FROM pet_user WHERE user_id=" . $user_id . ";";
