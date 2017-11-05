@@ -83,6 +83,7 @@ if (isset($_GET["p_id"])) {
             <h8>Warning: Update pet information will change status of all pending request regarding the affected pet to "failed"</h8>
             <h8><br><br></h8>
             <form action="admin_editpet.php">
+                <input type="hidden" value="<?php echo $pet_id ?>" name="p_id"/>
                 <div class="row">
                     <div class="col-sm-2">
                         <h5>New Pet's Owner</h5>
@@ -181,7 +182,7 @@ if (isset($_GET["p_id"])) {
 
                     <div class="container">
                         <button type="submit" name="update" class="btn btn-default">Submit</button>
-                        <a class="btn btn-danger" role="button" href="admin_editpet.php">Cancel</a>
+                        <a class="btn btn-danger" role="button" href="admin_pet.php">Cancel</a>
                     </div>
 
             </form>

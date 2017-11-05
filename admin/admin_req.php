@@ -75,7 +75,7 @@ if (isset($_SESSION["user_id"])) {
     </div>
     <div class="container-fluid">
         <div class="panel new-task-panel">
-            <form action="" id="findForm">
+            <form action="admin_req.php" id="findForm">
                 <div class="row">
 
                     <div class="row">
