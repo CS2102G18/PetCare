@@ -2,7 +2,6 @@ CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pets_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE request_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE avail_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
-CREATE SEQUENCE assn_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pcat_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 
 CREATE TABLE petcategory(
@@ -63,6 +62,8 @@ CREATE TABLE request(
     CONSTRAINT CHK_post CHECK (care_begin > post_time)
 );
 
+--According to the timing of the inserted request entry, set the slot attribute
+--to the corresponding value
 
 CREATE OR REPLACE FUNCTION timeslot(requestNum INTEGER)
 RETURNS VARCHAR(64) AS $$
@@ -81,6 +82,8 @@ RETURN slot;
 END; $$
 LANGUAGE PLPGSQL;
 
+--Calculate total length of time period of the request entry inserted
+
 CREATE OR REPLACE FUNCTION calculateTotalTime(requestNum INTEGER)
 RETURNS DOUBLE PRECISION AS $$
 DECLARE totalmins DOUBLE PRECISION; days DOUBLE PRECISION; hours DOUBLE PRECISION; mins DOUBLE PRECISION;
@@ -95,6 +98,8 @@ RETURN totalmins;
 END; $$
 LANGUAGE PLPGSQL;
 
+--Add time slot and total time attribute to the request entry
+
 CREATE OR REPLACE FUNCTION addRequestInfo()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -105,6 +110,8 @@ BEGIN
 END; $$
 LANGUAGE PLPGSQL;
 
+--Trigger that activate slot and totaltime adding methods when inserting new request
+--entry
 
 CREATE TRIGGER addSlot
 AFTER INSERT
@@ -112,7 +119,11 @@ ON request
 FOR EACH ROW
 EXECUTE PROCEDURE addRequestInfo();
 
-CREATE OR REPLACE FUNCTION cleanOutdatedAvail()
+--Take out the availability slots that are of the same pet category, same care taker
+--and the timing is overlapping, and those end_time already before current time
+--set is_deleted to TRUE
+
+CREATE OR REPLACE FUNCTION cleanOutdatedAndOverlappedAvail()
 RETURNS TRIGGER AS $$
 BEGIN(
   UPDATE availability SET is_deleted = TRUE
@@ -135,7 +146,11 @@ BEGIN(
 END; $$
 LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION cleanOutdatedReq()
+--Take out the request entries that have no corresponding availability slots
+--to hold the request, as well as the end time already before current time,
+--set status to be failed.
+
+CREATE OR REPLACE FUNCTION cleanOutdatedAndNotMatchingReq()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE request
@@ -156,16 +171,21 @@ BEGIN
 END; $$
 LANGUAGE PLPGSQL;
 
+--Activate the cleaning function on availability after each insertion
+
 CREATE TRIGGER changeAvail
 AFTER INSERT ON availability
 FOR EACH STATEMENT
-EXECUTE PROCEDURE cleanOutdatedAvail();
+EXECUTE PROCEDURE cleanOutdatedAndOverlappedAvail();
+
+--Activate the cleaning function on request after each insertion
 
 CREATE TRIGGER changeReq
 AFTER INSERT ON request
 FOR EACH STATEMENT
-EXECUTE PROCEDURE cleanOutdatedReq();
+EXECUTE PROCEDURE cleanOutdatedAndNotMatchingReq();
 
+--View that is used in request page to short list the averate bids
 
 CREATE VIEW requesttime AS
     SELECT SUM(r.bids)/SUM(r.totaltime)*60 AS avgbids, r.taker_id AS taker_id
