@@ -182,7 +182,7 @@ if (isset($_SESSION["user_id"])) {
                                 </thead>
                                 <tbody>
                                 <?php
-                                $query3 = "SELECT u.name, (SUM(r1.bids)/SUM(r1.totaltime)*60) AS average, SUM(r1.totaltime)
+                                $query3 = "SELECT u.name, (SUM(r1.bids)/SUM(r1.totaltime)*60) AS average, SUM(r1.totaltime)/60
                        FROM request r1, pet_user u
                        WHERE r1.taker_id = u.user_id AND r1.status = 'successful' AND NOT EXISTS (SELECT c1.species
                                                                                                   FROM petcategory c1
@@ -203,7 +203,7 @@ if (isset($_SESSION["user_id"])) {
                                 while ($row3 = pg_fetch_row($result3)) {
                                     $flag = 1;
                                     $average = $row3[1] < 0 ? '' : round(floatval($row3[1]), 2);
-                                    $totaltime = $row3[2] < 0 ? '' : round(floatval($row3[1]), 2);
+                                    $totaltime = $row3[2] < 0 ? '' : round(floatval($row3[2]), 2);
                                     echo "
                      <tr>
                     <td>$row3[0]</td>
