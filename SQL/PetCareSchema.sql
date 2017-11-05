@@ -1,17 +1,3 @@
-DROP VIEW requesttime;
-DROP TABLE request;
-DROP TABLE availability;
-DROP TABLE pet;
-DROP TABLE petcategory;
-DROP TABLE pet_user;
-
-DROP SEQUENCE user_id_seq;
-DROP SEQUENCE pets_id_seq;
-DROP SEQUENCE request_id_seq;
-DROP SEQUENCE avail_id_seq;
-DROP SEQUENCE assn_id_seq;
-DROP SEQUENCE pcat_seq;
-
 CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE pets_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
 CREATE SEQUENCE request_id_seq INCREMENT BY 1 MINVALUE 0 START WITH 1 NO CYCLE;
@@ -159,10 +145,10 @@ BEGIN
   UPDATE availability
   SET is_deleted = TRUE
   WHERE end_time <= CURRENT_TIMESTAMP
-  and is_deleted = FALSE
+  and is_deleted = FALSE;
   RETURN NULL;
 END; $$
-LANGUAGE PLPGSQL
+LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE FUNCTION cleanOutdatedReq()
 RETURNS TRIGGER AS $$
@@ -180,18 +166,18 @@ BEGIN
                       AND p.is_deleted = FALSE
                       AND r.care_end <= a.end_time
                       AND r.care_begin >= a.begin_time)
-  AND status = 'pending')
+  AND status = 'pending');
   RETURN NULL;
 END; $$
-LANGUAGE PLPGSQL
+LANGUAGE PLPGSQL;
 
 CREATE TRIGGER changeAvail
-BEFORE INSERT OR UPDATE availability
+BEFORE INSERT OR UPDATE ON availability
 FOR EACH STATEMENT
 EXECUTE PROCEDURE cleanOutdatedAvail();
 
 CREATE TRIGGER changeReq
-BEFORE INSERT OR UPDATE request
+BEFORE INSERT OR UPDATE ON request
 FOR EACH STATEMENT
 EXECUTE PROCEDURE cleanOutdatedReq();
 
@@ -228,45 +214,6 @@ INSERT INTO pet_user(name, password, email, address) VALUES ('Robin Goodman',901
 INSERT INTO pet_user(name, password, email, address) VALUES ('Marcus Gilbert',81232,'weazelman@yahoo.com','12 Summerhouse St. Hoboken, NJ 07030');
 INSERT INTO pet_user(name, password, email, address) VALUES ('Doug Neal',12343,'msloan@me.com','5 East Proctor Street Missoula, MT 59801');
 INSERT INTO pet_user(name, password, email, address) VALUES ('Josephine Erickson',23454,'goresky@msn.com','7943 East Lakeshore Street Rockford, MI 49341');
-
-/*
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (2,1,'Ah Beng');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (3,5,'Ah Lian');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (5,4,'Ah Hong');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (1,2,'Ah Ben');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (4,8,'Ah Wong');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (7,3,'Ah Kay');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (2,9,'Ah Seng');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (5,6,'Ah Leong');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (2,10,'Ah Mah');
-INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (8,7,'Ah Wai');
-*/
-
-/*
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 1);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 1);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 1);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 1);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 1);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 6, 2);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 2);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 2);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 2);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 2);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 3);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 6, 3);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 3);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 3);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 3);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 4);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 4);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 6, 4);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 1, 4);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 2, 4);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 3, 5);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 4, 5);
-INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2017-11-01 08:00:00', '2017-12-01 08:00:00', 5, 5);
-*/
 
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (21,1,'1');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (17,1,'2');
@@ -317,7 +264,7 @@ INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (10,23,'46');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (8,24,'47');
 INSERT INTO pet(pcat_id, owner_id, pet_name) VALUES (17,24,'48');
 
-﻿INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 00:00:00','2018-01-01 01:00:00',3,1);
+INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 00:00:00','2018-01-01 01:00:00',3,1);
 INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 18:00:00','2018-01-21 20:00:00',3,1);
 INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 23:00:00','2018-01-02 01:00:00',3,1);
 INSERT INTO availability(start_time, end_time, pcat_id, taker_id) VALUES ('2018-01-01 17:00:00','2018-01-01 19:00:00',3,1);
