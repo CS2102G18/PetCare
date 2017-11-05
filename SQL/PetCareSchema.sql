@@ -119,29 +119,15 @@ ON request
 FOR EACH ROW
 EXECUTE PROCEDURE addRequestInfo();
 
---Take out the availability slots that are of the same pet category, same care taker
---and the timing is overlapping, and those end_time already before current time
---set is_deleted to TRUE
+--Take out the availability slots that has end_time already before current time, set
+--is_deleted to TRUE
 
-CREATE OR REPLACE FUNCTION cleanOutdatedAndOverlappedAvail()
+CREATE OR REPLACE FUNCTION cleanOutdatedAvail()
 RETURNS TRIGGER AS $$
 BEGIN(
   UPDATE availability SET is_deleted = TRUE
-  WHERE (end_time <= CURRENT_TIMESTAMP
-  AND is_deleted = FALSE)
-  OR avail_id IN (
-    SELECT DISTINCT a1.avail_id
-    FROM availability a1 INNER JOIN availability a2
-      ON ((a1.pcat_id, a1.taker_id) = (a2.pcat_id, a2.taker_id))
-    WHERE EXISTS (
-    SELECT a2.avail_id
-    WHERE a2.start_time < a1.end_time
-    AND a2.end_time > a1.start_time
-    AND a2.avail_id <> a1.avail_id
-    AND a2.is_deleted = FALSE)
-  GROUP BY a1.avail_id
-  ORDER BY a1.avail_id)
-  );
+  WHERE end_time <= CURRENT_TIMESTAMP
+  AND is_deleted = FALSE;
   RETURN NULL;
 END; $$
 LANGUAGE PLPGSQL;
@@ -176,7 +162,7 @@ LANGUAGE PLPGSQL;
 CREATE TRIGGER changeAvail
 AFTER INSERT ON availability
 FOR EACH STATEMENT
-EXECUTE PROCEDURE cleanOutdatedAndOverlappedAvail();
+EXECUTE PROCEDURE cleanOutdatedAvail();
 
 --Activate the cleaning function on request after each insertion
 
