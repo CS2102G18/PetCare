@@ -114,11 +114,23 @@ EXECUTE PROCEDURE addRequestInfo();
 
 CREATE OR REPLACE FUNCTION cleanOutdatedAvail()
 RETURNS TRIGGER AS $$
-BEGIN
-  UPDATE availability
-  SET is_deleted = TRUE
-  WHERE end_time <= CURRENT_TIMESTAMP
-  and is_deleted = FALSE;
+BEGIN(
+  UPDATE availability SET is_deleted = TRUE
+  WHERE (end_time <= CURRENT_TIMESTAMP
+  AND is_deleted = FALSE)
+  OR avail_id IN (
+    SELECT DISTINCT a1.avail_id
+    FROM availability a1 INNER JOIN availability a2
+      ON ((a1.pcat_id, a1.taker_id) = (a2.pcat_id, a2.taker_id))
+    WHERE EXISTS (
+    SELECT a2.avail_id
+    WHERE a2.start_time < a1.end_time
+    AND a2.end_time > a1.start_time
+    AND a2.avail_id <> a1.avail_id
+    AND a2.is_deleted = FALSE)
+  GROUP BY a1.avail_id
+  ORDER BY a1.avail_id)
+  );
   RETURN NULL;
 END; $$
 LANGUAGE PLPGSQL;
