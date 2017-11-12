@@ -139,7 +139,6 @@ if (isset($_SESSION["user_id"])) {
                                           FROM petcategory pc LEFT JOIN pet p ON p.pcat_id= pc.pcat_id
                                                               LEFT JOIN availability a ON a.pcat_id = pc.pcat_id
                                           WHERE 1=1";
-
                                 if (trim($pet_age)) {
                                     $query .= " AND pc.age = '" . $pet_age . "'";
                                 }
@@ -162,7 +161,9 @@ if (isset($_SESSION["user_id"])) {
                                           ORDER BY pc.pcat_id";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
-
+                            $count_pet = 0;
+                            $count_avail = 0;
+                            $count_row = 0;
                             while ($row = pg_fetch_row($result)) {
                                 $pcat_id = $row[0];
                                 $pcat_age = $row[1];
@@ -170,6 +171,9 @@ if (isset($_SESSION["user_id"])) {
                                 $pcat_species = $row[3];
                                 $pcat_pcount = $row[4];
                                 $pcat_acount = $row[5];
+                                $count_pet = $count_pet + $pcat_pcount;
+                                $count_avail = $pcat_acount + $count_avail;
+                                $count_row ++;
                                 echo "<tr>";
                                 echo "<td >$pcat_id</td >";
                                 echo "<td >$pcat_species</td >";
@@ -182,6 +186,11 @@ if (isset($_SESSION["user_id"])) {
                             pg_free_result($result);
                             ?>
                         </table>
+                        <?php
+                        echo "<h5>Total number of categories: $count_row</h5>";
+                        echo "<h5>Total number of pets: $count_pet</h5>";
+                        echo "<h5>Total number of availability slots: $count_avail</h5>";
+                        ?>
                     </div>
                 </div>
             </form>
