@@ -91,6 +91,18 @@ if (isset($_SESSION["user_id"])) {
                             </select>
                         </div>
                     </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-sm-6">
+                            <label for="filter">Filters</label>
+                            <select name="filter" id="filter" class="form-control">
+                                <option value="">Select Filter</option>
+                                <option value="a">Users that posted more than 5 requests in the past one week</option>
+                                <option value="b">Users that took more than 5 requests in the past one week</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -129,6 +141,7 @@ if (isset($_SESSION["user_id"])) {
                                 $add_kw = $_GET['add_kw'];
                                 $em_kw = $_GET['em_kw'];
                                 $user_role = $_GET['user_role'];
+                                $filter = $_GET['filter'];
 
                                 $query = "SELECT u.user_id, u.name, u.password, u.email, u.address, u.role, u.is_deleted
                                           FROM pet_user u
@@ -148,6 +161,32 @@ if (isset($_SESSION["user_id"])) {
 
                                 if (trim($user_role)) {
                                     $query .= " AND u.role ='" . $user_role . "'";
+                                }
+
+                                if (trim($filter) == "a") {
+                                    $query .= " AND u.user_id IN (
+                                                    SELECT distinct r.owner_id
+                                                    FROM request r
+                                                    WHERE r.post_time BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP
+                                                    AND 5 <= ALL(
+                                                    SELECT COUNT(DISTINCT r1.request_id)
+                                                    FROM request r1
+                                                    WHERE r1.owner_id = r.owner_id
+                                                    AND r1.post_time BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP))";
+                                }
+
+                                else if (trim($filter) == "b") {
+                                    $query .= " AND u.user_id IN (
+                                                    SELECT r.taker_id
+                                                    FROM request r
+                                                    WHERE r.care_end BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP
+                                                    AND r.status = 'successful'
+                                                    AND 5 <= ALL(
+                                                    SELECT COUNT(DISTINCT r1.request_id)
+                                                    FROM request r1
+                                                    WHERE r1.taker_id = u.user_id
+                                                    AND r1.care_end BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP
+                                                    AND r1.status = 'successful'))";
                                 }
 
                                 $query .= " ORDER BY u.user_id;";
@@ -269,8 +308,8 @@ if (isset($_SESSION["user_id"])) {
                                                           LEFT OUTER JOIN request r1 ON (r1.owner_id = u.user_id)
                                                           LEFT OUTER JOIN request r2 ON (r2.owner_id = u.user_id AND r2.status = 'successful')
                                                           LEFT OUTER JOIN request r3 ON (r3.taker_id = u.user_id AND r3.status = 'successful')
-                                          WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false").
-                                         " GROUP BY u.user_id
+                                          WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false") .
+                                    " GROUP BY u.user_id
                                           ORDER BY u.user_id";
                             }
                             $result = pg_query($query) or die('Query failed 55: ' . pg_last_error());
@@ -307,8 +346,8 @@ if (isset($_SESSION["user_id"])) {
                                 $success_count_owner += $row[4];
                                 $success_count_taker += $row[9];
                             }
-                            $bid_avg = (double) $total_bid / $req_count;
-                            $total_rate = (double) $success_count_owner / $req_count;
+                            $bid_avg = (double)$total_bid / $req_count;
+                            $total_rate = (double)$success_count_owner / $req_count;
                             ?>
                             </tr>
                         </table>
@@ -317,10 +356,10 @@ if (isset($_SESSION["user_id"])) {
                         echo "<h5>Total number of availability slots: $av_count</h5>";
                         echo "<h5>Total number of successful request sent as owner: $success_count_owner</h5>";
                         echo "<h5>Total number of successful request accepted as taker: $success_count_taker</h5>";
-                        echo "<h5>Average bid from these users: ".round($bid_avg,2)."</h5>";
-                        echo "<h5>Total success rate: ".round($total_rate * 100,2)."%</h5>";
-                        echo "<h5>Highest bid from these users: $bid_highest</h5>";
-                        echo "<h5>Lowest bid from these users: $bid_low</h5>";
+                        echo "<h5>Average bid from these users: " . round($bid_avg, 2) . "</h5>";
+                        echo "<h5>Total success rate: " . round($total_rate * 100, 2) . "%</h5>";
+                        echo "<h5>Highest bid from these users: " . max($bid_highest, 0) . "</h5>";
+                        echo "<h5>Lowest bid from these users: " . min($bid_low, 0) . "</h5>";
                         ?>
                     </div>
             </form>
