@@ -368,7 +368,7 @@ if (isset($_SESSION["user_id"])) {
                                     " ORDER BY r.request_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
-
+                            echo "<h5>Total number of requests: ".pg_num_rows($result)."</h5>";
                             while ($row = pg_fetch_row($result)) {
                                 $req_id = $row[0];
                                 $owner_info = $row[2] . "(id: " . $row[1] . ")" . ($row[3] == 'admin' ? '***ADMIN***' : '');

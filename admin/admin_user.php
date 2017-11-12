@@ -160,7 +160,7 @@ if (isset($_SESSION["user_id"])) {
                                     " ORDER BY u.user_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
-
+                            echo "<h5>Total number of users: " . pg_num_rows($result) . "</h5>";
                             while ($row = pg_fetch_row($result)) {
                                 $user_id = $row[0];
                                 echo "<tr>";
@@ -210,7 +210,13 @@ if (isset($_SESSION["user_id"])) {
                                 <th>Number of Requests accepted</th>
                             </tr>
                             <?php
-                            $query = "SELECT u.user_id, 
+                            if (isset($_GET['search'])) {
+                                $user_kw = $_GET['user_kw'];
+                                $add_kw = $_GET['add_kw'];
+                                $em_kw = $_GET['em_kw'];
+                                $user_role = $_GET['user_role'];
+
+                                $query = "SELECT u.user_id, 
                                           COUNT(DISTINCT p.pets_id),
                                           COUNT(DISTINCT a.avail_id),
                                           COUNT(DISTINCT r1.request_id),
@@ -225,16 +231,59 @@ if (isset($_SESSION["user_id"])) {
                                                           LEFT OUTER JOIN request r1 ON (r1.owner_id = u.user_id)
                                                           LEFT OUTER JOIN request r2 ON (r2.owner_id = u.user_id AND r2.status = 'successful')
                                                           LEFT OUTER JOIN request r3 ON (r3.taker_id = u.user_id AND r3.status = 'successful')
-                                          GROUP BY u.user_id
+                                          WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false");
+
+                                if (trim($user_kw)) {
+                                    $query .= " AND UPPER(u.name) LIKE UPPER('%" . $user_kw . "%')";
+                                }
+
+                                if (trim($add_kw)) {
+                                    $query .= " AND UPPER(u.address) LIKE UPPER('%" . $add_kw . "%')";
+                                }
+
+                                if (trim($em_kw)) {
+                                    $query .= " AND UPPER(u.email) LIKE UPPER('%" . $em_kw . "%')";
+                                }
+
+                                if (trim($user_role)) {
+                                    $query .= " AND u.role ='" . $user_role . "'";
+                                }
+
+                                $query .= " GROUP BY u.user_id
+                                            ORDER BY u.user_id;";
+
+                                $result = pg_query($query) or die('Query failed1: ' . pg_last_error());
+                            } else {
+                                $query = "SELECT u.user_id, 
+                                          COUNT(DISTINCT p.pets_id),
+                                          COUNT(DISTINCT a.avail_id),
+                                          COUNT(DISTINCT r1.request_id),
+                                          COUNT(DISTINCT r2.request_id),
+                                          COALESCE(COUNT(DISTINCT r2.request_id)::DECIMAL/NULLIF(COUNT(DISTINCT r1.request_id),0),-1),
+                                          COALESCE(ROUND(AVG(DISTINCT r1.bids),2),0),
+                                          COALESCE(MIN(r1.bids),0),
+                                          COALESCE(MAX(r1.bids),0),
+                                          COUNT(DISTINCT r3.request_id)
+                                          FROM pet_user u LEFT OUTER JOIN pet p ON (p.owner_id = u.user_id)
+                                                          LEFT OUTER JOIN availability a ON (a.taker_id = u.user_id)
+                                                          LEFT OUTER JOIN request r1 ON (r1.owner_id = u.user_id)
+                                                          LEFT OUTER JOIN request r2 ON (r2.owner_id = u.user_id AND r2.status = 'successful')
+                                                          LEFT OUTER JOIN request r3 ON (r3.taker_id = u.user_id AND r3.status = 'successful')
+                                          WHERE u.is_deleted = " . (isset($_GET['show_deleted']) ? "true" : "false").
+                                         " GROUP BY u.user_id
                                           ORDER BY u.user_id";
+                            }
                             $result = pg_query($query) or die('Query failed 55: ' . pg_last_error());
+                            $pet_count = $av_count = $req_count = $success_count_owner = $success_count_taker = $total_bid = 0;
+                            $bid_highest = -1;
+                            $bid_low = 101;
                             while ($row = pg_fetch_row($result)) {
                                 $user_id = $row[0];
                                 $row_query = "SELECT u.name, u.is_deleted FROM pet_user u WHERE u.user_id = " . $user_id . ";";
                                 $row_result = pg_query($row_query) or die('Query Filed 66' . pg_last_error());
                                 $name_status = pg_fetch_row($row_result);
                                 $user_name = $name_status[0];
-                                $user_status = ($name_status[1]=='t' ? 'Deleted' : 'Active');
+                                $user_status = ($name_status[1] == 't' ? 'Deleted' : 'Active');
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$user_name</td >";
@@ -243,16 +292,36 @@ if (isset($_SESSION["user_id"])) {
                                 echo "<td >$row[2]</td>";
                                 echo "<td >$row[3]</td >";
                                 echo "<td >$row[4]</td>";
-                                echo "<td >".($row[5] != -1 ? round($row[5]*100 ,2)."%": "NA")."</td>";
+                                echo "<td >" . ($row[5] != -1 ? round($row[5] * 100, 2) . "%" : "NA") . "</td>";
                                 echo "<td >$row[6]</td>";
                                 echo "<td >$row[7]</td>";
                                 echo "<td >$row[8]</td>";
                                 echo "<td >$row[9]</td>";
                                 echo "</tr>";
+                                $bid_low = min($bid_low, $row[7]);
+                                $bid_highest = max($bid_highest, $row[8]);
+                                $total_bid += $row[6] * $row[3];
+                                $pet_count += $row[1];
+                                $av_count += $row[2];
+                                $req_count += $row[3];
+                                $success_count_owner += $row[4];
+                                $success_count_taker += $row[9];
                             }
+                            $bid_avg = (double) $total_bid / $req_count;
+                            $total_rate = (double) $success_count_owner / $req_count;
                             ?>
                             </tr>
                         </table>
+                        <?php
+                        echo "<h5>Total number of pets owned: $pet_count</h5>";
+                        echo "<h5>Total number of availability slots: $av_count</h5>";
+                        echo "<h5>Total number of successful request sent as owner: $success_count_owner</h5>";
+                        echo "<h5>Total number of successful request accepted as taker: $success_count_taker</h5>";
+                        echo "<h5>Average bid from these users: ".round($bid_avg,2)."</h5>";
+                        echo "<h5>Total success rate: ".round($total_rate * 100,2)."%</h5>";
+                        echo "<h5>Highest bid from these users: $bid_highest</h5>";
+                        echo "<h5>Lowest bid from these users: $bid_low</h5>";
+                        ?>
                     </div>
             </form>
         </div>

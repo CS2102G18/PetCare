@@ -203,8 +203,10 @@ if (isset($_SESSION["user_id"])) {
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
 
+                            echo "<h5>Total number of pets: ".pg_num_rows($result)."</h5>";
+
                             while ($row = pg_fetch_row($result)) {
-                                $pet_id = $row[0];
+                                $row_count ++;
                                 echo "<tr>";
                                 echo "<td >$row[0]</td >";
                                 echo "<td >$row[1]</td >";

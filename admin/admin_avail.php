@@ -292,45 +292,75 @@ if (isset($_SESSION["user_id"])) {
                                     " ORDER BY a.avail_id;";
                                 $result = pg_query($query) or die('Query failed2: ' . pg_last_error());
                             }
-
+                            echo "<h5>Total number of availability slots: ".pg_num_rows($result)."</h5>";
                             while ($row = pg_fetch_row($result)) {
-                                $a_id = $row[0];
-                                $a_post = $row[1];
-                                $a_start = $row[2];
-                                $a_end = $row[3];
-                                $a_user = $row[5] . " (id: " . $row[4] . ")";
-                                $a_pcat = $row[8] . " " . $row[7] . " " . $row[9];
-                                $a_status = ($row[6] == 't' ? 'Deleted' : 'Active');
-                                $a_remarks = $row[11];
+                            $a_id = $row[0];
+                            $a_post = $row[1];
+                            $a_start = $row[2];
+                            $a_end = $row[3];
+                            $a_user = $row[5] . " (id: " . $row[4] . ")";
+                            $a_pcat = $row[8] . " " . $row[7] . " " . $row[9];
+                            $a_status = ($row[6] == 't' ? 'Deleted' : 'Active');
+                            $a_remarks = $row[11];
 
-                                $work_go_on_query = "SELECT r.request_id
-                                                     FROM request r INNER JOIN availability a ON (r.taker_id = a.taker_id)
-                                                                    INNER JOIN pet p ON (r.pets_id = p.pets_id)
-                                                                    INNER JOIN petcategory pc ON (pc.pcat_id = a.pcat_id AND pc.pcat_id = p.pcat_id)
-                                                     WHERE r.care_begin >= a.start_time
-                                                     AND r.care_end <= a.end_time
-                                                     AND r.status = 'successful'
-                                                     AND a.avail_id = ".$a_id. " AND a.pcat_id = ".$row[10];
-                                $work_go_on_result = pg_query($work_go_on_query) or die('Query failed 3 : ' . pg_last_error());
+                            $work_go_on_query = "SELECT r.request_id
+                            FROM request r INNER JOIN availability a ON (r.taker_id = a.taker_id)
+                            INNER JOIN pet p ON (r.pets_id = p.pets_id)
+                            INNER JOIN petcategory pc ON (pc.pcat_id = a.pcat_id AND pc.pcat_id = p.pcat_id)
+                            WHERE r.care_begin >= a.start_time
+                            AND r.care_end <= a.end_time
+                            AND r.status = 'successful'
+                            AND a.avail_id = ".$a_id. " AND a.pcat_id = ".$row[10];
+                            $work_go_on_result = pg_query($work_go_on_query) or die('Query failed 3 : ' .
+                            pg_last_error());
 
-                                echo "<tr>";
-                                echo "<td >$a_id</td >";
-                                echo "<td >$a_user</td >";
-                                echo "<td >$a_post</td>";
-                                echo "<td >$a_start</td >";
-                                echo "<td >$a_end</td>";
-                                echo "<td >$a_pcat</td >";
-                                echo "<td>".(pg_num_rows($work_go_on_result) == 0 ? "NO" : "YES (request id: ".pg_fetch_row($work_go_on_result)[0].")")."</td>";
-                                echo "<td>".$a_remarks."</td>";
-                                echo "<td >$a_status</td >";
-                                echo "<td >" .
+                            echo "
+                            <tr>";
+                                echo "
+                                <td>$a_id</td>
+                                ";
+                                echo "
+                                <td>$a_user</td>
+                                ";
+                                echo "
+                                <td>$a_post</td>
+                                ";
+                                echo "
+                                <td>$a_start</td>
+                                ";
+                                echo "
+                                <td>$a_end</td>
+                                ";
+                                echo "
+                                <td>$a_pcat</td>
+                                ";
+                                echo "
+                                <td>".(pg_num_rows($work_go_on_result) == 0 ? "NO" : "YES (request id:
+                                    ".pg_fetch_row($work_go_on_result)[0].")")."
+                                </td>
+                                ";
+                                echo "
+                                <td>".$a_remarks."</td>
+                                ";
+                                echo "
+                                <td>$a_status</td>
+                                ";
+                                echo "
+                                <td>" .
                                     (!isset($_GET['show_deleted'])
-                                        ? "<a class=\"btn btn-default\" role=\"button\" href=\"admin_editavail.php?a_id=$a_id\">Edit</a>
-                                               <a class=\"btn btn-danger\" role=\"button\" href=\"admin_delete.php?a_id=$a_id&usage=avail\">Delete</a>"
-                                        : "<a class=\"btn btn-default\" role=\"button\" href=\"admin_restore.php?a_id=$a_id&usage=avail\">Restore</a>") .
+                                    ? "<a class=\"btn btn-default\" role=\"button\"
+                                    href=\"admin_editavail.php?a_id=$a_id\">Edit</a>
+                                    <a class=\"btn btn-danger\" role=\"button\"
+                                    href=\"admin_delete.php?a_id=$a_id&usage=avail\">Delete</a>"
+                                    : "<a class=\"btn btn-default\" role=\"button\"
+                                    href=\"admin_restore.php?a_id=$a_id&usage=avail\">Restore</a>") .
 
-                                    "</td>";
-                                echo "</tr>";
+                                    "
+                                </td>
+                                ";
+                                echo "
+                            </tr>
+                            ";
                             }
                             pg_free_result($result);
                             ?>
