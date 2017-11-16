@@ -124,7 +124,7 @@ EXECUTE PROCEDURE addRequestInfo();
 
 CREATE OR REPLACE FUNCTION cleanOutdatedAvail()
 RETURNS TRIGGER AS $$
-BEGIN(
+BEGIN
   UPDATE availability SET is_deleted = TRUE
   WHERE end_time <= CURRENT_TIMESTAMP
   AND is_deleted = FALSE;
