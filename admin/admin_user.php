@@ -288,6 +288,32 @@ if (isset($_SESSION["user_id"])) {
                                     $query .= " AND u.role ='" . $user_role . "'";
                                 }
 
+                                if (trim($filter) == "a") {
+                                    $query .= " AND u.user_id IN (
+                                                    SELECT distinct r.owner_id
+                                                    FROM request r
+                                                    WHERE r.post_time BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP
+                                                    AND 5 <= ALL(
+                                                    SELECT COUNT(DISTINCT r1.request_id)
+                                                    FROM request r1
+                                                    WHERE r1.owner_id = r.owner_id
+                                                    AND r1.post_time BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP))";
+                                }
+
+                                else if (trim($filter) == "b") {
+                                    $query .= " AND u.user_id IN (
+                                                    SELECT r.taker_id
+                                                    FROM request r
+                                                    WHERE r.care_end BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP
+                                                    AND r.status = 'successful'
+                                                    AND 5 <= ALL(
+                                                    SELECT COUNT(DISTINCT r1.request_id)
+                                                    FROM request r1
+                                                    WHERE r1.taker_id = u.user_id
+                                                    AND r1.care_end BETWEEN LOCALTIMESTAMP - INTERVAL '7 days' AND LOCALTIMESTAMP
+                                                    AND r1.status = 'successful'))";
+                                }
+
                                 $query .= " GROUP BY u.user_id
                                             ORDER BY u.user_id;";
 
@@ -358,8 +384,8 @@ if (isset($_SESSION["user_id"])) {
                         echo "<h5>Total number of successful request accepted as taker: $success_count_taker</h5>";
                         echo "<h5>Average bid from these users: " . round($bid_avg, 2) . "</h5>";
                         echo "<h5>Total success rate: " . round($total_rate * 100, 2) . "%</h5>";
-                        echo "<h5>Highest bid from these users: " . max($bid_highest, 0) . "</h5>";
-                        echo "<h5>Lowest bid from these users: " . min($bid_low, 0) . "</h5>";
+                        echo "<h5>Highest bid from these users: " . ($bid_highest == -1 ? max($bid_highest, 0) : $bid_highest). "</h5>";
+                        echo "<h5>Lowest bid from these users: " . ($bid_low == 101 ? min($bid_low, 0) : $bid_low). "</h5>";
                         ?>
                     </div>
             </form>
